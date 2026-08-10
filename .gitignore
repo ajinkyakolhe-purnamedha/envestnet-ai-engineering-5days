@@ -1,0 +1,28 @@
+# ---------------------------------------------------------------------------
+# Author-only. Never ships to participants who clone this repo.
+# ---------------------------------------------------------------------------
+.claude/
+archive/
+Instructor-Docs/
+prompt_specs/
+CLAUDE.md
+
+# ---------------------------------------------------------------------------
+# Python. The two uv projects carry their own .gitignore as well; these are a
+# safety net so nothing generated leaks in from a folder that lacks one.
+# ---------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# ---------------------------------------------------------------------------
+# Build output and tooling noise
+# ---------------------------------------------------------------------------
+node_modules/
+dist/
+build/
+*.local
+.DS_Store
+.playwright-mcp/

@@ -1,0 +1,23 @@
+[project]
+name = "python-courseware"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+courseware = [
+  "fastapi",
+  "httpx",
+  "jupyterlab",
+  "nbclient",
+  "nbformat",
+  "numpy",
+  "openai",
+  "pandas",
+  "pydantic",
+  "pytest",
+  "requests",
+  "scikit-learn",
+  "sqlalchemy",
+]
+

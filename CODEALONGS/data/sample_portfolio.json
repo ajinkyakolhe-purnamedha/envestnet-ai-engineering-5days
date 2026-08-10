@@ -1,0 +1,11 @@
+{
+  "simulated_date": "2020-03-20",
+  "risk_profile": "CONSERVATIVE",
+  "cash": 25000,
+  "holdings": [
+    {"symbol": "SPY", "shares": 100, "price": 228.80},
+    {"symbol": "QQQ", "shares": 150, "price": 170.70},
+    {"symbol": "GLD", "shares": 75, "price": 140.11}
+  ]
+}
+

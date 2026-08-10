@@ -6,6 +6,8 @@ paginate: true
 
 <!-- _class: lead -->
 
+> Draft version: content is being refined.
+
 # M1 · Introduction to AI Models
 
 What they do, where to get them, what they cost

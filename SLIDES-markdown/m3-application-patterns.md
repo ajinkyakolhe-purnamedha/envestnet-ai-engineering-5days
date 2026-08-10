@@ -6,6 +6,8 @@ paginate: true
 
 <!-- _class: lead -->
 
+> Draft version: content is being refined.
+
 # M3 · LLM Application Patterns
 
 The five architectural patterns and model economics

@@ -6,6 +6,8 @@ paginate: true
 
 <!-- _class: lead -->
 
+> Draft version: content is being refined.
+
 # M0 · Python & Its Power in AI
 
 Why this language, and what you can build with it

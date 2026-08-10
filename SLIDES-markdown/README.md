@@ -17,9 +17,14 @@ presenter view and can print them in a notes PDF.
 | `m4-building-rags.md` | M4 · Understanding & Building RAGs | 8 |
 | `m5-advanced-rag.md` | M5 · Advanced RAG Patterns + Evaluation | 7 |
 | `m6-fine-tuning.md` | M6 · LLM Fine-Tuning | 24 |
-| `m7-agentic-applications.md` | M7 · Agentic Application Building | 7 |
+| `m7-agentic-applications.md` | M7 · The Agent Loop, By Hand | 37 |
 
-Note: M3, M4, M5, and M7 reference snippet files (`snippets/m3/…` etc.) that
+M7 companion files:
+
+- `m7-concepts-reference.md`: dense text reference for the concepts covered in the M7 slides.
+- `m7-code-cookbook.md`: runnable, section-by-section Python recipes that demonstrate each M7 concept path.
+
+Note: M3, M4, and M5 reference snippet files (`snippets/m3/…` etc.) that
 don't exist yet in the source repo — those code blocks contain a clearly marked
 placeholder comment naming the missing file, so the gap is visible.
 

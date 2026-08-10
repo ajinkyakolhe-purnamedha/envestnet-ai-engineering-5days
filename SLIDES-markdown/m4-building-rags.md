@@ -6,6 +6,8 @@ paginate: true
 
 <!-- _class: lead -->
 
+> Draft version: content is being refined.
+
 # M4 · Retrieval-Augmented Generation (RAG)
 
 Grounding language models in dynamic & structured knowledge

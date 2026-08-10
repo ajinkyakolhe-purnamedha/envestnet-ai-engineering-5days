@@ -6,6 +6,8 @@ paginate: true
 
 <!-- _class: lead -->
 
+> Draft version: content is being refined.
+
 # M2 · Model, Tokens & Context
 
 What you're actually buying

@@ -6,6 +6,8 @@ paginate: true
 
 <!-- _class: lead -->
 
+> Draft version: content is being refined.
+
 # M6 · LLM Fine-Tuning
 
 Changing the model itself

@@ -6,6 +6,8 @@ paginate: true
 
 <!-- _class: lead -->
 
+> Draft version: content is being refined.
+
 # M5 · Advanced RAG Patterns & Evaluation
 
 Advanced query transformations and empirical retrieval metrics

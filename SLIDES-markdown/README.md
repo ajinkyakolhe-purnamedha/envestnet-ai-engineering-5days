@@ -22,7 +22,7 @@ presenter view and can print them in a notes PDF.
 M7 companion files:
 
 - `m7-concepts-reference.md`: dense text reference for the concepts covered in the M7 slides.
-- `m7-code-cookbook.md`: runnable, section-by-section Python recipes that demonstrate each M7 concept path.
+- `m7-lab-instructions.md`: notebook lab instructions plus optional Capstone integration hints.
 
 Note: M3, M4, and M5 reference snippet files (`snippets/m3/…` etc.) that
 don't exist yet in the source repo — those code blocks contain a clearly marked

@@ -12,7 +12,7 @@ For BGE, a sharded Transformers `safetensors` copy is also possible, but it is l
 The SmolLM2 weights are stored as standard Transformers sharded safetensors under:
 
 ```text
-models/smollm2-135m-instruct/
+smollm2-135m-instruct/
 ```
 
 Transformers loads the shards automatically from `model.safetensors.index.json`.

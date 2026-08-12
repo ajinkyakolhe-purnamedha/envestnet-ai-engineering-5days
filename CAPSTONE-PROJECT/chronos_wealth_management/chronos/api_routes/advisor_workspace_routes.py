@@ -1,6 +1,6 @@
 """Advisor client list, client portfolio, and report routes — read only."""
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from chronos.advisor_workspace.generate_advisor_review_report import (
@@ -21,6 +21,8 @@ from chronos.portfolio_performance.calculate_current_portfolio_value import (
     build_current_portfolio_snapshot,
 )
 from chronos.shared_database.api_schemas import (
+    AdvisorAssistantAnswerResponse,
+    AdvisorAssistantAskRequest,
     AdvisorClientSummaryResponse,
     AdvisorReportResponse,
     PortfolioResponse,
@@ -63,6 +65,38 @@ def create_advisor_client_report(
 ):
     with translate_domain_errors():
         return generate_advisor_review_report(db, advisor_user_id, client_user_id)
+
+
+@router.post(
+    "/advisor/clients/{client_user_id}/assistant",
+    response_model=AdvisorAssistantAnswerResponse,
+)
+def ask_advisor_assistant(
+    client_user_id: int,
+    advisor_user_id: int,
+    request: AdvisorAssistantAskRequest,
+    db: Session = Depends(get_database_session),
+):
+    # The M8 lab feature: this endpoint serves the participant-built
+    # workflow in labs/m8_advisor_assistant and answers 501 until the
+    # lab stubs are implemented.
+    from labs.m8_advisor_assistant.answer_client_question import (
+        answer_client_question,
+    )
+
+    with translate_domain_errors():
+        require_advisor_user(get_demo_user_by_id(db, advisor_user_id))
+        require_investor_user(get_demo_user_by_id(db, client_user_id))
+        try:
+            return answer_client_question(db, client_user_id, request.question)
+        except NotImplementedError as unfinished_lab_step:
+            raise HTTPException(
+                status_code=501,
+                detail=(
+                    "Advisor assistant not built yet — complete the M8 "
+                    f"lab: {unfinished_lab_step}"
+                ),
+            )
 
 
 @router.get("/advisor/reports/{report_id}", response_model=AdvisorReportResponse)

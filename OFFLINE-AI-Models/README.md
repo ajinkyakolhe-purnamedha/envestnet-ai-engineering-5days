@@ -28,3 +28,5 @@ GitHub upload status:
 - The model weights can be committed to a normal GitHub repository without Git LFS because every individual file is under 100 MB.
 - The largest files are the SmolLM2 shards, each under 90 MB.
 - Participants can clone the repository and run the notebook without connecting to Hugging Face, assuming Python dependencies are already installed.
+
+(Can use HuggingFaceTB/SmolLM-360M model too. More intelligence than 135M parameter model)

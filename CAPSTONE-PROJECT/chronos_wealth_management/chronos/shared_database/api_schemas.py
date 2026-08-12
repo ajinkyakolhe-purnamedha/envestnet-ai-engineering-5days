@@ -141,6 +141,20 @@ class AdvisorMetricResponse(BaseModel):
     worst_holding_gain_loss: float | None
 
 
+class AdvisorAssistantAskRequest(BaseModel):
+    question: str
+
+
+class AdvisorAssistantAnswerResponse(BaseModel):
+    route: str
+    refused: bool
+    verdict: str | None
+    note: str
+    note_source: str
+    review_problems: list[str]
+    metrics: AdvisorMetricResponse | None
+
+
 class AdvisorReportResponse(BaseModel):
     report_id: int
     advisor_user_id: int

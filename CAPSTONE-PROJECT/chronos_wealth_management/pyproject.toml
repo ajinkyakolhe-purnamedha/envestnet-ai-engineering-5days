@@ -15,6 +15,14 @@ dependencies = [
     "yfinance>=1.5.2",
 ]
 
+[project.optional-dependencies]
+# M8 lab: lets the advisor assistant draft notes with the committed
+# offline SmolLM2 weights. The app works fully without it (template notes).
+agents = [
+    "torch",
+    "transformers",
+]
+
 [dependency-groups]
 dev = [
     "httpx>=0.28.1",

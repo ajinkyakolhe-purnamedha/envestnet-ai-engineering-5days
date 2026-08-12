@@ -5,7 +5,7 @@ API an advisor question, get back a routed, fact-grounded, rule-checked
 advisor note. The morning's patterns — routing, chaining, evaluator — become
 production code with business-readable names.
 
-**The lab law:** the code-alongs are toys (hardcoded prices, dict tools).
+**The lab rule:** the code-alongs are examples (hardcoded prices, dict tools).
 Nothing pastes into the capstone — real schemas, a real DB session, the
 point-in-time price rule. You design from the patterns; you write from the
 interfaces.
@@ -19,7 +19,7 @@ From the repo root:
 ```bash
 cd CODE-ALONGS
 uv sync --extra agents
-uv run python -m m8.smolagents_agent    # the honest trace
+uv run python -m m8.smolagents_agent    # the trace from the framework run
 uv run python -m m8.pattern_chaining    # the fix
 uv run python -m m8.pattern_routing     # the front door
 ```
@@ -104,10 +104,10 @@ Route, then:
 - `"policy"` → answer from the thresholds, no client data.
 - `"portfolio"` → gather → judge → draft → review; if the review finds
   problems, redraft **once** (a bound, like `max_turns`), re-review, and
-  ship with any remaining problems attached.
+  return any remaining problems with the response.
 
 Accept `conversation_history: list[str] | None = None` and ignore it —
-that parameter is tomorrow's memory seam.
+that parameter is where M9 will attach memory.
 
 ### 7. Ship it — your code IS the feature
 
@@ -152,17 +152,17 @@ uv run --extra agents python -m pytest \
 `note_source` flips to `"language_model"` with zero code change — the
 draft function is the swap point.
 
-Two things to expect, both lessons rather than bugs:
+Two things to expect during the live run:
 
 - **A fresh Alice is 100% cash**, so the verdict you'll see first is the
   *40% cash* breach. To watch the 35% concentration verdict fire, log in
   as Alice and buy AAPL until it dominates the portfolio, then ask again.
-  Two different breaches, same workflow — Python catches both.
+  Two different breaches exercise the same workflow, and Python catches both.
 - **SmolLM2's prose will be mediocre** (it is a 135M model — you watched
-  it fail this morning). Read the note critically: the *sentences* wobble,
+  it fail this morning). Read the note critically: the *sentences* may be weak,
   but the verdict and every figure stay correct, because Python computed
-  them and the model only phrased them. That separation is the entire
-  point of the chaining pattern.
+  them and the model only phrased them. That separation is what the chaining
+  pattern gives you.
 
 > **Gotcha:** always run tests as `uv run python -m pytest`. If the venv
 > and extras are out of sync, bare `uv run pytest` can silently pick up a
@@ -173,13 +173,13 @@ Two things to expect, both lessons rather than bugs:
 ## Stretch
 
 1. **Router showdown** — upgrade the keyword router to BGE embeddings
-   (the M2 trick), then test `"How much cash would selling AAPL raise?"`
+   (the M2 pattern), then test `"How much cash would selling AAPL raise?"`
    against both. The embedding router misroutes it to price; your keyword
-   router refuses it. Write one sentence: why is the dumber router safer
-   here, and what would make the smarter one safe?
+   router refuses it. Write one sentence: why is the keyword router safer
+   here, and what would make the embedding router safe?
 2. **Trace habit** — add `elapsed_ms` per workflow step to the response.
-3. **Close the loop** — point the CODE-ALONGS smolagents toy's tools at
+3. **Close the loop** — point the CODE-ALONGS smolagents example's tools at
    the running Chronos API instead of its hardcoded dicts.
 4. **Read tomorrow** — list what M9 must add to make this client-facing:
-   memory, a human approval gate, streaming. Find the seam for each in
+   memory, a human approval gate, streaming. Find the extension point for each in
    today's code.

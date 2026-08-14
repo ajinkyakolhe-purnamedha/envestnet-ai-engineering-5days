@@ -98,6 +98,34 @@ class Trade(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=_utc_now)
 
 
+class AdvisorNoteDraft(Base):
+    """A drafted assistant note awaiting human approval (M9 lab).
+
+    Only rows with status "approved" are ever visible to the client.
+    The table holds prose and verdict text only — no holdings, no cash.
+    """
+
+    __tablename__ = "advisor_note_drafts"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    advisor_user_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id"), nullable=False
+    )
+    client_user_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id"), nullable=False
+    )
+    question: Mapped[str] = mapped_column(Text, nullable=False)
+    note: Mapped[str] = mapped_column(Text, nullable=False)
+    verdict: Mapped[str | None] = mapped_column(String, nullable=True)
+    note_source: Mapped[str] = mapped_column(String, nullable=False)
+    review_problems_json: Mapped[str] = mapped_column(Text, nullable=False)
+    judge_verdict: Mapped[str | None] = mapped_column(String, nullable=True)
+    status: Mapped[str] = mapped_column(String, nullable=False)
+    decision_reason: Mapped[str | None] = mapped_column(Text, nullable=True)
+    created_simulated_date: Mapped[date] = mapped_column(Date, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=_utc_now)
+
+
 class AdvisorReport(Base):
     __tablename__ = "advisor_reports"
 

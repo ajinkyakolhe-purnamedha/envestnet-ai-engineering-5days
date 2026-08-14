@@ -8,6 +8,7 @@ from chronos.shared_database.domain_errors import (
     InsufficientCashError,
     InsufficientSharesError,
     InvalidSimulatedDateError,
+    NoteDraftAlreadyDecidedError,
     PriceUnavailableError,
     RecordNotFoundError,
     WrongRoleError,
@@ -20,6 +21,7 @@ _ERROR_STATUS_CODES = [
     (InsufficientCashError, 400),
     (InsufficientSharesError, 400),
     (InvalidSimulatedDateError, 400),
+    (NoteDraftAlreadyDecidedError, 409),
 ]
 
 

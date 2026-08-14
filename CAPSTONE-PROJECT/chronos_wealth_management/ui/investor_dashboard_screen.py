@@ -23,6 +23,7 @@ def render_investor_dashboard_screen(user: dict) -> None:
     st.caption(f"Simulated date: {portfolio['simulated_date']}")
 
     _render_portfolio_summary(portfolio)
+    _render_advisor_messages(user_id)
     _render_holdings_table(portfolio)
     _render_symbol_price_chart(user_id)
     _render_account_value_history_chart(user_id)
@@ -41,6 +42,22 @@ def _render_portfolio_summary(portfolio: dict) -> None:
         f"${portfolio['total_return_amount']:,.2f}",
         f"{portfolio['total_return_percentage']:.2f}%",
     )
+
+
+def _render_advisor_messages(user_id: int) -> None:
+    """M9: notes from the advisor's assistant — approved ones only.
+    A pending or rejected draft can never appear here; that visibility
+    rule is enforced server-side, not by this screen."""
+    try:
+        messages = api_client.fetch_advisor_messages(user_id)
+    except ApiError as error:
+        st.error(str(error))
+        return
+    if not messages:
+        return
+    st.subheader("Messages From Your Advisor")
+    for message in messages:
+        st.success(f"{message['created_simulated_date']} — {message['note']}")
 
 
 def _render_holdings_table(portfolio: dict) -> None:

@@ -25,5 +25,9 @@ class InvalidSimulatedDateError(Exception):
     """Simulated date move is outside the available market date range."""
 
 
+class NoteDraftAlreadyDecidedError(Exception):
+    """The draft was already approved or rejected; decisions are final."""
+
+
 class MarketDataSetupError(Exception):
     """Market prices are missing; the load script must be run first."""

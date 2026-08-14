@@ -143,6 +143,9 @@ class AdvisorMetricResponse(BaseModel):
 
 class AdvisorAssistantAskRequest(BaseModel):
     question: str
+    # M9: past advisor questions for this client, oldest first. Empty on
+    # a first turn — and for every M8-era caller, which is why it defaults.
+    conversation_history: list[str] = []
 
 
 class AdvisorAssistantAnswerResponse(BaseModel):
@@ -153,6 +156,36 @@ class AdvisorAssistantAnswerResponse(BaseModel):
     note_source: str
     review_problems: list[str]
     metrics: AdvisorMetricResponse | None
+    # M9: advisory second opinion from the model judge; never blocks.
+    judge_verdict: str | None = None
+    # M9: id of the pending approval-queue row created for this answer.
+    draft_id: int | None = None
+
+
+class AdvisorNoteDraftResponse(BaseModel):
+    draft_id: int
+    advisor_user_id: int
+    client_user_id: int
+    question: str
+    note: str
+    verdict: str | None
+    note_source: str
+    review_problems: list[str]
+    judge_verdict: str | None
+    status: Literal["pending", "approved", "rejected"]
+    decision_reason: str | None
+    created_simulated_date: date
+
+
+class NoteDraftDecisionRequest(BaseModel):
+    decision: Literal["approved", "rejected"]
+    reason: str
+
+
+class ClientAdvisorMessageResponse(BaseModel):
+    draft_id: int
+    note: str
+    created_simulated_date: date
 
 
 class AdvisorReportResponse(BaseModel):

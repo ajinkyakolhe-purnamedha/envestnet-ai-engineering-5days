@@ -2,7 +2,8 @@
 
 Same workflow -- the chain's draft now faces a critic.
 Fully offline. Run:
-    uv run python -m m8.pattern_evaluator
+    uv run --project ../CODE-ALONGS \
+        python m8/pattern_evaluator.py
 """
 
 from chronos_offline import generate

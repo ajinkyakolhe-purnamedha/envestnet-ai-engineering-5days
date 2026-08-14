@@ -2,7 +2,8 @@
 
 The participants' framework: no key, local weights only.
 Run:
-    uv run python -m m8.smolagents_agent
+    uv run --project ../CODE-ALONGS \
+        python m8/smolagents_agent.py
 """
 
 from chronos_offline import CHAT_MODEL

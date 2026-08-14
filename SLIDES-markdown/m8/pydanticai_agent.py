@@ -1,7 +1,8 @@
 """Same agent, PydanticAI. M7's contracts ARE the framework.
 
 Needs GEMINI_API_KEY. Run:
-    uv run python -m m8.pydanticai_agent
+    uv run --project ../CODE-ALONGS \
+        python m8/pydanticai_agent.py
 """
 
 from pydantic import BaseModel

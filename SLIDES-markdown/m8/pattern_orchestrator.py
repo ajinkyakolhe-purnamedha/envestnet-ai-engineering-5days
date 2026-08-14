@@ -1,7 +1,8 @@
 """Pattern 4: orchestrator-workers. Plan, delegate, write.
 
 Fully offline. Run:
-    uv run python -m m8.pattern_orchestrator
+    uv run --project ../CODE-ALONGS \
+        python m8/pattern_orchestrator.py
 """
 
 from chronos_offline import generate

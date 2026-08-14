@@ -2,7 +2,8 @@
 
 Same workflow as pattern_chaining -- step 1 fans out.
 Fully offline. Run:
-    uv run python -m m8.pattern_parallel
+    uv run --project ../CODE-ALONGS \
+        python m8/pattern_parallel.py
 """
 
 from m8.advisor_tools import (check_guidelines,

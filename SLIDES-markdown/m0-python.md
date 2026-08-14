@@ -6,15 +6,13 @@ paginate: true
 
 <!-- _class: lead -->
 
-> Draft version: content is being refined.
-
-# M0 · Python & Its Power in AI
+# M0.0.1 · Python & Its Power in AI
 
 Why this language, and what you can build with it
 
 By the end of this module you can:
 
-- Explain why Python owns AI, and why that is not an accident
+- Explain why Python is the default for AI application work
 - Set up a modern Python project with `uv` in under a minute
 - Read and write the six building blocks every AI app is made of
 - Pull a real open-source model onto your own laptop
@@ -29,34 +27,34 @@ and (b) the specific subset of Python that AI engineering actually uses.
 
 ---
 
-# Why Python Won Gen AI
+# M0.1.1 · Why Python Is The Default
 
-- Reads like English — the code *is* the explanation
-- Simplicity is peak genius
-- More simplicity → more code → better LLMs at Python → more Python
-- The library ecosystem is the real moat
+- Low ceremony — the code stays close to the business rule
+- Fast iteration — useful when most experiments are thrown away
+- Large public codebase — LLMs are generally strong at Python
+- Library depth — the ecosystem is the real advantage
 
-Python is maintainable. In an era where AI writes half your code, **readable beats clever** — by more than it ever did.
+Python is maintainable. When AI generates more code than you write by hand, **readable beats clever**.
 
 <!--
-"Simplicity is the ultimate sophistication" — the Apple argument. Simple and
-powerful is much harder to build than complicated and powerful.
+Python is useful here for practical reasons, not because it is elegant in the
+abstract. AI application code is mostly orchestration: load data, call a model,
+validate the result, call a tool, store state, expose an API, and log what
+happened. Python expresses that coordination layer with little ceremony.
 
-The feedback loop is the part people miss, and it's an UNINTENDED side effect:
-because Python is simple, there is enormously more Python training data on the
-internet. So LLMs are measurably better at Python than at any other language.
-So people building AI reach for Python. So more Python gets written. It is an
-incremental loop that is still compounding — and it means the gap widens, not
-narrows.
+The LLM feedback loop is also practical. There is a large amount of public
+Python code, so coding models tend to perform well on Python. That makes Python
+a good default for AI-assisted development, especially when combined with clear
+names and small files.
 
-The maintainability point lands hard with this audience. Zen of Python — we
-close the module on it. The discipline of software engineering matters MORE in
-the age of AI, not less: you are now reviewing far more code than you write.
+The maintainability point matters throughout the week. Students will review
+generated code, not just write code. Readable code is code they can inspect,
+test, and correct.
 -->
 
 ---
 
-# The Same Idea, Two Languages
+# M0.1.2 · The Same Idea, Two Languages
 
 **Python**
 
@@ -73,6 +71,8 @@ for holding in holdings:
     if holding["weight"] > 0.35:
         print(f"Concentrated: {holding['symbol']}")
 ```
+
+Full running version: `SLIDES-markdown/m0/readable.py`
 
 **Java**
 
@@ -102,9 +102,9 @@ public class Concentration {
 ```
 
 <!--
-This is deliberately GOOD modern Java — records, List.of, no boxing hacks. If
-you show bad Java the Java people stop listening and you deserve it. Even at its
-best it is twice the lines.
+This is deliberately good modern Java — records, `List.of`, no artificial
+boilerplate. The comparison should be fair: even good Java uses more ceremony
+for this small rule.
 
 The point is not "Java is bad". It is: to express the same intent, Python asks
 you to think about the problem; Java also asks you to think about the machine —
@@ -118,35 +118,38 @@ what makes the trade different for AI than for a long-lived backend service.
 
 ---
 
-# Python × Gen AI = Customisable IP
+# M0.1.3 · Python × Gen AI = Customisable IP
 
-- With Python you can build **any** feature you want
-- And you can build it **on top of models you own**
-- Download it, customise it, keep it — no vendor sees your data or your edge
+- Python is the application layer around the model
+- Open weights can be downloaded, customized, and kept
+- Private data can stay inside your boundary
 - The raw material is free on HuggingFace
 
-> A frontier open-source model costs **~$200M** and a world-class team to train.
-> Two countries have managed it. The result is sitting there, downloadable, free.
-> Your job is to turn it into a product.
+Open weights change the ownership model:
+
+```text
+closed API  -> rent capability
+open model  -> own the artifact, adapt it, serve it yourself
+```
 
 <!--
-This is the emotional centre of the whole workshop. Land it properly.
+The argument is about ownership, not ideology. Closed APIs give fast access to
+strong capability, but the same endpoint is available to competitors. The
+application value comes from product design, proprietary data, workflow
+integration, evaluation, and operational reliability.
 
-The argument: closed-source APIs give you capability but no ownership. Anyone
-can call the same API you're calling. There is no moat in "we call GPT".
+Open weights add another option: the model artifact can live inside your own
+system. You can fine-tune it, quantize it, evaluate it, and serve it under your
+constraints. That does not automatically make it better than a closed model; it
+changes what you can control.
 
-Open weights give you something different — you take a $200M artifact for free,
-fine-tune it on data only you have, and now you own a competitive advantage
-your competitor cannot buy, copy, or even see. They don't know what you did and
-can't do anything about it.
-
-That flexibility is the power. Everything in the next 5 days is in service of
-this idea.
+M1 turns this into a model-selection decision. M6 returns to it when
+fine-tuning changes a model's behavior for a narrow task.
 -->
 
 ---
 
-# AI Engineer ≠ AI Researcher
+# M0.1.4 · AI Engineer ≠ AI Researcher
 
 |  | AI Researcher | **AI Engineer** |
 |---|---|---|
@@ -156,27 +159,31 @@ this idea.
 | Trains from scratch | Yes | Almost never |
 | Headcount needed | Hundreds worldwide | Millions |
 
-Most AI advice online is written for the first column — or by people selling hype. **Both are wrong for you.**
+Most AI application teams live in the second column.
 
 <!--
-This slide exists to inoculate them. It is why they get bad advice.
+This slide separates two jobs that are often mixed together. Researchers improve
+models. Engineers build reliable systems around models. The skills overlap, but
+the success criteria are different.
 
-Advice that is correct for a researcher is actively harmful for an engineer:
-"you should understand backprop before using an LLM", "train your own model",
-"read the transformer paper first". No. You are a software engineer who puts
-models into running systems.
+Advice that is correct for a researcher can be the wrong starting point for an
+engineer. Training from scratch, architecture research, and benchmark chasing
+are not the normal path to a useful enterprise feature. The normal path is to
+choose an existing model, wrap it in software, measure it, and control its
+failure modes.
 
 Demand asymmetry: the world needs a few thousand AI researchers. It needs
 millions of AI engineers. That gap is the career opportunity in this room — and
 it is what the rest of this workshop trains.
 
-If someone asks "so should I never learn the theory?" — learn it when a
-production problem demands it. Need-driven, not prestige-driven.
+Theory is still useful. The ordering matters: learn deeper internals when a
+production decision requires them. M2 gives enough model mechanics to make
+engineering decisions without turning the course into a research seminar.
 -->
 
 ---
 
-# Python vs Java/C vs JavaScript
+# M0.1.5 · Python vs Java/C vs JavaScript
 
 | | Strength | Where it runs | Trade-off |
 |---|---|---|---|
@@ -195,9 +202,9 @@ COBOL analogy for the older engineers: mainframes ran on COBOL because that's
 where the programs ran. Same logic applies today — languages win by owning a
 place, not by being elegant.
 
-The honest caveat: yes, some JavaScript runs on the backend now (Node), and
-modern JS tooling is written in Rust. Both are true, both are later
-conversations, don't rabbit-hole here.
+The caveat: some JavaScript runs on the backend now, and modern JS tooling is
+often written in Rust. Both are true, but they are not the decision this slide
+is teaching.
 
 The key insight to leave them with: when people say "Python is slow", they are
 describing the interpreter loop. In AI workloads you spend 99% of wall-clock
@@ -208,7 +215,7 @@ starts in Python now.
 
 ---
 
-# The Ecosystem
+# M0.2.1 · The Ecosystem
 
 **Tooling** — `uv` for everything
 
@@ -265,9 +272,9 @@ the safe window right now; 3.14 is too new for some AI libraries.
 
 ---
 
-**The Python AI Ecosystem · 1/2**
+**The Python AI Ecosystem · 1 of 2**
 
-# Libraries, Models, Providers
+# M0.2.2 · Libraries, Models, Providers
 
 **Libraries — the tools**
 
@@ -292,30 +299,28 @@ the safe window right now; 3.14 is too new for some AI libraries.
 
 | | |
 |---|---|
-| Claude | Anthropic |
 | GPT | OpenAI |
 | Gemini | Google |
+| Command | Cohere |
 
-Two columns you download and keep. One column you call and pay for. **That difference is M1.**
+Two columns you download and keep. One column you call and pay for.
+
+That difference is M1.
 
 <!--
-Three shelves in the same shop, and it's worth naming them separately because
-people conflate them constantly.
+There are three different categories here, and mixing them leads to confused
+architecture decisions.
 
-LIBRARIES are the tools, and the split that matters is run-vs-serve:
-transformers and ollama are how you run a model on one machine (ollama being
-the easy on-ramp — one command, no Python); vllm is how you serve one to many
-users with batching and throughput. diffusers is transformers' sibling for
-image and video. You will use transformers today.
+Libraries are tools. `transformers` and `ollama` run models locally. `vllm`
+serves models with batching and throughput. `diffusers` handles image and video
+generation. These are not models; they are software used to run models.
 
-OPEN MODELS are downloadable weights. Note these are almost all Chinese labs
-now — Qwen, GLM, Kimi, DeepSeek — plus Google's Gemma. That is a genuine shift
-from two years ago and worth remarking on.
+Open models are downloadable weights. Closed models are accessed through APIs.
+The operational questions are different: where the data goes, who pays for
+tokens, who controls serving, and whether the artifact can be customized.
 
-CLOSED MODELS are an API and a bill. Best capability, zero ownership.
-
-The click line is the whole point of the slide, and it sets up M1's four ways.
-Do not get drawn into "which is best" — that is M1's closed-vs-open slide.
+This slide sets up M1's four model-access patterns. Do not turn it into a
+ranking discussion yet.
 
 Licences differ and it is not a footnote: Qwen and DeepSeek are typically
 Apache-2.0, Gemma has its own terms. If the pitch is "IP you own", legal will
@@ -324,45 +329,42 @@ read the licence.
 
 ---
 
-**The Python AI Ecosystem · 2/2**
+**The Python AI Ecosystem · 2 of 2**
 
-# Getting One Onto Your Laptop
+# M0.2.3 · Getting One Onto Your Laptop
 
 ```python
 """Pull a $200M artifact onto your laptop. For free."""
 
-from huggingface_hub import snapshot_download
+# Run once with network, then the weights live in a
+# folder you own. For this workshop, that already
+# happened: OFFLINE-AI-Models/ is in the repo.
 
-snapshot_download(
-    # 22M params, ~85 MB on disk
-    repo_id="Snowflake/snowflake-arctic-embed-xs",
-    local_dir="./models/arctic-embed-xs",
-    ignore_patterns=["*.msgpack", "*.h5", "tensorboard*"],
+from chronos_offline import generate
+
+reply = generate(
+    "In one sentence: what is a concentrated portfolio?",
+    max_new_tokens=40,
 )
-
-# It's now a local folder. No API key. No network.
-# No per-token bill. It is yours.
-from sentence_transformers import SentenceTransformer
-
-model = SentenceTransformer("./models/arctic-embed-xs")
-vectors = model.encode(
-    ["broad market index fund", "S&P 500 tracker"]
-)
-
-print(vectors.shape)   # (2, 384) -> meaning, as numbers
+print(reply)
 ```
+
+Full running version: `SLIDES-markdown/m0/offline_model.py`
 
 **What to notice**
 
-- Four lines, no API key, no account
+- No API key, no account
+- No network after the weights are present
+- No per-token bill
+- A local artifact you can inspect, serve, or fine-tune
 - 22M parameters, ~85 MB on disk
 - Downloads once, then works with no network
-- It is now **a folder you own**
+- It is now a local artifact you control
 - Size is two different numbers: **parameters** drive quality, **bytes on disk** drive whether you can ship it. M2 comes back to this.
 
 <!--
-Run it live if you can. Watching weights land in a local folder is what makes
-the "$200M artifact, free" slide two beats ago concrete rather than rhetorical.
+Run it live if time allows. Seeing a model become a local folder makes the
+ownership point concrete.
 
 The two-numbers point matters and people conflate them: 22M parameters is the
 capability number; 85 MB is the logistics number. A model can be small on disk
@@ -373,15 +375,15 @@ This particular model — arctic-embed-xs — is not decoration. It is the
 embedding model M2 uses to demonstrate meaning vectors and the one M4's offline
 RAG runs on. Say that: the thing they just downloaded gets used twice more.
 
-Demo if time: open huggingface.co, sort by trending, open a model's Files tab so
-they see it is just a folder of weights and config.
+Demo if time: open a model's Files tab on HuggingFace. The useful observation is
+that a model is files: weights, tokenizer, config, and metadata.
 -->
 
 ---
 
 <!-- _class: lead -->
 
-# Building Blocks
+# M0.3.1 · Building Blocks
 
 The six things every Python AI app is made of
 
@@ -390,14 +392,15 @@ Shift gears — laptops open from here.
 
 Framing: we're not covering "all of Python". We're covering the specific subset
 that shows up in every AI application you will build this week. Six things.
-Every snippet is a real file in snippets/m0/ — they can run all of them.
+Every snippet is a real file in `SLIDES-markdown/m0/` — they can run all of
+them with `uv run --project ../CODE-ALONGS python m0/<file>.py`.
 -->
 
 ---
 
-**Building Blocks · 1/6**
+**Building Blocks · 1 of 6**
 
-# Variables & Type Hints
+# M0.3.2 · Variables & Type Hints
 
 ```python
 """Variables and type hints. A Chronos price row."""
@@ -419,12 +422,14 @@ dividend: float | None = None      # may be absent
 print(f"{symbol} - {close:,.2f} x {shares:g} shares")
 ```
 
+Full running version: `SLIDES-markdown/m0/variables.py`
+
 **What to notice**
 
 - No type declarations needed to run
 - But annotate anyway — `list[str]`, `float | None`
 - Hints are checked by your IDE, not the interpreter
-- **This is the bit that matters:** Pydantic and FastAPI read these hints and turn them into real runtime validation
+- Pydantic and FastAPI read these hints and turn them into runtime validation
 - Type hints are how a "dynamic" language gets a static contract — without giving up the fast iteration.
 
 <!--
@@ -435,15 +440,15 @@ Do NOT let this become a static-vs-dynamic-typing debate. The pragmatic answer:
 annotate function signatures and data models, skip annotations on obvious local
 variables. That's what the ecosystem actually does.
 
-The Pydantic connection is the payoff — it lands two slides from now. Plant it
-here so it doesn't feel like magic later.
+The Pydantic connection arrives two slides from now. Introduce it here so the
+runtime-validation behavior does not feel like magic later.
 -->
 
 ---
 
-**Building Blocks · 2/6**
+**Building Blocks · 2 of 6**
 
-# Functions & Logging
+# M0.3.3 · Functions & Logging
 
 ```python
 """Functions and logging. Never print() in real code."""
@@ -471,31 +476,30 @@ if __name__ == "__main__":
     position_value(100, 323.54)
 ```
 
+Full running version: `SLIDES-markdown/m0/functions.py`
+
 **What to notice**
 
 - Docstring first — it's what an LLM reads too
 - Annotated signature: `(float, float) -> float`
 - Fail loudly and early on bad input
 - `logging`, never `print`
-- **Why logging matters more with AI:** model output is non-deterministic. When a feature misbehaves in production, the log is the *only* record of what the model actually saw and said.
+- With non-deterministic model output, logs are the record of what the model saw and returned
 
 <!--
-The print-vs-logging point usually gets nods but no real conviction until you
-frame it the AI way: with deterministic code you can reproduce a bug locally.
-With an LLM in the loop you often cannot — same prompt, different output. Your
-logs are the only forensic evidence you will ever have. Log the prompt, log the
-response, log the model version.
+With deterministic code, a failure is often reproducible locally. With a model
+in the loop, the same prompt may not produce the same text. Logs record the
+prompt, response, model version, tool calls, and decisions made around them.
 
-The `%s` lazy-formatting style in log calls (not f-strings) is deliberate —
-the string is only built if that level is enabled. Small thing, mention it if
-the room is sharp.
+The `%s` lazy-formatting style in log calls (not f-strings) is deliberate: the
+string is only built if that level is enabled.
 -->
 
 ---
 
-**Building Blocks · 3/6**
+**Building Blocks · 3 of 6**
 
-# Classes
+# M0.3.4 · Classes
 
 ```python
 @dataclass
@@ -529,6 +533,8 @@ class Portfolio:
         return self._cash + held
 ```
 
+Full running version: `SLIDES-markdown/m0/classes.py`
+
 **What to notice**
 
 - `@dataclass` — the shape of your data, no boilerplate
@@ -548,9 +554,9 @@ you inherit, and the deep hierarchy instinct from Java is actively unhelpful.
 
 ---
 
-**Building Blocks · 4/6**
+**Building Blocks · 4 of 6**
 
-# Data: CSV → Insight
+# M0.3.5 · Data: CSV → Insight
 
 ```python
 """Reading and processing data.
@@ -560,7 +566,7 @@ pandas for thousands of rows.
 
 import pandas as pd
 
-prices = pd.read_csv("data/sample_prices.csv")
+prices = pd.read_csv("data/prices.csv")
 
 # Filter, group, aggregate. Three chained operations
 # replace the nested loop you'd write elsewhere.
@@ -575,8 +581,10 @@ print(summary)
 
 # Billions of rows? Change the import, keep the logic:
 #   import polars as pl
-#   prices = pl.scan_csv("data/sample_prices.csv")
+#   prices = pl.scan_csv("data/prices.csv")
 ```
+
+Full running version: `SLIDES-markdown/m0/data_csv.py`
 
 **What to notice**
 
@@ -596,16 +604,16 @@ API is deliberately similar so switching is cheap, but don't teach it now.
 
 ---
 
-**Building Blocks · 5/6**
+**Building Blocks · 5 of 6**
 
-# Databases
+# M0.3.6 · Databases
 
 ```python
 """Database read/write. sqlite3 ships with Python."""
 
 import sqlite3
 
-conn = sqlite3.connect("chronos.db")
+conn = sqlite3.connect(":memory:")
 conn.execute("""
     CREATE TABLE IF NOT EXISTS prices (
         symbol TEXT NOT NULL,
@@ -618,8 +626,9 @@ conn.execute("""
 conn.executemany(
     "INSERT OR REPLACE INTO prices VALUES (?, ?, ?)",
     [
-        ("SPY", "2020-03-12", 248.11),
-        ("SPY", "2020-03-13", 269.32),
+        ("AAPL", "2020-05-29", 79.49),
+        ("AAPL", "2020-06-01", 80.46),
+        ("AAPL", "2020-06-02", 80.83),
     ],
 )
 conn.commit()
@@ -629,11 +638,13 @@ rows = conn.execute(
     "SELECT date, close FROM prices"
     " WHERE symbol = ? AND date <= ?"
     " ORDER BY date DESC LIMIT 1",
-    ("SPY", "2020-03-14"),
+    ("AAPL", "2020-06-01"),
 )
 print(list(rows))
 conn.close()
 ```
+
+Full running version: `SLIDES-markdown/m0/database.py`
 
 **What to notice**
 
@@ -654,9 +665,9 @@ extension rather than a new universe.
 
 ---
 
-**Building Blocks · 6/6**
+**Building Blocks · 6 of 6**
 
-# The API Server
+# M0.3.7 · The API Server
 
 ```python
 class Holding(BaseModel):
@@ -683,6 +694,8 @@ def get_holding(symbol: str) -> Holding:
     return BOOK[symbol]
 ```
 
+Full running version: `SLIDES-markdown/m0/api_server.py`
+
 **What to notice**
 
 - `BaseModel` + type hints = automatic validation
@@ -704,7 +717,7 @@ which is how you stop an LLM returning free-form prose. Plant it now.
 
 ---
 
-# Running & Debugging
+# M0.4.1 · Running & Debugging
 
 **Ways to run**
 
@@ -725,7 +738,7 @@ uv run pytest -x --pdb    # stop and drop into a debugger
 - Breakpoint in VS Code — click the gutter, F5
 - `breakpoint()` anywhere in the code
 - Read the traceback **bottom-up**: the last line is what broke, above it is how you got there
-- Reading tracebacks bottom-up is the single highest-leverage habit here. Most people read top-down and give up.
+- Read tracebacks bottom-up: exception first, call path second
 
 <!--
 Keep this brisk — it's plumbing, and they'll pick it up in the lab anyway.
@@ -745,7 +758,7 @@ slide after the lab.
 
 ---
 
-# Code You'll Still Understand in Six Months
+# M0.4.2 · Code You'll Still Understand in Six Months
 
 **Before**
 
@@ -772,6 +785,8 @@ def concentrated(holdings: list[Holding],
         and (sector is None or holding.sector == sector)
     ]
 ```
+
+Full running version: `SLIDES-markdown/m0/naming.py`
 
 **What changed**
 
@@ -809,20 +824,22 @@ module on it.
 
 ---
 
-# 🧪 Lab: Market data, point-in-time prices, a benchmark (70 min)
+# M0.L1 · Lab: Market Data, Point-In-Time Prices, Benchmark
 
-<code>labs/python_basics/python_basics_lab.py</code> — fill in three functions.
+`labs/python_basics/python_basics_lab.py` — fill in three functions.
 
 1. **Read closes from a CSV** *(12 min)* — market data arrives as files first
 2. **The price on or before a date** *(18 min)* — never a price the investor hasn't reached
 3. **Compare the account to a benchmark** *(30 min)* — **ships to the app**
 
-Done when: <code>uv run pytest tests/labs -m lab</code> is green, and a buy-and-hold line appears on the account value chart.
+Done when: `uv run pytest tests/labs -m lab` is green, and a buy-and-hold line appears on the account value chart.
 
-Prerequisite: <code>uv run python -m scripts.load_market_data</code> · Stretch: measure the worst drawdown
+Prerequisite: `uv run python -m scripts.load_market_data`
+
+Stretch: measure the worst drawdown.
 
 <!--
-Circulate. The two failure modes you'll see: (1) forgetting `uv run` and hitting
+Common failure modes: (1) forgetting `uv run` and hitting
 the system Python, (2) running from the wrong directory, so the CSV path misses.
 
 Exercise 2 is the one to make a point of. "The latest close on or BEFORE this
@@ -830,7 +847,7 @@ date" is not a Python trick — it is the rule the entire application obeys, and
 the reason the app can never show a price from the investor's future. Weekends
 fall out of it for free: a Saturday values from Friday's close.
 
-Exercise 3 is why the lab is worth 70 minutes. They are not writing a toy — the
+Exercise 3 is the capstone connection. They are not writing a toy — the
 function graduates into `chronos/portfolio/benchmark_comparison.py` and the line
 appears on the chart. Show that happening at the front of the room when the
 first person passes.
@@ -845,7 +862,7 @@ over the investing corpus, M7 makes it agentic. Everything compounds from here.
 
 ---
 
-# Python → IPython → Jupyter
+# M0.4.3 · Python → IPython → Jupyter
 
 **The Java/C loop**
 
@@ -897,7 +914,7 @@ That's the same discipline as the naming slide, applied to file format.
 
 <!-- _class: lead -->
 
-# The Zen of Python
+# M0.5.1 · The Zen of Python
 
 Beautiful is better than ugly.
 **Explicit is better than implicit.**

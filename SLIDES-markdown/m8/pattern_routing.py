@@ -2,7 +2,8 @@
 
 Same workflow as pattern_chaining -- routing decides
 which questions ever reach it. Fully offline. Run:
-    uv run python -m m8.pattern_routing
+    uv run --project ../CODE-ALONGS \
+        python m8/pattern_routing.py
 """
 
 import sys
@@ -42,7 +43,8 @@ def show_scores(question: str) -> None:
 
 if __name__ == "__main__":
     # Pass your own question to see the scores:
-    #   uv run python -m m8.pattern_routing "..."
+    #   uv run --project ../CODE-ALONGS \
+    #       python m8/pattern_routing.py "..."
     if len(sys.argv) > 1:
         show_scores(" ".join(sys.argv[1:]))
         raise SystemExit(0)

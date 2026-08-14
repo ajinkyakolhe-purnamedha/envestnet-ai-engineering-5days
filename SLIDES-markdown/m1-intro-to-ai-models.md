@@ -6,9 +6,7 @@ paginate: true
 
 <!-- _class: lead -->
 
-> Draft version: content is being refined.
-
-# M1 · Introduction to AI Models
+# M1.0.1 · Introduction To AI Models
 
 What they do, where to get them, what they cost
 
@@ -22,14 +20,14 @@ By the end of this module you can:
 <!--
 ~75 minutes, with the last 30 hands-on.
 
-Frame the module as a shopping trip, not a lecture. By the end they should be
-able to answer "which model, from where, and why" for a feature — that question
-is the whole job, and everything after M1 assumes they can answer it.
+Frame the module as a model-access decision. By the end, students should be
+able to answer: which model, where does it run, where does the data go, and why
+is that the right trade-off for this feature?
 -->
 
 ---
 
-# What Models Can Do Now
+# M1.1.1 · What Models Can Do Now
 
 **Language**
 
@@ -45,27 +43,30 @@ is the whole job, and everything after M1 assumes they can answer it.
 - Generate — images, video, audio
 - Act — call your tools, run your code
 
-> The interesting question stopped being *"can it do this?"* and became
-> **"can I make it do this reliably, cheaply, on my data?"**
+The engineering question:
+
+```text
+Can I make it reliable, affordable, and grounded in my data?
+```
 
 <!--
-DEMO SLIDE — do not read the bullets. Show two or three things live, using
-whatever you have open. Suggestions that land well with engineers:
+Demo slide. Do not read the bullets. Show two or three things live, using
+whatever you have open. Suggestions that work well with engineers:
 
   - Paste a stack trace, ask for the root cause
-  - Screenshot a UI, ask for the HTML/CSS
+  - Screenshot a UI, ask for implementation notes
   - Paste a chunk of the Chronos prices CSV, ask for the trend as JSON
 
-Then land the pivot at the bottom. That sentence is the thesis of the entire
-five days: capability is table stakes now; reliability, cost, and data
-ownership are the engineering. Everything from M2 onward is one of those three.
+Then use the question at the bottom as the transition. Capability is not the
+end of the engineering problem. Reliability, cost, data boundary, evaluation,
+and integration are the work.
 
 Keep this to 10 minutes. It's very easy to burn half the module on demos.
 -->
 
 ---
 
-# A Model Is Not a Product
+# M1.1.2 · A Model Is Not A Product
 
 **What you just watched**
 
@@ -85,15 +86,12 @@ Raw capability, with a person doing the integration by hand.
 
 Same model. The difference is entirely engineering.
 
-> GPT is a model. ChatGPT is a product. **The distance between those two words is the job.**
+Model capability becomes a product only after engineering wraps it.
 
 <!--
-The bridge slide, and it stops the demo becoming "AI is amazing, the end".
-
-The move to make: the demo they just watched was impressive AND it was entirely
-manual. You chose the input, you pasted the context, you read the output, you
-decided if it was right, and then you did something with it. Strip the human out
-and nothing happens. That is a capability, not a feature.
+This bridge stops the demo from becoming the lesson. The demo was manual:
+someone chose the input, supplied context, judged the output, and moved the
+answer somewhere useful. A product has to do those steps inside software.
 
 Land the four right-hand rows as the actual work of the next five days:
   - "where the work happens" -> it's in the CRM, the IDE, the ticket queue.
@@ -104,16 +102,14 @@ Land the four right-hand rows as the actual work of the next five days:
     guardrails and red-teaming.
   - "someone measured it" -> evals. M3. Without them you are guessing.
 
-The GPT/ChatGPT line is the one to land. Same weights underneath; one is a
-research artifact and the other is a product used by hundreds of millions,
-and the entire difference is the software wrapped around it.
-
-Then straight into the next slide: that difference is also where the money is.
+The core distinction is model versus product. A model is a capability. A
+product is the model plus context, workflow, permissions, evaluation, safety,
+UI, monitoring, and ownership.
 -->
 
 ---
 
-# The Gap We're Here to Fill
+# M1.1.3 · The Application Gap
 
 **Cloud — the mature market**
 
@@ -125,11 +121,14 @@ Then straight into the next slide: that difference is also where the money is.
 - Platforms earn **10×** what the software on them earns
 - Exactly inverted. The application layer barely exists yet.
 
-When AI follows cloud, that ratio flips — and **a 100× swing** lands on the software side. **That gap is the job description.**
+If AI follows the cloud pattern, more value moves to the application layer.
+
+That application layer is built by engineers.
 
 <!--
-This is the commercial argument for the whole week, and it works because it is
-one shape shown twice, inverted.
+This is the commercial argument for building applications rather than only
+studying models. Keep it as an order-of-magnitude framing, not a precise market
+forecast.
 
 CLOUD, mature: the platform layer (AWS, Azure, GCP selling compute and storage)
 earns X. The software built on that platform earns roughly 10X. That is the
@@ -141,14 +140,13 @@ roughly 10x what the applications built on them earn. That is not a permanent
 state, it is an early state — it is what cloud looked like before the SaaS wave
 arrived.
 
-Then the punchline: when AI follows the same path, the ratio inverts. That is a
-100x swing in where the revenue sits, and it lands on the application layer —
-which is built by engineers writing features, not by researchers training
-models. That is the room's opportunity, and it is why the next five days are
-about building rather than about model architecture.
+If the ratio shifts toward applications, the work is product engineering:
+workflow integration, data access, evaluation, security, UX, and operations.
+Those are software-engineering problems around a model.
 
-The 10x figures are Ajinkya's datapoint — have the source to hand, because a
-sharp room will ask, and the number is doing a lot of work here.
+Have the source for the 10x figures available if this slide is delivered. The
+numbers are useful as a shape, but they are not required for the technical
+argument.
 
 Two honest caveats worth pre-empting if challenged:
   1. "AI software revenue is early" is partly a measurement artifact — many AI
@@ -163,7 +161,7 @@ the deck.
 
 ---
 
-# Four Ways to Use a Model
+# M1.2.1 · Four Ways To Use A Model
 
 | | Where the weights live | Where it runs | You need |
 |---|---|---|---|
@@ -179,8 +177,8 @@ This table is the spine of the module — the next four slides are one code
 example each, in this order. Tell them that so the sequence reads as a tour.
 
 The row that surprises people is 3: no key, no account, no network, no bill.
-Most engineers have never actually run a model locally and assume it needs a
-datacentre. Twenty minutes from now they'll have done it.
+Many engineers have never run a model locally and assume it needs dedicated
+infrastructure. The offline lab makes the local path concrete.
 
 Rows 2 and 4 are the "grown-up" versions of 1 and 3 — same model, different
 billing and data boundary. That's usually the real enterprise decision, and
@@ -189,161 +187,174 @@ it's a procurement conversation as much as a technical one.
 
 ---
 
-**Four Ways to Use a Model · 1/4**
+**Four Ways to Use a Model · 1 of 4**
 
-# Closed Model, Vendor API
+# M1.2.2 · Closed Model, Vendor API
 
 ```python
 """Way 1: closed model, straight from the vendor."""
 
-from anthropic import Anthropic
+import os
+from dotenv import load_dotenv
+from google import genai
 
-client = Anthropic()      # reads ANTHROPIC_API_KEY
+load_dotenv(override=True)      # reads GEMINI_API_KEY
+client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
 
-NOTE = "Cash is 40% of the book, one holding is 52%."
+NOTE = "Cash is 40% of the book, AAPL is 52%."
 
-response = client.messages.create(
-    model="claude-opus-5",
-    max_tokens=16000,
-    messages=[
-        {"role": "user", "content": f"Name the risk: {NOTE}"},
-    ],
+response = client.models.generate_content(
+    model="gemini-2.5-flash-lite",
+    contents=("Return exactly one sentence. "
+              f"Name the biggest concentration risk: {NOTE}"),
+    config={"max_output_tokens": 60},
 )
 
-print(response.content[0].text)
+print(response.text)
 ```
+
+Full running version: `SLIDES-markdown/m1/first_call.py`
 
 **What to notice**
 
-- Three required fields: `model`, `max_tokens`, `messages`
-- `messages` is a list of turns — the API is **stateless**
-- No session, no connection; every call carries its whole history
+- Two required fields here: `model` and `contents`
+- The API is **stateless**
+- No session, no connection; every call carries its input
 - The key comes from the environment, never the code
-- Fastest path to a working feature. You rent capability; you own nothing.
+- Fastest path to a working feature
+- You rent capability; the model artifact is not yours
 
 <!--
-Statelessness is the concept that trips up most newcomers, and it's worth 60
-seconds: there is no conversation on the server. A "chat" is you resending the
-entire transcript every single turn. That's why context windows matter (M2),
-why long conversations get expensive, and why caching exists.
+Statelessness is the concept to make precise. There is no durable conversation
+on the model server. A chat request is the transcript sent again on each turn.
+That is why context windows matter in M2, why long chats get expensive, and why
+M9 treats memory as a transcript management problem.
 
 max_tokens is a hard cap on the response, not a target. Set it too low and you
 truncate mid-sentence — a very common first bug.
 
-Never put a key in source. Environment variable, secrets manager, or your
-cloud's IAM. Say it once, firmly; someone in the room is about to do it.
+Never put a key in source. Use an environment variable, a secrets manager, or
+cloud IAM. This rule applies to notebooks too.
 -->
 
 ---
 
-**Four Ways to Use a Model · 2/4**
+**Four Ways to Use a Model · 2 of 4**
 
-# Closed Model, Your Cloud
+# M1.2.3 · Closed Model, One Boundary
 
 ```python
-"""Way 2: closed model, via your own cloud account."""
+"""Way 2: put the provider behind a small function."""
 
-from anthropic import AnthropicBedrockMantle
+import os
+from dotenv import load_dotenv
+from google import genai
 
-# Auth is AWS IAM. Billing lands on your AWS bill.
-# Traffic stays inside your account boundary.
-client = AnthropicBedrockMantle(aws_region="us-east-1")
+load_dotenv(override=True)
 
-response = client.messages.create(
-    model="anthropic.claude-opus-5",   # note the prefix
-    max_tokens=16000,
-    messages=[{"role": "user", "content": "Hello"}],
-)
+def call_gemini(prompt: str) -> str:
+    client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
+    response = client.models.generate_content(
+        model="gemini-2.5-flash-lite",
+        contents=prompt,
+    )
+    return response.text
 
-print(response.content[0].text)
-
-# Same SDK, same request shape as the vendor API.
-# What changes: who bills you, and where the data goes.
+print(call_gemini("Name one portfolio risk."))
 ```
+
+Full running version: `SLIDES-markdown/m1/cloud_call.py`
 
 **What to notice**
 
-- Different client, **identical** request shape
-- Auth is your cloud's IAM, not a vendor key
-- Billing lands on a bill you already have
-- Model ID picks up a provider prefix
-- **Why this row exists:** procurement, data residency, and an existing cloud commitment. Often the only option that clears review.
+- Provider details live in one function
+- Product code calls `call_gemini(...)`, not a scattered SDK
+- The model ID is configuration, not business logic
+- `gemini-2.5-flash-lite` is the cheap working demo model
+- **Why this row exists:** swapping providers later should be configuration, not surgery.
 
 <!--
-DRAFT — the outline had this as a TODO. I've assumed AWS Bedrock; swap the
-client if Envestnet standardises on Azure/Foundry or GCP/Vertex. The three
-client classes are AnthropicBedrockMantle, AnthropicFoundry, AnthropicVertex —
-the rest of the code is unchanged, which is exactly the point of the slide.
-
-The engineering point is small: same SDK, one line different. The point that
-actually matters to this audience is organisational — going through the cloud
-account means no new vendor contract, no new data-processing agreement, and
-traffic that stays inside a boundary the security team already signed off on.
-For a regulated business that is frequently the whole decision.
+This slide uses Gemini directly because that is the key available in the
+workshop `.env`. The engineering point is still the same: keep provider details
+at the boundary so later procurement or cloud decisions do not leak through the
+application.
 
 Caveat worth knowing: feature parity lags on partner platforms. Some newer API
-features land on the first-party API first. Check before promising one.
+features appear on the first-party API first. Check before promising one.
 -->
 
 ---
 
-**Four Ways to Use a Model · 3/4**
+**Four Ways to Use a Model · 3 of 4**
 
-# Open Model, Your Machine
+# M1.2.4 · Open Model, Your Machine
 
 ```python
 """Way 3: open model, on your laptop. No key, no network."""
 
-from transformers import pipeline
+from transformers import AutoModelForCausalLM, AutoTokenizer
 
-# Downloads once (~1 GB), then runs entirely offline.
-chat = pipeline(
-    "text-generation",
-    model="Qwen/Qwen2.5-0.5B-Instruct",
+PATH = "../OFFLINE-AI-Models/smollm2-135m-instruct"
+
+tokenizer = AutoTokenizer.from_pretrained(
+    PATH, local_files_only=True
 )
+model = AutoModelForCausalLM.from_pretrained(
+    PATH, local_files_only=True
+).eval()
 
 messages = [
     {"role": "system", "content": "You explain portfolios."},
     {"role": "user", "content": "One holding is 52% of it."},
 ]
 
-out = chat(messages, max_new_tokens=64)
-print(out[0]["generated_text"][-1]["content"])
+prompt = tokenizer.apply_chat_template(
+    messages, tokenize=False, add_generation_prompt=True
+)
+inputs = tokenizer(prompt, return_tensors="pt")
+out = model.generate(**inputs, max_new_tokens=60, do_sample=False)
+
+new = out[0, inputs["input_ids"].shape[-1]:]
+print(tokenizer.decode(new, skip_special_tokens=True))
 
 # No API key. No per-token bill. No data leaving the box.
 # This half-gigabyte is the thing you can fine-tune in M6.
 ```
 
+Full running version: `SLIDES-markdown/m1/open_local.py`
+
 **What to notice**
 
 - No key. No account. No network after the download.
-- ~1 GB on disk, runs on a laptop CPU
+- ~260 MB on disk, runs on a laptop CPU
 - Same `messages` shape you just learned
-- The weights are now **a file you own**
-- Slower and less capable than row 1 — and it is the only row where the result can become *your* IP.
+- The weights are local files
+- Slower and less capable than row 1
+- The artifact can be adapted, evaluated, and served under your control
 
 <!--
-Run this live if you possibly can. The moment a model answers on a laptop with
-the wifi off is the moment M0's "customisable IP" argument stops being a slide
-and becomes a thing they watched happen.
+Run this live if possible. The important observation is operational: after the
+download, the model call does not need a network, an API key, or a per-token
+bill.
 
-Set expectations honestly: a 0.5B model is not going to impress anyone at
+Set expectations honestly: a 135M model is not going to impress anyone at
 conversation. It will follow a narrow instruction reasonably well. That is the
 correct use for small models — one job, done cheaply, a million times.
 
-The callback to land: this file is what M6 fine-tunes. Right now it's a generic
-half-gigabyte; after fine-tuning on data only you have, it does something no
-competitor can buy.
+This file is what M6 can fine-tune. Fine-tuning does not make the model know
+new changing facts; it changes behavior for a narrow task. That distinction is
+handled explicitly in M6.
 
-Practical: first run downloads the weights, so pre-download before the session
-or the room stalls on a progress bar.
+Practical: the workshop repo already carries the weights. If you swap to a
+larger model, pre-download before the session or the room stalls on a progress
+bar.
 -->
 
 ---
 
-**Four Ways to Use a Model · 4/4**
+**Four Ways to Use a Model · 4 of 4**
 
-# Open Model, Hosted
+# M1.2.5 · Open Model, Hosted
 
 ```python
 """Way 4: open model, someone else's GPU."""
@@ -367,71 +378,65 @@ print(out.choices[0].message.content)
 # You need a key here, but you don't need permission.
 ```
 
+Full running version: `SLIDES-markdown/m1/open_hosted.py`
+
 **What to notice**
 
 - Open weights, industrial-scale hardware
 - A key again — but for *compute*, not for the model
 - Portable: move to your own GPUs, code unchanged
 - Access to models far too big for a laptop
-- The pragmatic middle: open-model economics and ownership, without buying GPUs.
+- Open-model portability without buying GPUs
 
 <!--
-This row is how most serious open-model work actually ships. A 400B-parameter
-open model is not running on anyone's laptop, but you can rent it by the token,
-and — critically — you are not locked in. If the price moves or the provider
-folds, the weights are still on HuggingFace and the same code points somewhere
-else. That optionality is the difference between renting compute and renting
-capability.
+This row is common in production open-model work. Large open models do not fit
+on a laptop, but hosted inference lets a team rent GPU time while keeping
+portability. If a provider changes price or reliability, the weights can be
+served elsewhere.
 
-Providers to name: HuggingFace Inference, Together, Fireworks, Groq, plus the
-open-model catalogues inside Bedrock and Vertex. Don't pick a favourite from
-the front of the room.
+Providers to name: HuggingFace Inference, Together, Fireworks, Groq, and
+managed open-model catalogues. Don't pick a favourite from the front of the
+room.
 
-The line to leave them with: "you need a key here, but you don't need
-permission." Nobody can revoke your access to an open model — only to one
-particular vendor's copy of it.
+The distinction is compute versus capability. A hosted provider can revoke
+access to its endpoint. It cannot remove the open weights from your architecture
+if you have planned for portability.
 -->
 
 ---
 
-# What Changes When It's Real
+# M1.3.1 · What Changes In Production
 
 ```python
-with client.beta.messages.stream(          # 1. stream
-    model="claude-opus-5",
-    max_tokens=64000,
-    betas=["server-side-fallback-2026-07-01"],
-    fallbacks="default",                   # 2. auto-fallback
-    messages=[{"role": "user", "content": PROMPT}],
-) as stream:
-    response = stream.get_final_message()
-
-# 3. The model can decline. Check BEFORE reading content
-#    -- on a refusal, response.content may be empty.
-if response.stop_reason == "refusal":
-    log.warning("declined: %s", response.stop_details)
-else:
-    print(response.content[0].text)
-
-# 4. Log what it cost. Every call, every time.
-log.info(
-    "in=%d out=%d",
-    response.usage.input_tokens,
-    response.usage.output_tokens,
+response = client.models.generate_content(
+    model="gemini-2.5-flash-lite",
+    contents=PROMPT,
+    config={"max_output_tokens": 80},
 )
+
+# 1. Log what it cost. Every call, every time.
+usage = response.usage_metadata
+print(f"usage prompt={usage.prompt_token_count} "
+      f"output={usage.candidates_token_count}")
+
+# 2. Check the response shape before reading text.
+if response.text:
+    print(response.text)
 ```
+
+Full running version: `SLIDES-markdown/m1/production_call.py`
 
 **What to notice**
 
-1. **Stream** — long answers hit HTTP timeouts otherwise
-2. **Fallback** — a declined request re-runs on another model automatically
-3. **Check `stop_reason`** *before* reading content
-4. **Log tokens** — every call, every time
+1. **Load secrets from `.env`** — never paste keys into code
+2. **Use Flash Lite for demos** — cheap enough to run live
+3. **Log tokens** — every call, every time
+4. **Check text exists** before treating the call as successful
 
-Slide 1 was the demo. This is the version that survives a Monday morning.
+The first model call proves access. This version handles production outcomes.
 
 <!--
-The habit worth teaching here is #3, and it generalises past any one vendor:
+The habit worth teaching here is #3, and it generalizes past any one vendor:
 a model call has more outcomes than "worked" and "threw an exception". It can
 return a successful HTTP 200 and still not answer you — safety classifiers
 decline, content gets truncated at max_tokens, a tool call comes back instead
@@ -443,23 +448,22 @@ server-side on another model in the same call, so a false-positive refusal
 doesn't become a user-visible failure. Worth mentioning that benign work in
 security and life-sciences adjacent domains is where false positives cluster.
 
-Token logging pays for itself in week one. Without it, "why did the AI bill
-triple?" is unanswerable — and it always gets asked.
+Token logging is operational data. Without it, cost, latency, and regression
+questions become guesswork.
 -->
 
 ---
 
-# The Models Worth Knowing
+# M1.4.1 · The Models Worth Knowing
 
 **Closed — general purpose**
 
-| Model | In / Out per 1M |
+| Model | Reach for it when |
 |---|---|
-| Claude Opus 5 | $5 / $25 |
-| Claude Sonnet 5 | $3 / $15 |
-| Claude Haiku 4.5 | $1 / $5 |
-| GPT-5.5 | $5 / $30 |
-| Gemini 3.1 Pro | $2 / $12 |
+| Gemini 2.5 Flash-Lite | cheapest live demos, routing, extraction |
+| Gemini 2.5 Flash | stronger fast default |
+| Gemini Pro tier | harder reasoning or multimodal work |
+| GPT family | ecosystem and tool support |
 
 **Open weights — general purpose**
 
@@ -471,18 +475,19 @@ triple?" is unanswerable — and it always gets asked.
 | Kimi | Moonshot | Coding |
 | GLM | Zhipu | Speed, long context |
 
-These are the **generalists** — one model, many jobs. There is another shelf entirely.
+These are generalists: one model, many jobs.
+
+There is another shelf: specialist models.
 
 <!--
-DRAFT — prices and rankings are from August 2026 and rot within weeks. Re-check
-before every delivery; treat the table as a shape, not as truth.
+Prices and rankings rot quickly. Re-check before delivery and treat the table
+as a current example, not durable course truth.
 
 Three framings that outlive the specific numbers:
 
-1. THE PRICE SPREAD IS ~100x, not 2x. Frontier closed models run $5-30 per
-   million output tokens; capable open models run cents. On a feature doing
-   millions of calls that is the difference between a product and a science
-   project. It's also why M2's model-routing discussion matters.
+1. THE PRICE SPREAD CAN BE ORDERS OF MAGNITUDE, not a small constant factor.
+   On a feature doing millions of calls, that can decide whether the feature is
+   operationally viable. This is why M2's model-routing discussion matters.
 
 2. THE FRONTIER GAP HAS NARROWED but has not closed. Open models now match
    closed models on many benchmarks. On the hardest agentic and long-horizon
@@ -497,12 +502,14 @@ Licences differ and it is not a footnote: Qwen and DeepSeek are typically
 Apache-2.0, Llama has its own usage terms. If the pitch is "IP you own", legal
 will read the licence.
 
-Don't turn this into a benchmark debate. Point at the leaderboards, move on.
+Do not turn this into a benchmark debate. The durable lesson is the decision
+axis: capability, latency, cost, data boundary, ownership, and serving
+complexity.
 -->
 
 ---
 
-# One Job, Done Better
+# M1.4.2 · One Job, Done Better
 
 | Job | Open models to look at | Replaces |
 |---|---|---|
@@ -513,16 +520,15 @@ Don't turn this into a benchmark debate. Point at the leaderboards, move on.
 | **Meaning vectors** | arctic-embed · bge | *This one powers M4* |
 | **Re-ranking** | bge-reranker | Better search results |
 
-> A single-purpose model beats a big general model **at that one purpose** — and it is smaller, faster and cheaper to run.
+A single-purpose model can beat a large general model at one job, while being
+smaller, faster, and cheaper.
 
 <!--
-DRAFT — model names are August 2026 and rot fast. Re-check, and open two or
-three on their sites live rather than reading the table aloud; these are much
-more convincing seen than described.
+Model names change quickly. Re-check examples before delivery. The stable
+concept is specialist versus generalist.
 
-The point of the slide, and say it directly: your instinct will be to reach for
-the biggest general model for everything, because that is what the demos show.
-That instinct is expensive and often just worse.
+The engineering mistake is reaching for the largest general model for every
+task. That is expensive and often less accurate than a specialist.
 
 Why the specialist wins, three reasons and they compound:
   1. Better at the job. All of its parameters learned one thing.
@@ -535,9 +541,8 @@ you don't yet know the shape of the problem. Use a specialist the moment the
 job is well-defined and the volume is real. Most production systems end up as
 a handful of specialists with one generalist for the messy parts.
 
-WORLD MODELS are the emerging fifth category — models that generate navigable
-environments rather than flat video. Worth a sentence as "watch this space";
-the open ones are not yet something you would build on.
+If discussing emerging categories such as world models, keep it brief. They are
+not required for this workshop's application path.
 
 Two callbacks that matter:
   - arctic-embed is the 85 MB model they downloaded in M0. It is a
@@ -547,7 +552,7 @@ Two callbacks that matter:
 
 ---
 
-# Closed vs Open: The Real Decision
+# M1.4.3 · Closed vs Open: The Real Decision
 
 | | Closed | Open |
 |---|---|---|
@@ -558,22 +563,24 @@ Two callbacks that matter:
 | **Ownership** | You rent capability | **You own the artifact** |
 | **Lock-in** | Vendor's roadmap and pricing | Yours |
 
-> Not a religious question. **Start closed to find out whether the feature is worth building. Move open when ownership, cost, or data boundary starts to matter.**
+Pragmatic path:
+
+```text
+start closed to test value
+move open when cost, ownership, or data boundary matters
+```
 
 <!--
-This is the slide people will screenshot. Land the closing line properly.
+The pragmatic path saves time. Prototype on a strong closed model when the
+feature is still uncertain. That tells the team whether the workflow has value
+before they spend time on serving infrastructure.
 
-The pragmatic path, and say it explicitly because it saves them months:
-prototype on a closed frontier model, because you want to learn whether the
-feature works at all before you spend a week on infrastructure. Then look at
-your three numbers — cost per call at real volume, where the data is going, and
-how much of the result you want to own. If none of them hurt, stay. If one
-does, you already know exactly what the feature needs to do, which makes moving
-to an open model a well-specified engineering task instead of a research
-project.
+Then measure: cost per call, latency, data boundary, and whether the model
+behavior needs to become owned IP. If one of those hurts, the team can move
+open with a known task and acceptance criteria.
 
-The anti-pattern is picking a side first, on principle, and then discovering
-six weeks in that the feature was never viable. Both religions cost the same.
+The anti-pattern is choosing closed or open as an identity before the feature is
+understood. Both directions can waste time if chosen too early.
 
 Ownership is the row that matters most for this audience, and it's the M0
 argument arriving on schedule: anyone can call the same API you're calling.
@@ -584,7 +591,7 @@ Nobody else has your data.
 
 <!-- _class: lead -->
 
-# Lab
+# M1.L1 · Lab
 
 Your first AI chatbot — two ways
 
@@ -598,7 +605,7 @@ they won't say so.
 
 ---
 
-# 🧪 Lab: A working chatbot (15 min)
+# M1.L2 · Lab: A Working Chatbot
 
 ```python
 def reply(message, history):
@@ -608,38 +615,34 @@ def reply(message, history):
     ]
     msgs.append({"role": "user", "content": message})
 
-    with client.messages.stream(
-        model="claude-opus-5",
-        max_tokens=4096,
-        system=SYSTEM,
-        messages=msgs,
-    ) as stream:
-        partial = ""
-        for text in stream.text_stream:
-            partial += text
-            yield partial       # Gradio renders each yield
+    response = client.models.generate_content(
+        model="gemini-2.5-flash-lite",
+        contents=f"{SYSTEM}\n\nUser: {message}",
+    )
+    return response.text
 ```
+
+Full running version: `SLIDES-markdown/m1/gradio_chat.py`
 
 **What to notice**
 
 - Gradio hands you `history` — you convert it to `messages`
-- `yield` instead of `return` → text streams into the UI
+- `return` sends the model text back into the UI
 - The system prompt is where the *product* lives
-- ~25 lines to a shareable web app
+- About 25 lines to a shareable web app
 
-1. `uv add gradio anthropic` → run it → then **change the system prompt** and watch the personality change.
+1. Run it → then **change the system prompt** and watch the personality change.
 
 Done when: A browser chat window that streams a reply, with a system prompt you wrote yourself.
 
 <!--
-Gradio is the fastest path from a Python function to a shareable UI. It is not
-a production frontend and nobody should ship it, but for a workshop and for
-internal demos it removes an entire day of frontend work.
+Gradio is a fast path from a Python function to a shareable UI. It is not the
+production frontend pattern for Chronos, but it is useful for a first model
+call because it removes unrelated frontend work.
 
-The exercise that teaches the most is the system-prompt edit. Have them make
+The exercise that teaches the most is the system-prompt edit. Have students make
 the assistant refuse to discuss anything but their portfolio, then try to talk
-it out of that. Two minutes of that does more for their intuition about prompt
-engineering — and about prompt injection — than a slide on either.
+it out of that. The lesson is prompt control and prompt injection, not Gradio.
 
 Common stumbles: forgetting `type="messages"` (Gradio's older tuple format has
 a different shape), and yielding the delta instead of the accumulated string
@@ -648,7 +651,7 @@ a different shape), and yielding the delta instead of the accumulated string
 
 ---
 
-# 🧪 Lab: Pull the network cable (15 min)
+# M1.L3 · Lab: Pull The Network Cable
 
 ```python
 def reply(message, history):
@@ -663,6 +666,8 @@ def reply(message, history):
     return out[0]["generated_text"][-1]["content"]
 ```
 
+Full running version: `SLIDES-markdown/m1/gradio_offline.py`
+
 **What to notice**
 
 - `HF_HUB_OFFLINE=1` — this is a proof, not a config
@@ -670,12 +675,12 @@ def reply(message, history):
 - No key, no network, no bill, no data leaving the box
 - Same Gradio wrapper as Lab A
 
-1. Run it, then **turn off your wifi and run it again.** Note where quality drops off vs Lab A — that gap is what the rest of the week is about closing.
+1. Run it, then **turn off your wifi and run it again.** Note where quality drops off vs Lab A. That gap is what the rest of the week reduces.
 
 Done when: A chatbot answering with the network disabled.
 
 <!--
-The wifi-off step is the entire point. Do it at the front of the room too.
+The wifi-off step is the point. Do it at the front of the room too.
 
 PREP REQUIRED — see offline_models.md for the vetted models and the sharding
 recipe. Weights ship in the workshop repo, under GitHub's 100 MB per-file
@@ -688,10 +693,10 @@ for the generative model, but the smallest decent instruct model
 quantised build to hit 500 MB. The 85 MB arctic-embed-xs embedding model is
 comfortably within budget either way and is what M4's offline RAG uses.
 
-Expect the quality gap to be stark and USE IT. Do not apologise for it — ask
-the room what would have to be true for the small model to be good enough for
-one specific job. Answers: a narrower task, a better prompt, retrieved context,
-fine-tuning. Those are M2, M3, M4, and M6. This lab is the setup for the week.
+Expect the quality gap to be clear. Use it as a diagnostic question: what would
+make the small model good enough for one specific job? Answers: narrower task,
+better prompt, retrieved context, fine-tuning, or a different model tier. Those
+map to M2, M3, M4, and M6.
 
 Alternative labs if a group finishes early or wants something else: Gradio live
 transcriber, text-to-image, or trend summaries over the Chronos prices CSV
@@ -702,7 +707,7 @@ from M0.
 
 <!-- _class: lead -->
 
-# Where That Leaves Us
+# M1.5.1 · Where That Leaves Us
 
 You can now call a model — four different ways — and you have a working chatbot.
 

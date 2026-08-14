@@ -1,7 +1,8 @@
 """The Day 2 pitch: your retriever just became a tool.
 
 Needs GEMINI_API_KEY. Run:
-    uv run python -m m8.llamaindex_rag_agent
+    uv run --project ../CODE-ALONGS \
+        python m8/llamaindex_rag_agent.py
 """
 
 import asyncio

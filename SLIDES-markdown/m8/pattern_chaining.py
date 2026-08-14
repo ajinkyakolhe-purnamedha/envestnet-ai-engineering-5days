@@ -2,7 +2,8 @@
 
 The artifact M8.2 grows, slide by slide: gather ->
 decide -> draft. Fully offline. Run:
-    uv run python -m m8.pattern_chaining
+    uv run --project ../CODE-ALONGS \
+        python m8/pattern_chaining.py
 """
 
 from chronos_offline import generate

@@ -1,7 +1,8 @@
 """Same agent, LangGraph. The loop becomes a state graph.
 
 Needs GEMINI_API_KEY. Run:
-    uv run python -m m8.langgraph_agent
+    uv run --project ../CODE-ALONGS \
+        python m8/langgraph_agent.py
 """
 
 from m8.advisor_tools import (QUESTION, check_guidelines,

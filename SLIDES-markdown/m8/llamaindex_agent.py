@@ -1,7 +1,8 @@
 """Same agent, LlamaIndex. Tools first, RAG next door.
 
 Needs GEMINI_API_KEY. Run:
-    uv run python -m m8.llamaindex_agent
+    uv run --project ../CODE-ALONGS \
+        python m8/llamaindex_agent.py
 """
 
 import asyncio

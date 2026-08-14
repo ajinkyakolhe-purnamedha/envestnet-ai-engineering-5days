@@ -182,9 +182,10 @@ Who wrote the runtime is negotiable; that it exists is not.
 # M8.1.5 · Experiment: Read Your Own Trace
 
 ```bash
-cd CODE-ALONGS
-uv sync --extra agents
-uv run python -m m8.smolagents_agent
+cd SLIDES-markdown
+uv sync --project ../CODE-ALONGS --extra agents
+uv run --project ../CODE-ALONGS \
+    python m8/smolagents_agent.py
 ```
 
 While it runs (~30s), answer in M7 vocabulary:
@@ -587,8 +588,9 @@ costs reliability, so spend it only when the problem demands it.
 # M8.2.9 · Experiment: Break The Router
 
 ```bash
-uv run python -m m8.pattern_routing \
-  "How much cash would selling AAPL raise?"
+uv run --project ../CODE-ALONGS \
+    python m8/pattern_routing.py \
+    "How much cash would selling AAPL raise?"
 ```
 
 Observed: `price 0.823 · trade 0.773` — a sell walks in the front door.
@@ -655,8 +657,8 @@ exercise them, as M8.1.3 proved. They run on Gemini
 (gemini-2.5-flash-lite, the cheapest tier; a full run costs a fraction
 of a cent). In the room that means read-along on the instructor's key;
 at a desk later, any personal key works. All files live in
-CODE-ALONGS/m8/ and run with `uv run python -m m8.<name>` from the
-CODE-ALONGS folder.
+SLIDES-markdown/m8/ and run from SLIDES-markdown/ with
+`uv run --project ../CODE-ALONGS python m8/<name>.py`.
 
 The one thing to track through all three slides is the question at the
 bottom: where does the M7 runtime go?
@@ -1156,9 +1158,12 @@ Chronos advisor dashboard. From here, straight into the lab.
 **Warm-up (10 min)** — the patterns, on toy data:
 
 ```bash
-cd CODE-ALONGS && uv sync --extra agents
-uv run python -m m8.smolagents_agent
-uv run python -m m8.pattern_chaining
+cd SLIDES-markdown
+uv sync --project ../CODE-ALONGS --extra agents
+uv run --project ../CODE-ALONGS \
+    python m8/smolagents_agent.py
+uv run --project ../CODE-ALONGS \
+    python m8/pattern_chaining.py
 ```
 
 **Main event** — implement the starter pack:

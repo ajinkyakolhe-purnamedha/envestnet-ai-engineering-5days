@@ -1,7 +1,8 @@
 """Pattern 6: handoff. An agent becomes another's tool.
 
 Fully offline (and honestly shaky on SmolLM2). Run:
-    uv run python -m m8.pattern_handoff
+    uv run --project ../CODE-ALONGS \
+        python m8/pattern_handoff.py
 """
 
 from chronos_offline import CHAT_MODEL

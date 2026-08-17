@@ -6,6 +6,9 @@ archive/
 Instructor-Docs/
 prompt_specs/
 CLAUDE.md
+*instructor-notes.md
+CODE-ALONGS/
+docs/superpowers
 
 # ---------------------------------------------------------------------------
 # Python. The two uv projects carry their own .gitignore as well; these are a
@@ -17,6 +20,9 @@ __pycache__/
 .pytest_cache/
 .ipynb_checkpoints/
 
+# State file the m9 state_resume.py toy writes next to itself
+SLIDES-markdown/m9/pending_drafts.json
+
 # ---------------------------------------------------------------------------
 # Build output and tooling noise
 # ---------------------------------------------------------------------------
@@ -26,3 +32,12 @@ build/
 *.local
 .DS_Store
 .playwright-mcp/
+OFFLINE-AI-Models/MODEL-DISTRIBUTION-PLAN.md
+SLIDES-markdown/m7-code-cookbook.md
+SLIDES-markdown/m7-concepts-reference.md
+
+# Instructor-only answer keys (lab solutions)
+answers/
+
+# Instructor-only quiz solutions; keep participant question files trackable.
+QUIZZES/**/answer-keys/

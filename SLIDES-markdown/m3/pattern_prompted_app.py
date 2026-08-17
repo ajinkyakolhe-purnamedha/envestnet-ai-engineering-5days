@@ -1,33 +1,38 @@
-"""Pattern 2: prompt engineered application.
+"""Pattern 2: a prompted application returns a validated Python object."""
 
-Fully offline. Run:
-    uv run --project ../CODE-ALONGS \
-        python m3/pattern_prompted_app.py
-"""
+import os
+from typing import Literal
 
-import json
-
-
-def llm(prompt: str) -> str:
-    return '{"symbol": "AAPL", "intent": "review"}'
+import instructor
+from google import genai
+from pydantic import BaseModel, Field
 
 
-# #region pattern
-SYSTEM = """Extract the symbol and intent.
-Return JSON with keys: symbol, intent."""
+class TradeIntent(BaseModel):
+    action: Literal["buy", "sell"]
+    symbol: str = Field(description="Uppercase stock ticker")
+    shares: int = Field(gt=0, description="Whole shares requested")
+    client: str
 
 
-def parse_request(note: str) -> dict:
-    reply = llm(f"{SYSTEM}\n\nAdvisor note: {note}")
-    parsed = json.loads(reply)
-    assert set(parsed) == {"symbol", "intent"}
-    return parsed
-# #endregion pattern
+def extract_trade(note: str, client: instructor.Instructor) -> TradeIntent:
+    """Turn an advisor note into typed application data, not prose."""
+    return client.create(
+        response_model=TradeIntent,
+        messages=[{"role": "user", "content": f"Extract the trade: {note}"}],
+    )
+
+
+def validate_trade_intent(intent: TradeIntent) -> bool:
+    """Business validation remains application code, not model output."""
+    return intent.symbol in {"AAPL", "SPY", "QQQ"}
 
 
 if __name__ == "__main__":
-    print(parse_request("Please review Alice's AAPL allocation."))
-
-# Pros: cheap, testable, no new infrastructure. Cons:
-# facts still come from the model or the input. Prompting
-# fixes shape and discipline, not missing knowledge.
+    if api_key := os.getenv("GEMINI_API_KEY"):
+        structured_client = instructor.from_genai(genai.Client(api_key=api_key))
+        trade = extract_trade("Buy 10 shares of AAPL for Alice.", structured_client)
+        print(trade)
+        print("Allowed symbol:", validate_trade_intent(trade))
+    else:
+        print("Set GEMINI_API_KEY in .env to run the extraction.")

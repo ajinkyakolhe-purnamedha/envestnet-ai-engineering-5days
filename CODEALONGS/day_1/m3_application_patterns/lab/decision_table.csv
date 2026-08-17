@@ -1,0 +1,4 @@
+candidate,workflow,data_boundary,pattern,model_tier,why_not_simpler,first_test
+Portfolio-note explainer,Rewrite a supplied adviser note,No private lookup,base,small,No fixed shape or private facts,Answer contains every supplied fact
+Support-ticket hand-off,Extract priority owner and next step from a ticket,Input ticket text only,prompted,small,Direct prose is hard for a workflow system to consume,Reject a missing or invalid field
+Policy Q&A,Answer from changing internal policy documents,Private current documents,rag,medium,The facts are not in model weights,Answer cites a supplied chunk

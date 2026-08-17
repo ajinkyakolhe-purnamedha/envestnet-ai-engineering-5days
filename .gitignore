@@ -38,6 +38,6 @@ SLIDES-markdown/m7-concepts-reference.md
 
 # Instructor-only answer keys (lab solutions)
 answers/
-
+tmp/
 # Instructor-only quiz solutions; keep participant question files trackable.
 QUIZZES/**/answer-keys/

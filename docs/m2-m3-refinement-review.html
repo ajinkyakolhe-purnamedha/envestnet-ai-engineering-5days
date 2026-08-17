@@ -1,0 +1,52 @@
+<div id="m2-m3-review">
+  <style>
+    #m2-m3-review{font-family:system-ui,sans-serif;color:#172033;max-width:1080px;margin:0 auto;padding:28px;line-height:1.5}#m2-m3-review h1{font-size:30px;margin:0 0 6px}#m2-m3-review h2{font-size:22px;margin:28px 0 8px}#m2-m3-review h3{font-size:17px;margin:20px 0 6px}.sub{color:#586174;margin:0 0 22px}.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}.step,.choice{padding:14px;background:#f4f6f9;border-left:4px solid #b7c1d0}.active{border-left-color:#2166d1;background:#edf4ff}.step strong{display:block}table{width:100%;border-collapse:collapse;margin:12px 0 18px}th,td{text-align:left;vertical-align:top;padding:10px;border-bottom:1px solid #dce1e8}th{font-weight:650;background:#f4f6f9}.tag{font-size:13px;color:#586174}code{background:#f4f6f9;padding:2px 5px;border-radius:3px}.choice{margin:10px 0}.yes{color:#12622a;font-weight:650}.no{color:#8b3026;font-weight:650}.feedback{background:#172033;color:#fff;padding:18px;margin-top:26px}.feedback textarea{width:100%;min-height:90px;box-sizing:border-box;margin-top:8px;padding:10px;font:inherit}.feedback button{margin-top:10px;padding:9px 14px;border:0;background:#8fc3ff;color:#10233d;font-weight:650;cursor:pointer}@media(max-width:700px){.flow{grid-template-columns:1fr}table{font-size:14px}}
+  </style>
+  <h1>M2 &amp; M3 refinement review</h1>
+  <p class="sub">Read the proposed Day 1 progression, identify what feels right or wrong, then send concise feedback.</p>
+
+  <h2>The Day 1 story</h2>
+  <div class="flow">
+    <div class="step"><strong>M0</strong>Build maintainable Python applications.</div>
+    <div class="step"><strong>M1</strong>Access models and identify AI application opportunities.</div>
+    <div class="step active"><strong>M2</strong>Inspect what a model call contains, costs, and forgets.</div>
+    <div class="step active"><strong>M3</strong>Choose the least-complex pattern that solves the feature.</div>
+  </div>
+  <p><strong>Compounding application:</strong> M1 builds the Chronos Portfolio Assistant. M2 instruments it. M3 decides what it should become next. No unrelated chatbot is rebuilt.</p>
+
+  <h2>M2 · Model, Tokens &amp; Context <span class="tag">target: 19 slides</span></h2>
+  <table><thead><tr><th>Block</th><th>Learner outcome</th><th>Small code concept</th></tr></thead><tbody>
+    <tr><td>One call</td><td>Label model, instruction, history, and output cap; prove that chat history is application state.</td><td><code>messages_grow</code></td></tr>
+    <tr><td>Tokens</td><td>See tokens/IDs; connect next-token prediction to fluent, confident mistakes.</td><td><code>token_ids</code></td></tr>
+    <tr><td>Context</td><td>Count, price, trim, compact, and cache a transcript.</td><td><code>count_context</code>, <code>trim_history</code></td></tr>
+    <tr><td>Cost &amp; latency</td><td>Connect model size and context length to quality, cost, and wait time.</td><td><code>instrument_reply</code></td></tr>
+    <tr><td>Embeddings</td><td>See meaning similarity; understand why retrieval is next.</td><td><code>embedding_similarity</code></td></tr>
+  </tbody></table>
+  <div class="flow"><div class="step">Mini lab<br><strong>Measure one request</strong><br>tokens + estimated cost</div><div class="step">Main lab<br><strong>Instrument M1 assistant</strong><br>running cost + history</div><div class="step">Experiment<br><strong>Make it forget</strong><br>trim old turns</div><div class="step">Observation<br><strong>Record trade-off</strong><br>quality / cost / latency</div></div>
+  <p><span class="yes">Keep:</span> call anatomy, statelessness, tokens, context, cost, latency, embeddings. <span class="no">Move out:</span> routing, new provider access, prompt depth, RAG implementation.</p>
+
+  <h2>M3 · AI Application Patterns <span class="tag">target: 19 slides</span></h2>
+  <p><strong>Rule:</strong> choose the first rung that works. Every added pattern must answer: <em>Why is a simpler pattern insufficient?</em></p>
+  <table><thead><tr><th>Pattern</th><th>What it adds</th><th>Use it when</th><th>Deep implementation</th></tr></thead><tbody>
+    <tr><td>Direct call</td><td>General language capability</td><td>Drafting, rewriting, translation</td><td>M1/M3</td></tr>
+    <tr><td>Prompted + structured output</td><td>Instruction and typed Python object</td><td>Extraction, classification, controlled hand-off</td><td>M3: Instructor + Pydantic</td></tr>
+    <tr><td>RAG</td><td>Retrieved facts and citations</td><td>Current/private/document knowledge</td><td>M4/M5</td></tr>
+    <tr><td>Fine-tuning</td><td>Repeated learned behaviour</td><td>Stable high-volume style/format/task</td><td>M6</td></tr>
+    <tr><td>Agentic workflow</td><td>Dynamic tools and variable steps</td><td>Steps genuinely vary</td><td>M7–M9</td></tr>
+  </tbody></table>
+  <div class="flow"><div class="step">Mini lab<br><strong>Choice card</strong><br>data → failure → pattern → test</div><div class="step">Main lab<br><strong>Selection clinic</strong><br>three candidate applications</div><div class="step">One build<br><strong>Prompted extractor</strong><br>plus deterministic contract</div><div class="step">Output<br><strong>Decision table</strong><br>why-not-simpler included</div></div>
+  <p><span class="yes">Keep:</span> five patterns, selection clinic, deterministic-first contracts. <span class="no">Preview only:</span> RAG mechanics, fine-tuning, agent loops, full evaluation, red teaming.</p>
+
+  <h2>Three choices to confirm</h2>
+  <div class="choice"><strong>1. M2 depth:</strong> Confirmed: retain caching and an embedding preview; move routing to later architecture/operations work.</div>
+  <div class="choice"><strong>2. M3 structured output:</strong> Confirmed: Instructor + Pydantic is the primary implementation. Native provider structured-output APIs remain implementation detail, not a parallel teaching path.</div>
+  <div class="choice"><strong>3. M3 lab:</strong> decision clinic first with one small build—or less clinic and more time building one selected pattern?</div>
+
+  <div class="feedback"><strong>Quick feedback</strong><br><textarea id="feedback" placeholder="For example: Keep M2 caching but move routing to M3. Use Instructor as primary. Make M3 lab build-first."></textarea><br><button type="button" id="send-feedback">Send feedback</button></div>
+  <script>
+    document.getElementById('send-feedback').addEventListener('click', async () => {
+      const text = document.getElementById('feedback').value.trim() || 'The M2/M3 plan is approved as shown.';
+      await window.openai.sendFollowUpMessage({title:'Refine M2/M3 plan',prompt:'Feedback on M2/M3 refinement plan: ' + text + '\nUpdate the plan accordingly and propose the next implementation step.'});
+    });
+  </script>
+</div>

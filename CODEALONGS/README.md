@@ -2,7 +2,7 @@
 
 Cookbooks are syntax flash cards: each tiny Python file demonstrates one visible operation and can be run independently. Read them in filename order inside each folder.
 
-Code-alongs combine those features into one small capability. Open the seven notebooks in order and run each from top to bottom.
+Code-alongs combine those features into one small capability. Open the notebooks in order and run each from top to bottom.
 
 ## Cookbook order
 
@@ -19,6 +19,8 @@ Code-alongs combine those features into one small capability. Open the seven not
 5. `05_llm_application_in_python.ipynb`
 6. `06_rag_as_a_python_pipeline.ipynb`
 7. `07_agents_as_python_control_flow.ipynb`
+8. `07b_m7_manual_agent_loop.ipynb` - competing M7 notebook aligned to "The Agent Loop, By Hand"
+9. `07c_m7_code_cookbook.ipynb` - notebook conversion of the M7 runnable code cookbook
 
 ## Install and run
 

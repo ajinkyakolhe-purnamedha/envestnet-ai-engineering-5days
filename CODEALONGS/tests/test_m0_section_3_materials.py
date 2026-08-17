@@ -11,7 +11,12 @@ import nbformat
 import pytest
 
 
-MATERIALS = Path(__file__).resolve().parents[1] / "day_1" / "m0_section_3_wealth_demo"
+MATERIALS = (
+    Path(__file__).resolve().parents[1]
+    / "day_1"
+    / "m0_python_foundations"
+    / "03_wealth_demo"
+)
 sys.path.insert(0, str(MATERIALS))
 
 

@@ -6,13 +6,13 @@ No API key or third-party package is required.
 Run a snippet from the repository root:
 
 ```bash
-uv run --project CODEALONGS python CODEALONGS/day_1/m0_section_3_wealth_demo/03_functions.py
+uv run --project CODEALONGS python CODEALONGS/day_1/m0_python_foundations/03_wealth_demo/03_functions.py
 ```
 
 Run the complete test suite:
 
 ```bash
-cd CODEALONGS/day_1/m0_section_3_wealth_demo
+cd CODEALONGS/day_1/m0_python_foundations/03_wealth_demo
 uv run python -m unittest wealth_demo.test_wealth_demo -v
 ```
 
@@ -20,7 +20,7 @@ Run the local server, then in another terminal call `curl http://localhost:8000/
 or `curl http://localhost:8000/portfolio`:
 
 ```bash
-cd CODEALONGS/day_1/m0_section_3_wealth_demo
+cd CODEALONGS/day_1/m0_python_foundations/03_wealth_demo
 uv run uvicorn wealth_demo.server:app --reload
 ```
 

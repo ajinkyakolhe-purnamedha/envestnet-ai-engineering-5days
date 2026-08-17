@@ -11,7 +11,8 @@ import nbformat
 MATERIALS = (
     Path(__file__).resolve().parents[1]
     / "day_1"
-    / "m0_section_1_share_purchase"
+    / "m0_python_foundations"
+    / "01_share_purchase"
 )
 SNIPPET = MATERIALS / "01_purchase_cost.py"
 NOTEBOOK = MATERIALS / "02_purchase_cost_code_along.ipynb"

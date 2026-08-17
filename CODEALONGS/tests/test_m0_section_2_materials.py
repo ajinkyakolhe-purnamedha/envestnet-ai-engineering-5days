@@ -8,7 +8,8 @@ import nbformat
 MATERIALS = (
     Path(__file__).resolve().parents[1]
     / "day_1"
-    / "m0_section_2_model_access"
+    / "m0_python_foundations"
+    / "02_packages_and_model_access"
 )
 
 

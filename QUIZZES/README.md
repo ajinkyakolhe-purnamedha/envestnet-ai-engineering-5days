@@ -2,7 +2,7 @@
 
 Each participant quiz has 15 questions: 10 multiple-choice questions, 3
 code-reading/debugging questions, 1 scenario question, and 1 capstone-transfer
-question. Answer keys are kept separately for instructors.
+question.
 
 The standard quizzes are in the module root. Advanced versions for experienced
 engineers are under `advanced/` and use the same question mix with closer

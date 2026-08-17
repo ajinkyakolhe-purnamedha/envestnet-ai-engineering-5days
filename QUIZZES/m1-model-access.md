@@ -3,67 +3,67 @@
 ## Multiple choice
 
 1. What does it mean to treat a model as one function in an application?
-   - A. Give it inputs, receive a probabilistic output, and design software around that boundary.
-   - B. Assume it contains the complete business workflow.
+   - A. Treat every response as deterministic.
+   - B. Give it inputs, receive a probabilistic output, and design software around that boundary.
    - C. Store all business rules inside the prompt.
-   - D. Treat every response as deterministic.
+   - D. Assume it contains the complete business workflow.
 
 2. Why is a model not a complete product?
-   - A. A product also needs data boundaries, policy, user interaction, errors, and operations.
+   - A. Models only produce numbers.
    - B. Models cannot be called from software.
-   - C. Products do not need tests.
-   - D. Models only produce numbers.
+   - C. A product also needs data boundaries, policy, user interaction, errors, and operations.
+   - D. Products do not need tests.
 
 3. Which is the most important difference between a hosted and a local model
    access path?
-   - A. Hosted access delegates infrastructure; local access keeps more control but requires more operations.
+   - A. Hosted models cannot be monitored.
    - B. Hosted models are always more accurate.
    - C. Local models never use memory.
-   - D. Hosted models cannot be monitored.
+   - D. Hosted access delegates infrastructure; local access keeps more control but requires more operations.
 
 4. What is one reason an enterprise may prefer a governed platform boundary for
    model access?
    - A. Identity, policy, logging, and provider configuration can be managed consistently.
-   - B. It guarantees that generated content is true.
-   - C. It removes all usage cost.
-   - D. It makes application code unnecessary.
+   - B. It makes application code unnecessary.
+   - C. It guarantees that generated content is true.
+   - D. It removes all usage cost.
 
 5. What should influence the choice between proprietary and open-weight models?
-   - A. Required capability, privacy, license, latency, cost, and operating responsibility.
-   - B. Brand popularity alone.
-   - C. Parameter count alone.
-   - D. Whether the prompt is short.
+   - A. Parameter count alone.
+   - B. Required capability, privacy, license, latency, cost, and operating responsibility.
+   - C. Whether the prompt is short.
+   - D. Brand popularity alone.
 
 6. Why is “choose the smallest sufficient model” a useful default?
-   - A. It controls cost and latency while leaving room to increase capability when evidence requires it.
+   - A. It guarantees local deployment.
    - B. Smaller models never make mistakes.
-   - C. It avoids evaluating quality.
-   - D. It guarantees local deployment.
+   - C. It controls cost and latency while leaving room to increase capability when evidence requires it.
+   - D. It avoids evaluating quality.
 
 7. What should a provider-neutral model boundary usually hide?
-   - A. Authentication, provider SDK details, response normalization, and provider errors.
+   - A. The user’s intended output.
    - B. The business requirement and all tests.
-   - C. The user’s intended output.
-   - D. Every application policy.
+   - C. Every application policy.
+   - D. Authentication, provider SDK details, response normalization, and provider errors.
 
 8. Why is model output non-determinism an engineering concern?
-   - A. Tests and downstream code need contracts, validation, and tolerance for variation.
-   - B. It means models cannot be used in production.
-   - C. It makes input validation unnecessary.
-   - D. It only affects local models.
+   - A. It makes input validation unnecessary.
+   - B. It only affects local models.
+   - C. It means models cannot be used in production.
+   - D. Tests and downstream code need contracts, validation, and tolerance for variation.
 
 9. Where should an API credential normally be loaded?
-   - A. From protected runtime configuration, not hard-coded source or prompts.
-   - B. From a public notebook output.
-   - C. From the model’s generated answer.
-   - D. From a user’s portfolio history.
+   - A. From the model’s generated answer.
+   - B. From protected runtime configuration, not hard-coded source or prompts.
+   - C. From a user’s portfolio history.
+   - D. From a public notebook output.
 
 10. What is a safe application behavior when a model returns empty or unusable
     output?
-    - A. Return a defined fallback or error, log the event, and avoid pretending the answer succeeded.
-    - B. Retry forever.
-    - C. Execute the requested action anyway.
-    - D. Return the raw provider object to every caller.
+    - A. Execute the requested action anyway.
+    - B. Return the raw provider object to every caller.
+    - C. Return a defined fallback or error, log the event, and avoid pretending the answer succeeded.
+    - D. Retry forever.
 
 ## Code reading and debugging
 

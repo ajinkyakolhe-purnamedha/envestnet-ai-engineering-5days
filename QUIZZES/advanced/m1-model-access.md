@@ -4,67 +4,67 @@
 
 1. A model is highly capable but produces variable output. Which design most
    directly makes it usable by a business workflow?
-   - A. A typed/validated boundary with explicit fallback and observability
-   - B. A longer prompt with no tests
+   - A. Removing all user context
+   - B. A typed/validated boundary with explicit fallback and observability
    - C. More model parameters only
-   - D. Removing all user context
+   - D. A longer prompt with no tests
 
 2. A regulated team needs provider flexibility and auditable access. Which
    boundary is most appropriate?
-   - A. Application code calls one internal interface while adapters handle providers and policy
+   - A. Users paste keys into prompts
    - B. Every feature calls a provider SDK directly
-   - C. Users paste keys into prompts
+   - C. Application code calls one internal interface while adapters handle providers and policy
    - D. A model chooses which provider to use without logging
 
 3. A local model reduces data egress but increases deployment complexity. What
    decision principle follows?
-   - A. Compare privacy/control gains against hardware, reliability, and maintenance costs
+   - A. Accuracy no longer matters
    - B. Local is always the enterprise default
    - C. Hosted is always prohibited
-   - D. Accuracy no longer matters
+   - D. Compare privacy/control gains against hardware, reliability, and maintenance costs
 
 4. What is the strongest reason to evaluate a smaller model before a larger one?
-   - A. It establishes whether the requirement can meet quality, latency, and cost targets with less operational burden.
+   - A. It guarantees the same output.
    - B. Smaller models never hallucinate.
-   - C. It avoids writing an evaluation.
-   - D. It guarantees the same output.
+   - C. It establishes whether the requirement can meet quality, latency, and cost targets with less operational burden.
+   - D. It avoids writing an evaluation.
 
 5. Which concern belongs in a model adapter rather than in every business feature?
-   - A. Provider response normalization and provider-specific retry/error mapping
-   - B. The portfolio allocation policy
-   - C. The user’s business goal
-   - D. The acceptance test for a trade
+   - A. The user’s business goal
+   - B. Provider response normalization and provider-specific retry/error mapping
+   - C. The acceptance test for a trade
+   - D. The portfolio allocation policy
 
 6. A provider outage occurs. Which fallback is safest for an explanation feature?
-   - A. Return a clear unavailable response and preserve the request for controlled retry or review.
-   - B. Invent a likely explanation from memory.
-   - C. Execute the next business action anyway.
-   - D. Expose the provider exception and API key.
+   - A. Execute the next business action anyway.
+   - B. Expose the provider exception and API key.
+   - C. Return a clear unavailable response and preserve the request for controlled retry or review.
+   - D. Invent a likely explanation from memory.
 
 7. Which combination best describes open-weight model selection?
-   - A. Family capability/license, parameter size, hardware fit, and serving responsibility
+   - A. API price only
    - B. Brand name and prompt length only
-   - C. API price only
-   - D. Context window only
+   - C. Context window only
+   - D. Family capability/license, parameter size, hardware fit, and serving responsibility
 
 8. Why is “model access” only the first engineering problem?
-   - A. Reliability, data grounding, evaluation, security, and user workflow still surround the call.
-   - B. Models cannot be integrated into applications.
-   - C. Access automatically solves governance.
-   - D. The first call is always production-ready.
+   - A. Access automatically solves governance.
+   - B. The first call is always production-ready.
+   - C. Models cannot be integrated into applications.
+   - D. Reliability, data grounding, evaluation, security, and user workflow still surround the call.
 
 9. What should a model boundary do with malformed provider output?
-   - A. Normalize or reject it according to a documented contract and emit useful telemetry.
-   - B. Pass it to every downstream component unchanged.
-   - C. Silently convert it to a successful action.
-   - D. Delete the request.
+   - A. Silently convert it to a successful action.
+   - B. Normalize or reject it according to a documented contract and emit useful telemetry.
+   - C. Delete the request.
+   - D. Pass it to every downstream component unchanged.
 
 10. A team optimizes only model quality and ignores latency and cost. What is the
     likely enterprise consequence?
-    - A. A technically strong feature may fail its service or budget constraints.
-    - B. The model will become deterministic.
-    - C. Privacy risk disappears.
-    - D. Tests become unnecessary.
+    - A. Privacy risk disappears.
+    - B. Tests become unnecessary.
+    - C. A technically strong feature may fail its service or budget constraints.
+    - D. The model will become deterministic.
 
 ## Code reading and debugging
 

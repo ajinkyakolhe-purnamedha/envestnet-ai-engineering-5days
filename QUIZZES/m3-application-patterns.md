@@ -4,65 +4,65 @@
 
 1. Why should instructions, context, questions, and history be kept separate
    while building a model request?
-   - A. It makes prompt failures easier to diagnose and change independently.
-   - B. It guarantees factual answers.
+   - A. It makes the model deterministic.
+   - B. It makes prompt failures easier to diagnose and change independently.
    - C. It removes the need for tests.
-   - D. It makes the model deterministic.
+   - D. It guarantees factual answers.
 
 2. What should come before choosing a model or build pattern?
-   - A. Define the task, required capability, data boundary, and operating constraints.
-   - B. Choose the largest available model.
-   - C. Add tools immediately.
-   - D. Write the longest possible prompt.
+   - A. Add tools immediately.
+   - B. Write the longest possible prompt.
+   - C. Define the task, required capability, data boundary, and operating constraints.
+   - D. Choose the largest available model.
 
 3. What is the usual first pattern for a task that only needs a language
    response from supplied input?
-   - A. Direct model call
+   - A. Agentic workflow
    - B. Retrieval system
    - C. Fine-tuning
-   - D. Agentic workflow
+   - D. Direct model call
 
 4. When is structured output a good addition to a prompted application?
-   - A. When downstream code needs predictable fields and types.
-   - B. When there is no downstream code.
-   - C. When the response can be ignored.
-   - D. When the model should choose its own database schema.
+   - A. When the response can be ignored.
+   - B. When downstream code needs predictable fields and types.
+   - C. When the model should choose its own database schema.
+   - D. When there is no downstream code.
 
 5. When does retrieval earn its additional complexity?
-   - A. When the response depends on relevant private, current, or external information not in the prompt.
+   - A. When the application has no data source.
    - B. Whenever a prompt has more than one sentence.
-   - C. When a deterministic rule is missing.
-   - D. When the application has no data source.
+   - C. When the response depends on relevant private, current, or external information not in the prompt.
+   - D. When a deterministic rule is missing.
 
 6. What does fine-tuning primarily change compared with retrieval?
-   - A. It changes learned behavior, format, or style; retrieval supplies information at request time.
-   - B. It guarantees current facts.
-   - C. It replaces all evaluation.
-   - D. It is always cheaper than prompting.
+   - A. It replaces all evaluation.
+   - B. It is always cheaper than prompting.
+   - C. It guarantees current facts.
+   - D. It changes learned behavior, format, or style; retrieval supplies information at request time.
 
 7. When does an agentic workflow justify its complexity?
-   - A. When the task needs dynamic multi-step decisions, tools, and feedback.
-   - B. For every one-step response.
-   - C. When no tools are available.
+   - A. When no tools are available.
+   - B. When the task needs dynamic multi-step decisions, tools, and feedback.
+   - C. For every one-step response.
    - D. When the output is always a fixed sentence.
 
 8. What is the difference between schema validation and business validation?
-   - A. Schema validation checks shape/types; business validation checks whether the action is allowed.
-   - B. Schema validation proves an answer is true.
-   - C. Business validation is optional after structured output.
-   - D. They are the same check.
+   - A. Business validation is optional after structured output.
+   - B. They are the same check.
+   - C. Schema validation proves an answer is true.
+   - D. Schema validation checks shape/types; business validation checks whether the action is allowed.
 
 9. Why can model selection be treated as an economic decision?
-   - A. Capability, latency, cost, privacy, and operations vary across model tiers and deployment choices.
-   - B. All models have identical operating costs.
-   - C. The cheapest model is always sufficient.
-   - D. Model choice affects only branding.
+   - A. The cheapest model is always sufficient.
+   - B. Capability, latency, cost, privacy, and operations vary across model tiers and deployment choices.
+   - C. Model choice affects only branding.
+   - D. All models have identical operating costs.
 
 10. What is the central pattern-selection discipline?
-    - A. Choose the least complex pattern that reliably meets the requirement and record why simpler options fail.
-    - B. Start with an agent and remove features later.
-    - C. Use retrieval whenever facts exist.
-    - D. Let model confidence replace deterministic tests.
+    - A. Use retrieval whenever facts exist.
+    - B. Let model confidence replace deterministic tests.
+    - C. Start with an agent and remove features later.
+    - D. Choose the least complex pattern that reliably meets the requirement and record why simpler options fail.
 
 ## Code reading and debugging
 

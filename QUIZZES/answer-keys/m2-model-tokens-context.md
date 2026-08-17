@@ -1,17 +1,17 @@
 # M2 answer key
 
-1. A — A token is a piece of text used by the model.
-2. A — The context window is the request-processing limit.
-3. A — Those are the main request components.
-4. A — The application resends the state needed for a stateless call.
-5. A — Counts help estimate limits and operating cost.
-6. A — Size needs an explicit handling policy.
-7. A — Trimming can remove important facts or break turn order.
-8. A — Input usage measures processed request text.
-9. A — Production quality includes operational constraints.
-10. A — Embeddings support semantic comparison.
-11. The last four messages.
-12. It ignores input-token cost; a complete estimate includes input and output usage.
-13. The transcript may have an invalid turn boundary. Remove leading assistant messages or retain a complete user/assistant turn.
-14. Collect token/input size and latency/cost measurements; try a recent-history limit or summarization policy.
-15. Example: estimate input tokens before each call and trim or summarize low-value history when a threshold is reached.
+1. A — The context window limits all request context.
+2. A — The application resends state for a stateless call.
+3. A — Tokenization depends on vocabulary and tokenizer rules.
+4. A — All listed request components consume context.
+5. A — Unbounded history creates limit, cost, latency, and distraction risks.
+6. A — The application must choose and document a policy.
+7. A — A coherent turn boundary preserves meaning and protocol validity.
+8. A — Input and output have different economics and optimization levers.
+9. A — Embeddings support similarity search, not truth or policy.
+10. A — Larger models commonly use more compute and cost more.
+11. It retains the most recent `keep_turns * 2` messages; it does not ensure the slice begins with a user message or fit the model’s token budget.
+12. Input-token usage is missing, so the estimate understates total cost and may hide the largest optimization opportunity.
+13. The conversation may have an invalid or confusing boundary. Remove leading assistant messages or retain a complete recent turn, then test the resulting transcript.
+14. Measure input/output tokens, latency, cost, truncation/fallback rate, and whether required facts remain. Start with a bounded recent-turn policy plus a summary or durable-fact path for information that must survive.
+15. Example: estimate request tokens plus a reserved output budget; when a threshold is crossed, summarize/trim low-value history and retry once; if still over budget, return a clear “conversation too long” message without calling the model.

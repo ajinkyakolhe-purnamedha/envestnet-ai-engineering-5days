@@ -1,17 +1,17 @@
 # M1 answer key
 
-1. A — A model produces outputs from inputs.
-2. A — A product needs surrounding application behavior.
-3. A — Hosted models are accessed through a service/API.
-4. A — Local models run on controlled hardware.
-5. A — Hosted access reduces operations but adds dependency and cost.
-6. A — Local access increases control but adds operational work.
-7. A — Selection follows the task and operating requirements.
-8. A — A boundary hides provider-specific details.
-9. A — Secrets belong in protected configuration.
-10. A — Empty output needs safe handling and observability.
-11. It prevents a call when required configuration is missing.
-12. Extract and normalize the text into the application’s documented return type.
-13. Move the loading-only setting to model loading/configuration and pass only generation settings to generation.
-14. Keep the application-level interface, input/output contract, fallback behavior, and tests stable.
-15. It should accept structured messages or a prompt and return normalized text, with a safe error/fallback path.
+1. A — A model is a probabilistic function inside a larger system.
+2. A — Products require surrounding data, policy, UX, and operations.
+3. A — Hosted and local paths shift infrastructure/control trade-offs.
+4. A — Governance centralizes identity, policy, logging, and configuration.
+5. A — Selection is a capability, economics, privacy, and operations decision.
+6. A — Start with the least costly/slowest sufficient option and measure gaps.
+7. A — The boundary should isolate provider-specific concerns.
+8. A — Contracts and validation make variable output usable.
+9. A — Secrets belong in protected runtime configuration.
+10. A — Safe fallback and observability prevent false success.
+11. It avoids an invalid provider call when configuration is missing and gives the caller a defined result.
+12. Extract the intended text, handle missing/empty fields, normalize errors, and return the documented string contract.
+13. The loading and generation APIs have different options. Reproduce the call with a tiny fixture, inspect the API boundary, and move the setting to model loading.
+14. Keep the application-level function signature, message/response contract, fallback behavior, logging, and tests stable; swap only the provider adapter/configuration.
+15. Example: accept role/content messages and return normalized text. Validate or review claims before action, and return a safe fallback when output is empty or violates policy.

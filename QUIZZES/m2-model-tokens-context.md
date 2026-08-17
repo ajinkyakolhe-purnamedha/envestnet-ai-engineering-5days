@@ -2,89 +2,91 @@
 
 ## Multiple choice
 
-1. What is a token?
-   - A. A small piece of text used by a model
-   - B. A user password
-   - C. A database server
-   - D. A Python package
+1. What is a context window?
+   - A. The maximum request context a model can process, including instructions, history, and supplied material.
+   - B. The amount of training data a model has seen.
+   - C. The number of users an application supports.
+   - D. The network timeout for an API call.
 
-2. What is a context window?
-   - A. The maximum amount of request context a model can process
-   - B. The size of a user interface
-   - C. The number of model providers
-   - D. The time needed to install Python
+2. Why does a stateless model call usually need conversation history from the
+   application?
+   - A. The application owns the state and must resend the relevant context.
+   - B. The model permanently remembers every conversation.
+   - C. History is stored automatically in the tokenizer.
+   - D. The provider stores business rules for the application.
 
-3. What is usually included in a model request?
-   - A. Instructions, history, the current input, and any supplied context
-   - B. Only the last word
-   - C. Only the output
-   - D. Only the API key
+3. Why can two tokenizers produce different token counts for the same text?
+   - A. Token boundaries depend on the tokenizer and its vocabulary.
+   - B. Token counts are random at runtime.
+   - C. Output length changes the input text.
+   - D. Tokens are database rows.
 
-4. Why does an application often send conversation history again?
-   - A. The application keeps the state and sends the relevant parts to a stateless call.
-   - B. The model permanently remembers every user.
-   - C. History is part of the Python interpreter.
-   - D. The server automatically stores every prompt.
+4. Which parts should be included when estimating request context?
+   - A. System instructions, retained history, current input, and any retrieved or supplied context.
+   - B. Only the final user question.
+   - C. Only output tokens.
+   - D. Only the model name.
 
-5. Why count tokens?
-   - A. To estimate context use, cost, and possible limits
-   - B. To improve spelling only
-   - C. To replace testing
-   - D. To change the model’s training data
+5. What is the main risk of allowing conversation history to grow without a
+   policy?
+   - A. Requests can exceed limits, become slower/costlier, or distract the model with stale information.
+   - B. The model gains permanent memory.
+   - C. The application stops needing validation.
+   - D. The database schema changes automatically.
 
-6. What should happen when a request is too large?
-   - A. Apply a clear policy such as trimming, summarizing, retrieving, or rejecting.
-   - B. Ignore the limit.
-   - C. Delete all instructions.
-   - D. Keep retrying forever.
+6. Which policy is most appropriate when history no longer fits the budget?
+   - A. Select deliberately among trimming, summarization, retrieval, or a clear refusal.
+   - B. Delete the system instruction silently.
+   - C. Retry indefinitely with the same request.
+   - D. Assume the provider will truncate the right information.
 
-7. Why can trimming history be dangerous?
-   - A. It may remove information or break the expected message order.
-   - B. It always makes responses longer.
-   - C. It changes Python types.
-   - D. It creates a new model.
+7. Why should a trimmed chat transcript preserve valid turn order?
+   - A. The model and application need a coherent conversation boundary to interpret the messages.
+   - B. Assistant messages cannot contain text.
+   - C. User messages always cost less.
+   - D. Turn order changes the model’s weights.
 
-8. What does input usage measure?
-   - A. How much request text was processed
-   - B. How many users signed in
-   - C. How many database rows exist
-   - D. How many Python files exist
+8. Why should input and output usage be measured separately?
+   - A. They can have different cost, latency, and optimization strategies.
+   - B. Only output contributes to cost.
+   - C. Input tokens are never processed.
+   - D. Separate measurements make answers deterministic.
 
-9. Why measure latency and cost as well as output quality?
-   - A. A useful system must meet quality and operational constraints together.
-   - B. Quality never matters.
-   - C. Cost determines truth.
-   - D. Latency is unrelated to users.
+9. What can embeddings help an application do?
+   - A. Compare semantic similarity and find potentially relevant text.
+   - B. Prove that a statement is true.
+   - C. Enforce every business policy.
+   - D. Replace the application database.
 
-10. What is an embedding commonly used for?
-    - A. Comparing the meaning of text
-    - B. Storing an API key
-    - C. Running a web server
-    - D. Validating every business rule
+10. Why might a larger model increase operational cost even when the prompt is
+    unchanged?
+    - A. Larger models often require more compute and may be slower or priced higher.
+    - B. Larger models use no context.
+    - C. Larger models remove all retries.
+    - D. Parameter size affects only the user interface.
 
 ## Code reading and debugging
 
-11. What does this code keep?
+11. What does this expression retain, and what important question does it not
+    answer?
 
     ```python
-    recent = messages[-4:]
+    retained = messages[-(keep_turns * 2):]
     ```
 
-12. Why is this estimate incomplete?
+12. A cost estimate uses only `output_tokens * output_rate`. What is missing,
+    and why does it matter?
 
-    ```python
-    cost = output_tokens * output_rate
-    ```
-
-13. A trimmed message list begins with an assistant message. Why might that be
-    a problem, and what simple correction can be made?
+13. A trimming function returns a list whose first message has role `assistant`.
+    What could go wrong, and what is one corrective step?
 
 ## Scenario
 
-14. A chat application becomes slower and more expensive as the conversation
-    grows. What two measurements would you collect first, and what simple policy
-    could you try?
+14. A production assistant becomes slower and more expensive as users continue
+    chatting. What measurements would you collect, and how would you choose an
+    initial history policy without losing important facts?
 
 ## Capstone transfer
 
-15. Give one rule for keeping a Chronos assistant within its context budget.
+15. Define a context-budget guard for Chronos: what will be measured, when will
+    it act, and what will the user see if the budget cannot be met?

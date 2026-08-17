@@ -2,86 +2,89 @@
 
 ## Multiple choice
 
-1. What is the context window?
-   - A. The total limit on the instructions, history, and other input the model can process for a request.
-   - B. The model’s training-data size.
-   - C. The network timeout.
-   - D. The number of users in a database.
+1. What is a token?
+   - A. A small piece of text used by a model
+   - B. A user password
+   - C. A database server
+   - D. A Python package
 
-2. Why does a stateless model call resend history?
-   - A. The application owns the conversation state and must include relevant history in each request.
-   - B. The server remembers every user forever.
-   - C. Tokens are stored in SQLite automatically.
-   - D. The model can only read one word.
+2. What is a context window?
+   - A. The maximum amount of request context a model can process
+   - B. The size of a user interface
+   - C. The number of model providers
+   - D. The time needed to install Python
 
-3. What is a token ID?
-   - A. A numeric representation used by a tokenizer for a piece of text
-   - B. An API credential
-   - C. A database primary key for a portfolio
-   - D. A latency measurement
+3. What is usually included in a model request?
+   - A. Instructions, history, the current input, and any supplied context
+   - B. Only the last word
+   - C. Only the output
+   - D. Only the API key
 
-4. Why are token counts evidence rather than exact universal truths?
-   - A. Tokenization depends on the tokenizer and the text.
-   - B. Every language uses the same token IDs.
-   - C. Counts are unrelated to input.
-   - D. Tokens only exist during training.
+4. Why does an application often send conversation history again?
+   - A. The application keeps the state and sends the relevant parts to a stateless call.
+   - B. The model permanently remembers every user.
+   - C. History is part of the Python interpreter.
+   - D. The server automatically stores every prompt.
 
-5. What contributes to the context consumed by a request?
-   - A. System instructions, retained history, current input, and any included context
-   - B. Only the user’s final question
-   - C. Only the output tokens
-   - D. The Python interpreter version
+5. Why count tokens?
+   - A. To estimate context use, cost, and possible limits
+   - B. To improve spelling only
+   - C. To replace testing
+   - D. To change the model’s training data
 
-6. When history grows too large, which is an explicit engineering choice?
-   - A. Trim old turns, summarize them, retrieve relevant facts, or reject the request with a clear policy.
-   - B. Pretend the context limit does not exist.
-   - C. Delete the system instruction first without review.
-   - D. Increase the model’s parameter count at runtime.
+6. What should happen when a request is too large?
+   - A. Apply a clear policy such as trimming, summarizing, retrieving, or rejecting.
+   - B. Ignore the limit.
+   - C. Delete all instructions.
+   - D. Keep retrying forever.
 
-7. Why must trimmed chat history begin with a valid user message?
-   - A. An assistant-leading transcript can violate the expected turn structure.
-   - B. User messages are always shorter.
-   - C. It reduces the model’s parameter count.
-   - D. It makes embeddings exact.
+7. Why can trimming history be dangerous?
+   - A. It may remove information or break the expected message order.
+   - B. It always makes responses longer.
+   - C. It changes Python types.
+   - D. It creates a new model.
 
-8. What does a larger model generally trade for higher capability?
-   - A. More latency and cost, subject to the specific model and workload
-   - B. Fewer parameters and no quality change
-   - C. Guaranteed factuality
-   - D. Zero context usage
+8. What does input usage measure?
+   - A. How much request text was processed
+   - B. How many users signed in
+   - C. How many database rows exist
+   - D. How many Python files exist
 
-9. What does instrumentation make visible?
-   - A. Input/output usage, duration, and estimated cost for a call
-   - B. The model’s private training examples
-   - C. A guarantee that the answer is true
-   - D. The user’s password
+9. Why measure latency and cost as well as output quality?
+   - A. A useful system must meet quality and operational constraints together.
+   - B. Quality never matters.
+   - C. Cost determines truth.
+   - D. Latency is unrelated to users.
 
-10. What are embeddings primarily useful for?
-   - A. Comparing semantic similarity between pieces of text
-   - B. Replacing all validation rules
-   - C. Counting HTTP retries
-   - D. Selecting a Python interpreter
+10. What is an embedding commonly used for?
+    - A. Comparing the meaning of text
+    - B. Storing an API key
+    - C. Running a web server
+    - D. Validating every business rule
 
 ## Code reading and debugging
 
-11. Given `trim_history(history, keep_turns=1)` and a history ending with a
-    user message, what does the function’s `while` loop protect against?
+11. What does this code keep?
 
-12. A developer counts only the latest question and concludes that the request
-    is below the context limit. Which input parts did they omit?
+    ```python
+    recent = messages[-4:]
+    ```
 
-13. A cost report uses only `output_tokens * output_rate`. What accounting bug
-    does this create, and what should the estimate include?
+12. Why is this estimate incomplete?
+
+    ```python
+    cost = output_tokens * output_rate
+    ```
+
+13. A trimmed message list begins with an assistant message. Why might that be
+    a problem, and what simple correction can be made?
 
 ## Scenario
 
-14. In the M2 lab, a Chronos transcript has become too long and the assistant
-    loses the first portfolio constraint after trimming. What evidence should
-    the learner record, and what policy should they choose between trimming,
-    summarizing, retrieval, or rejection?
+14. A chat application becomes slower and more expensive as the conversation
+    grows. What two measurements would you collect first, and what simple policy
+    could you try?
 
 ## Capstone transfer
 
-15. Design one context-budget guard for a Chronos portfolio assistant. State the
-    measurement, threshold decision, and user-visible behavior when the budget
-    is exceeded.
+15. Give one rule for keeping a Chronos assistant within its context budget.

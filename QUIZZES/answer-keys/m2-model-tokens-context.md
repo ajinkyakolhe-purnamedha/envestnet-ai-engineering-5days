@@ -1,17 +1,17 @@
 # M2 answer key
 
-1. A — It is the request’s total input budget.
-2. A — The application resends the state it wants the model to use.
-3. A — Token IDs represent tokenizer pieces numerically.
-4. A — The tokenizer and text determine the count.
-5. A — All of those request components consume context.
-6. A — Each option is an explicit policy with different trade-offs.
-7. A — The retained transcript should preserve a valid turn boundary.
-8. A — Larger capability often costs more latency and money.
-9. A — Instrumentation exposes measurable call behavior.
-10. A — Embeddings support semantic comparison, not truth validation.
-11. It removes retained assistant messages from the front so the transcript begins with a user turn.
-12. System instructions, retained history, and any retrieved or supplied context.
-13. It underestimates cost by ignoring input usage; include both input and output token costs.
-14. Record the before/after message list, token estimate, retained facts, and resulting quality/cost/latency. Choose a written policy based on the feature’s requirements—for example, summarize durable constraints, trim low-value chatter, retrieve authoritative facts, and reject safely when no valid budget remains.
-15. Example: estimate input tokens before the call; if estimated input plus a reserved output budget exceeds the configured limit, summarize or trim low-value history and retry once, otherwise return a clear “conversation too long” message.
+1. A — A token is a piece of text used by the model.
+2. A — The context window is the request-processing limit.
+3. A — Those are the main request components.
+4. A — The application resends the state needed for a stateless call.
+5. A — Counts help estimate limits and operating cost.
+6. A — Size needs an explicit handling policy.
+7. A — Trimming can remove important facts or break turn order.
+8. A — Input usage measures processed request text.
+9. A — Production quality includes operational constraints.
+10. A — Embeddings support semantic comparison.
+11. The last four messages.
+12. It ignores input-token cost; a complete estimate includes input and output usage.
+13. The transcript may have an invalid turn boundary. Remove leading assistant messages or retain a complete user/assistant turn.
+14. Collect token/input size and latency/cost measurements; try a recent-history limit or summarization policy.
+15. Example: estimate input tokens before each call and trim or summarize low-value history when a threshold is reached.

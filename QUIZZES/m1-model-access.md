@@ -2,91 +2,90 @@
 
 ## Multiple choice
 
-1. What is the key engineering lesson of “a model is not a product”?
-   - A. A model alone supplies the complete user workflow.
-   - B. Product value requires an application boundary, data, policy, and user experience around the model.
-   - C. Models should never be called from software.
-   - D. Only researchers can ship AI.
+1. What is an AI model?
+   - A. A system that produces outputs from inputs it receives
+   - B. A complete finished application
+   - C. A database table
+   - D. A web browser
 
-2. Which path sends a request to a provider-managed proprietary model?
-   - A. A direct Gemini API call
-   - B. A local SQLite query
-   - C. A Python type hint
-   - D. A pytest fixture
+2. Why is a model not a complete product?
+   - A. A product also needs data, rules, user interaction, and reliable software.
+   - B. Models cannot produce text.
+   - C. Products do not need users.
+   - D. Models cannot run in applications.
 
-3. What does Vertex AI add to a Gemini access path?
-   - A. A governed cloud platform boundary and project identity
-   - B. Automatic local GPU memory
-   - C. A new Python language
-   - D. A guarantee of zero latency
+3. What is a hosted model?
+   - A. A model accessed through a service or API
+   - B. A model stored only in a notebook cell
+   - C. A model with no parameters
+   - D. A database query
 
-4. What does “open weights” mean in this module?
-   - A. The model’s parameters are available under the relevant license for people to run or host.
-   - B. The model has no parameters.
-   - C. The model is always free to operate.
-   - D. The model must run in a browser.
+4. What is a local model?
+   - A. A model run on hardware controlled by the application team
+   - B. A model that can never be tested
+   - C. A model that always has internet access
+   - D. A model that needs no memory
 
-5. What is a common advantage of hosted open-weight inference?
-   - A. Access to an open-model ecosystem without operating the hardware yourself
-   - B. No token charges ever
-   - C. No provider boundary
-   - D. Guaranteed private data residency
+5. What is one trade-off of using a hosted model?
+   - A. Less infrastructure to operate, but a service dependency and usage cost
+   - B. No network is needed
+   - C. The team owns the model weights
+   - D. It cannot be replaced
 
-6. What is a common advantage of local open-weight inference?
-   - A. The request can stay on the machine under your control.
-   - B. It automatically scales to millions of users.
-   - C. It removes model-size constraints.
-   - D. It never needs a GPU or memory.
+6. What is one trade-off of using a local model?
+   - A. More control and privacy, but more hardware and operations responsibility
+   - B. No setup is required
+   - C. It always has the best quality
+   - D. It cannot be monitored
 
-7. Which is the soundest default model-selection rule from M1?
-   - A. Always choose the largest model.
-   - B. Choose the smallest model and simplest deployment that meet the requirement.
-   - C. Always choose local inference.
-   - D. Choose based only on brand recognition.
+7. What should guide model selection?
+   - A. The task’s quality, speed, cost, privacy, and operating needs
+   - B. The longest model name
+   - C. The newest version only
+   - D. The largest parameter count only
 
-8. Why put provider-specific code behind an application boundary?
-   - A. To isolate configuration, errors, observability, and future provider changes
-   - B. To hide all tests
-   - C. To prevent any model replacement
-   - D. To make prompts impossible to inspect
+8. What is a model boundary?
+   - A. A small application interface that hides provider-specific call details
+   - B. A limit on Python files
+   - C. A database password
+   - D. A user interface color
 
-9. Which configuration should normally remain out of source control?
-   - A. A model’s public name
-   - B. An API key
-   - C. A function signature
-   - D. A test assertion
+9. Where should secrets normally be kept?
+   - A. In protected configuration such as environment variables or a secret store
+   - B. In a public slide
+   - C. In a prompt
+   - D. In a test name
 
-10. What does the M1 assistant lab ask learners to preserve when calling a model?
-   - A. The complete `system + history + current message` transcript
-   - B. Only the current message
-   - C. Only the system instruction
-   - D. The API key in the transcript
+10. What should an application do when a model returns no usable output?
+    - A. Return a safe fallback and record what happened
+    - B. Treat the empty output as a successful answer
+    - C. Expose the secret key
+    - D. Delete the conversation
 
 ## Code reading and debugging
 
-11. In `01_gemini_text.py`, what happens when `GEMINI_API_KEY` is absent?
-   - A. The program prints a configuration message and does not call the provider.
-   - B. It fabricates a model response.
-   - C. It raises a database error.
-   - D. It downloads a local model.
+11. What is the purpose of this check?
 
-12. A learner writes `call_model()` so it returns the provider response object,
-    but the lab expects a string reply and tests `result == "..."`. What is the
-    bug at the boundary?
+    ```python
+    if api_key:
+        call_model(api_key)
+    else:
+        print("Configuration is missing")
+    ```
 
-13. A local-model demo forwards `local_files_only=True` into text generation and
-    Transformers reports that the argument is unused. Where should the setting
-    belong, and what should generation receive instead?
+12. A function returns a provider response object, but the rest of the app
+    expects text. What should the boundary do?
+
+13. A local model fails because a setting meant for loading the model was passed
+    into the generate call. What should you do?
 
 ## Scenario
 
-14. A team must prototype Chronos with synthetic data this afternoon, but later
-    needs governed cloud deployment and usage logging. Which M1 access path do
-    you recommend first, and what boundary should remain stable when the path
-    changes?
+14. You need to test an AI feature today without depending on a live provider,
+    but the production version may use a hosted service. What should remain the
+    same between the test version and production version?
 
 ## Capstone transfer
 
-15. For a Chronos “explain my portfolio” feature, define the model-boundary
-    function’s input and output types and name one safe behavior for empty or
-    failed model output.
+15. For a Chronos assistant, what should the model-call function accept and what
+    should it return?

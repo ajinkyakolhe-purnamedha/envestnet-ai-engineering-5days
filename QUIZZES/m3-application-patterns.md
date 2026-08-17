@@ -2,86 +2,87 @@
 
 ## Multiple choice
 
-1. Which four request parts should an engineer keep separate while diagnosing a model failure?
-   - A. Instruction, context, question, and conversation history
-   - B. GPU, CPU, disk, and memory
-   - C. User, database, browser, and router
-   - D. Token, parameter, vendor, and license
+1. What should be separated when building a model request?
+   - A. Instructions, context, the question, and history
+   - B. All code into one function
+   - C. The user from the application
+   - D. Tests from the source code
 
-2. What is the first model-selection question?
-   - A. Which model is most famous?
-   - B. What capability, data boundary, latency, cost, and operating constraints does the job require?
-   - C. Which model has the longest name?
-   - D. Can the prompt be made longer?
+2. Why separate these parts?
+   - A. It makes failures easier to understand and fix.
+   - B. It increases model size.
+   - C. It removes the need for data.
+   - D. It guarantees a correct answer.
 
-3. In open-model selection, why consider the family before the exact version?
-   - A. Family behavior, license, modalities, and tool support are broader design choices than a version label.
-   - B. Versions never matter.
-   - C. Families determine the user’s password.
-   - D. Version numbers are token IDs.
+3. What should model selection start with?
+   - A. The task and its requirements
+   - B. The biggest available model
+   - C. A random provider
+   - D. The longest prompt
 
-4. What is one important dial represented by open-model parameter size?
-   - A. Capability and resource demand, with larger sizes generally needing more compute or memory
-   - B. The number of application users
-   - C. The number of validation rules
-   - D. The context history itself
-
-5. What changes when using a closed model service?
-   - A. The team makes an HTTP/service call and pays for usage instead of operating model weights and GPUs.
-   - B. The team receives the provider’s training data.
-   - C. All operating concerns disappear.
-   - D. Tokens become free.
-
-6. Which pattern is the least complex fit for a task requiring only a direct language response?
-   - A. Direct call
-   - B. RAG
+4. What is the simplest useful application pattern?
+   - A. A direct model call
+   - B. A multi-agent system
    - C. Fine-tuning
-   - D. Agentic workflow
+   - D. A full retrieval system
 
-7. Which pattern adds typed structure to a model response?
-   - A. Prompted application with structured output
-   - B. SQLite
-   - C. Health check
-   - D. Tokenization
+5. When is structured output useful?
+   - A. When the application needs a predictable response shape
+   - B. When no output is needed
+   - C. When the model must be hidden
+   - D. When a database is unavailable
 
-8. What does RAG add that a direct call does not inherently have?
-   - A. A retrieval boundary for supplying relevant private or current facts
-   - B. Guaranteed correctness
-   - C. A larger parameter count
-   - D. A local GPU
+6. When is retrieval useful?
+   - A. When the response needs relevant external, private, or current information
+   - B. For every one-sentence question
+   - C. Only for changing colors
+   - D. To replace all tests
 
-9. What is the correct relationship between schema validation and business validation?
-   - A. Schema validation checks shape/types; deterministic business rules still need separate checks.
-   - B. Schema validation approves every business decision.
-   - C. Business validation is unnecessary after an LLM call.
-   - D. They are identical.
+7. When might fine-tuning be useful?
+   - A. When repeated behavior or style cannot be achieved reliably with simpler methods
+   - B. Whenever a prompt has a typo
+   - C. For storing current facts
+   - D. For a health endpoint
 
-10. What is the M3 selection discipline?
-   - A. Choose the first/least-complex pattern that reliably meets the requirement and write down why.
-   - B. Start with agents for every problem.
-   - C. Add retrieval before understanding the data.
-   - D. Let model confidence replace a test.
+8. When might an agentic workflow be useful?
+   - A. When the system must choose and execute multiple dynamic steps
+   - B. For every direct answer
+   - C. When no tools exist
+   - D. Only for token counting
+
+9. What does schema validation check?
+   - A. Whether output has the expected fields and types
+   - B. Whether a business decision is allowed
+   - C. Whether a model is truthful
+   - D. Whether a user is satisfied
+
+10. What is the main M3 design rule?
+    - A. Use the least complex pattern that reliably meets the need.
+    - B. Always use the most complex pattern.
+    - C. Always use an agent.
+    - D. Avoid deterministic code.
 
 ## Code reading and debugging
 
-11. Given `choose_pattern({"format"})`, what does the current function return,
-    and why does it not return `rag`?
+11. A function returns `"prompted"` when a requirement includes `"format"`.
+    What does that tell you about the function?
 
-12. A prompted extraction returns valid JSON with `allocation_percent: 80`,
-    while policy allows at most 35. What check is missing?
+12. A model returns the correct fields but an amount violates a business limit.
+    What check should happen next?
 
-13. A developer chooses an agentic workflow for a fixed one-step portfolio
-    explanation. What design/debugging question should they ask first?
+13. A developer adds retrieval even though all required facts are already in the
+    input. What design problem might this create?
 
 ## Scenario
 
-14. In the M3 selection clinic, one Chronos idea needs current private policy
-    facts, another only needs a fixed response format, and a third needs a
-    multi-step tool loop. Choose the first pattern for each and state one reason
-    a simpler pattern would fail.
+14. Choose a suitable first pattern for each task:
+
+    - Answer a question using only the user’s supplied text.
+    - Return a response with fixed fields.
+    - Look up private documents before answering.
+    - Complete a changing sequence of tool calls.
 
 ## Capstone transfer
 
-15. For a Chronos trade-preview feature, select the least-complex application
-    pattern, define one deterministic contract that must run before any action,
-    and name the evidence you would use to justify the selection.
+15. For a Chronos trade-preview feature, name the simplest suitable pattern and
+    one deterministic rule that must run before any trade is approved.

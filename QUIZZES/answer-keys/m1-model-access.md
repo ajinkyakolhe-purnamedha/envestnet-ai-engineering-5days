@@ -1,17 +1,17 @@
 # M1 answer key
 
-1. B — Product value comes from the surrounding application system.
-2. A — Direct Gemini is the proprietary provider path.
-3. A — Vertex adds a governed cloud/platform boundary.
-4. A — Open weights refers to available parameters under a license.
-5. A — Hosting is delegated while the open ecosystem remains available.
-6. A — Local inference can keep requests on the machine.
-7. B — Use the smallest sufficient model and deployment.
-8. A — A boundary isolates provider concerns and makes change manageable.
-9. B — API keys are secrets.
-10. A — The assistant sends system instructions, prior history, and the current message.
-11. A — It prints the missing-key instruction and skips the call.
-12. The boundary returns the wrong abstraction; normalize the provider result to the string contract expected by the assistant and tests.
-13. `local_files_only` belongs in model loading/configuration. Generation should receive only generation parameters supported by the model call.
-14. Start with a deterministic/offline or hosted prototype, depending on the team’s constraints, but keep a provider-neutral `call_model(messages) -> str` boundary and logging around it.
-15. Example: input is a list of role/content messages; output is a string. On empty output, return a safe fallback such as “I could not produce an answer; please try again.”
+1. A — A model produces outputs from inputs.
+2. A — A product needs surrounding application behavior.
+3. A — Hosted models are accessed through a service/API.
+4. A — Local models run on controlled hardware.
+5. A — Hosted access reduces operations but adds dependency and cost.
+6. A — Local access increases control but adds operational work.
+7. A — Selection follows the task and operating requirements.
+8. A — A boundary hides provider-specific details.
+9. A — Secrets belong in protected configuration.
+10. A — Empty output needs safe handling and observability.
+11. It prevents a call when required configuration is missing.
+12. Extract and normalize the text into the application’s documented return type.
+13. Move the loading-only setting to model loading/configuration and pass only generation settings to generation.
+14. Keep the application-level interface, input/output contract, fallback behavior, and tests stable.
+15. It should accept structured messages or a prompt and return normalized text, with a safe error/fallback path.

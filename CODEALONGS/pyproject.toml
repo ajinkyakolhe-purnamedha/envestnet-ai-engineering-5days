@@ -8,6 +8,7 @@ dependencies = [
 
 [project.optional-dependencies]
 courseware = [
+  "anthropic",
   "fastapi",
   "google-genai",
   "huggingface-hub",

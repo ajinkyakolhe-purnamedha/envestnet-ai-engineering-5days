@@ -2,8 +2,8 @@
 uv init wealth-demo
 cd wealth-demo
 
-uv add transformers torch
-uv add google-genai
-uv add python-dotenv
 uv add fastapi uvicorn
-uv add openai anthropic boto3
+uv add openai anthropic google-genai
+uv add transformers diffusers
+uv add python-dotenv 
+

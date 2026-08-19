@@ -41,7 +41,7 @@ The application assembles the request. The model returns a completion and usage.
 These parts are the same whether the feature is a portfolio assistant, support
 copilot, document workflow, or internal operations tool.
 
-M1 starting point: `CODEALONGS/day_1/m1_model_access/01_gemini_text.py`
+M1 starting point: `CODEALONGS/day_1/m1_model_access/01_closed_model_call.py`
 
 <!--
 The provider API is not the lesson. Label the pieces a participant owns at

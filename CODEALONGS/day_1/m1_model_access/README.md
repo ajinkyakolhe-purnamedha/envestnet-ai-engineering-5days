@@ -10,14 +10,37 @@ Run from the repository root:
 uv run --project CODEALONGS --extra courseware jupyter lab
 ```
 
-Set `GEMINI_API_KEY` in the repository `.env` for the direct Gemini example.
-The Vertex example additionally needs an authenticated Google Cloud identity and
-`GOOGLE_CLOUD_PROJECT`. The hosted open-weight example needs `HF_TOKEN`.
+Three pairs form the learning path; the fourth is an epilogue about where a
+model call lives once your organisation owns it.
 
 | Pair | One essential idea |
 |---|---|
-| 01–02 | Call a proprietary model through the Gemini API |
-| 03–04 | Call Gemini through the Vertex AI cloud boundary |
-| 05–06 | Call a hosted open-weight model and explore modalities |
-| 07–08 | Run the cohort model entirely locally |
-| 09–10 | Put a model call behind a small, logged application boundary |
+| 01–02 | Three proprietary SDKs, one identical call shape |
+| 03–04 | Run an open-weight model from local files, with no network |
+| 05–06 | Put the model behind a small, logged application boundary |
+| 07–08 | *Later:* the same call through a governed cloud boundary |
+
+## Keys, and what runs without them
+
+Nothing in pairs 03–04 needs a key or a network — the weights are committed to
+`OFFLINE-AI-Models/`. Everything else degrades gracefully: a snippet reports
+which providers are unconfigured and keeps going, and a failing provider never
+stops the others.
+
+| Variable | Used by | Where it comes from |
+|---|---|---|
+| `GEMINI_API_KEY` | pairs 01–02, 05–06 | the repository `.env` |
+| `OPENAI_API_KEY` | pair 01–02 | the repository `.env` |
+| `ANTHROPIC_API_KEY` | pair 01–02 | the repository `.env` |
+| `GOOGLE_CLOUD_PROJECT` | pair 07–08 | an authenticated Google Cloud identity |
+| `HF_TOKEN` | pair 07–08 | a Hugging Face account |
+
+Pair 05–06 picks a backend for itself: Gemini when the key works, the local
+model when it does not. The demonstration survives a dead key or flat wifi.
+
+## Lab
+
+`lab/` is the module exercise. It starts from the pair 05–06 assistant and adds
+the two things that snippet leaves out — conversation history, and a safe
+response when the model returns no usable text — proven by two tests that never
+call a provider.

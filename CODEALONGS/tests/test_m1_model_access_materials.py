@@ -13,11 +13,10 @@ DECK = ROOT.parent / "SLIDES-markdown" / "m1-intro-to-ai-models.md"
 
 def test_m1_has_paired_snippets_and_code_alongs() -> None:
     pairs = [
-        ("01_gemini_text.py", "02_gemini_text_code_along.ipynb"),
-        ("03_vertex_gemini.py", "04_vertex_gemini_code_along.ipynb"),
-        ("05_hosted_open_model.py", "06_hosted_open_model_code_along.ipynb"),
-        ("07_local_model.py", "08_local_model_code_along.ipynb"),
-        ("09_model_boundary.py", "10_model_boundary_code_along.ipynb"),
+        ("01_closed_model_call.py", "02_closed_model_call_code_along.ipynb"),
+        ("03_local_model_call.py", "04_local_model_call_code_along.ipynb"),
+        ("05_advisor_assistant.py", "06_advisor_assistant_code_along.ipynb"),
+        ("07_cloud_hosted_models.py", "08_cloud_hosted_models_code_along.ipynb"),
     ]
     for snippet_name, notebook_name in pairs:
         snippet = MATERIALS / snippet_name
@@ -33,10 +32,25 @@ def test_m1_has_paired_snippets_and_code_alongs() -> None:
 
 def test_m1_deck_uses_new_courseware_and_correct_cloud_boundary() -> None:
     deck = DECK.read_text()
-    assert "CODEALONGS/day_1/m1_model_access/01_gemini_text.py" in deck
+    for snippet_name in (
+        "01_closed_model_call.py",
+        "03_local_model_call.py",
+        "05_advisor_assistant.py",
+        "07_cloud_hosted_models.py",
+    ):
+        assert f"CODEALONGS/day_1/m1_model_access/{snippet_name}" in deck
     assert "Gemini through Vertex AI" in deck
     assert "Bedrock is a separate cloud catalogue" in deck
     assert "open weights" in deck.lower()
+
+
+def test_m1_defers_the_cloud_boundary_until_after_the_lab() -> None:
+    """The governed-cloud section is the epilogue, not a mid-module detour."""
+    deck = DECK.read_text()
+    lab = deck.index("M1.L \u00b7 Lab")
+    assert deck.index("M1.2.2 \u00b7 Three proprietary SDKs") < lab
+    assert deck.index("M1.5.1 \u00b7 Build the assistant") < lab
+    assert lab < deck.index("M1.6.1 \u00b7 Cloud platforms")
 
 
 def test_m1_covers_application_opportunity_and_has_a_lab_pack() -> None:

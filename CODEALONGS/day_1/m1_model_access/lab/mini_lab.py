@@ -12,7 +12,7 @@ PROMPT = f"Explain the greatest portfolio risk in one sentence: {PORTFOLIO_NOTE}
 
 if api_key := os.getenv("GEMINI_API_KEY"):
     response = genai.Client(api_key=api_key).models.generate_content(
-        model="gemini-2.5-flash-lite",
+        model="gemini-3.5-flash-lite",
         contents=PROMPT,
     )
     print(response.text)

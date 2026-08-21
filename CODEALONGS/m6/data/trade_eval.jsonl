@@ -1,0 +1,3 @@
+{"input":"Please sell 40 AAPL for Mrs Rao.","expected":"[{\"symbol\":\"AAPL\",\"action\":\"sell\",\"shares\":40}]"}
+{"input":"Buy 25 NVDA tomorrow morning.","expected":"[{\"symbol\":\"NVDA\",\"action\":\"buy\",\"shares\":25}]"}
+{"input":"No trade today, just discussed cash balance.","expected":"[]"}

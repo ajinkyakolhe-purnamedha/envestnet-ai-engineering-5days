@@ -14,19 +14,27 @@ presenter view and can print them in a notes PDF.
 | `m1-intro-to-ai-models.md` | M1 · Introduction to AI Models | 17 |
 | `m2-model-tokens-context.md` | M2 · Model, Tokens & Context | 16 |
 | `m3-application-patterns.md` | M3 · LLM Application Patterns | 8 |
-| `m4-building-rags.md` | M4 · Understanding & Building RAGs | 8 |
-| `m5-advanced-rag.md` | M5 · Advanced RAG Patterns + Evaluation | 7 |
-| `m6-fine-tuning.md` | M6 · LLM Fine-Tuning | 24 |
-| `m7-agentic-applications.md` | M7 · The Agent Loop, By Hand | 37 |
+| `m4-building-rags.md` | M4 · Building A Complete Baseline RAG | 18 |
+| `m5-advanced-rag.md` | M5 · Advanced RAG Improvements & Evaluation | 12 |
+| `m6-fine-tuning.md` | M6 · LLM Fine-Tuning | 19 |
+| `m7-agentic-applications.md` | M7 · Agentic LLMs | 19 |
+| `m8-agentic-frameworks.md` | M8 · Agentic Frameworks | 18 |
+
+M4-M8 companion files:
+
+- `../CODEALONGS/m4/README.md`: ordered baseline RAG demonstration snippets.
+- `../CODEALONGS/m5/README.md`: ordered advanced RAG and evaluation snippets.
+- `../CODEALONGS/m6/README.md`: ordered fine-tuning concept snippets.
+- `../CODEALONGS/m7/README.md`: ordered plain-Python agent loop snippets.
+- `../CODEALONGS/m8/README.md`: ordered smolagents and LlamaIndex framework snippets.
 
 M7 companion files:
 
 - `m7-concepts-reference.md`: dense text reference for the concepts covered in the M7 slides.
 - `m7-lab-instructions.md`: notebook lab instructions plus optional Capstone integration hints.
 
-Note: M3, M4, and M5 reference snippet files (`snippets/m3/…` etc.) that
-don't exist yet in the source repo — those code blocks contain a clearly marked
-placeholder comment naming the missing file, so the gap is visible.
+Note: M3 still references placeholder snippet files from the older draft. M4,
+M5, M6, M7, and M8 now point to runnable snippets under `../CODEALONGS/`.
 
 ## Preview
 

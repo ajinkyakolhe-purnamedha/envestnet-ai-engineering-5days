@@ -1,17 +1,24 @@
-"""Instructor solution for the M2 instrumentation lab; no provider I/O."""
+"""Instructor solution for the M2 assistant budgeting lab; no provider I/O."""
 
 
-def estimate_cost(input_tokens: int, output_tokens: int) -> float:
-    return input_tokens / 1_000 * 0.002 + output_tokens / 1_000 * 0.004
+def build_messages(
+    instruction: str,
+    context: str,
+    history: list[dict[str, str]],
+    new_user_message: str,
+) -> list[dict[str, str]]:
+    return [
+        {"role": "system", "content": instruction},
+        *history,
+        {"role": "system", "content": f"Context available this turn:\n{context}"},
+        {"role": "user", "content": new_user_message},
+    ]
 
 
-def trim_history(messages: list[dict[str, str]], keep_turns: int) -> list[dict[str, str]]:
-    retained = messages[-(keep_turns * 2) :]
-    while retained and retained[0]["role"] == "assistant":
-        retained.pop(0)
-    return retained
+def estimate_monthly_cost(one_call_cost: float, calls_per_month: int) -> float:
+    return one_call_cost * calls_per_month
 
 
-def instrument(usage: dict[str, int], cumulative_cost: float) -> dict[str, float]:
-    call_cost = estimate_cost(usage["input_tokens"], usage["output_tokens"])
-    return {"call_cost": call_cost, "cumulative_cost": cumulative_cost + call_cost}
+def choose_first_model_to_try(rows: list[dict[str, object]]) -> str:
+    sorted_rows = sorted(rows, key=lambda row: row["estimated_cost_usd"])
+    return str(sorted_rows[0]["tier"])

@@ -251,9 +251,9 @@ is the bug everyone writes first; picking the text block is the fix. That is
 the first hint of something M2 makes central: a model call is structured, not
 a string in and a string out.
 
-The full file reads keys from .env, runs whichever providers are configured,
-and catches failures per provider — one depleted key must not stop the other
-two. Quota, billing, and outages are normal; a model call is a network call.
+The full file reads keys from .env and reports which providers are configured.
+Keep the teaching path simple here: the point is the repeated call shape, not a
+dispatch framework.
 -->
 
 ---
@@ -413,8 +413,9 @@ the model as a parameter so the caller decides which one.
 testable without a key, and it is the same seam the lab and every later module
 use.
 
-The file picks a backend for you — Gemini when a key works, the local model
-when it does not — so the demonstration survives a dead key or a flat wifi.
+The snippet uses the local SmolLM model so the application boundary is visible
+without a provider key or network. The point is the boundary: facts in, model
+call out, measured reply back.
 -->
 
 ---

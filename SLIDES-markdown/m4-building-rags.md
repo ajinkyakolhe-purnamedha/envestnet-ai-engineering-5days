@@ -6,199 +6,370 @@ paginate: true
 
 <!-- _class: lead -->
 
-> Draft version: content is being refined.
+# M4.0 · Building A Complete Baseline RAG
 
-# M4 · Retrieval-Augmented Generation (RAG)
+RAG is a retrieval pipeline around an LLM: prepare knowledge, index it, search
+it, then answer from retrieved evidence.
 
-Grounding language models in dynamic & structured knowledge
+By the end of this module, you can:
 
-By the end of this module you can:
-
-- Build an end-to-end vector retrieval pipeline from raw documents
-- Select chunking strategies appropriate for specific document layouts
-- Implement hybrid search combining dense vectors with sparse keyword indexing
-- Apply reranking models to improve precision on top-k context retrieval
-- Connect LLMs to structured data stores using Text-to-SQL over DuckDB / Parquet
+- Explain why retrieval is different from long context and fine-tuning
+- Run a first simple RAG query with LlamaIndex
+- Chunk source documents into retrieval units with source metadata
+- Build a simple searchable index over chunks
+- Retrieve top-k context and inspect the scores
+- Generate a grounded answer with citations
 
 <!--
-Set expectations: 60 minutes lecture, followed by a hands-on RAG implementation lab.
-
-RAG addresses the fundamental limitation of LLM parametric memory: models cannot access private, offline, or real-time enterprise data without re-training.
-
-Rather than altering model weights, RAG retrieves relevant document passages at query time and injects them directly into the context window.
+M4 is the baseline RAG module. The job today is ownership of the pipeline:
+document, chunk, vector, index, retrieval result, prompt, answer.
 -->
 
 ---
 
-# The 5-Step RAG Architecture
+# M4.1 · Why RAG Exists
+
+Three facts make bare model calls insufficient:
+
+| Gap | Why it matters |
+| --- | --- |
+| Private knowledge | the model has not read your policies or client notes |
+| Current knowledge | policies and prices change after training |
+| Verifiable knowledge | an answer needs a source a human can inspect |
 
 ```text
-  [ Raw Data ] ---> 1. Chunking ---> 2. Embeddings ---> [ Vector Database ]
-                                                               |
-  [ User Query ] ---> 3. Retrieve Top-K Passages <--------------+
-                             |
-                             v
-  [ Prompt Construction ] ---> 4. LLM Generation ---> [ Grounded Response ]
+RAG = search -> paste -> ask
 ```
 
-### Ingestion Pipeline (Offline)
-1. Load raw files (PDF, Markdown, HTML, CSV).
-2. Split documents into discrete text chunks.
-3. Generate dense vector embeddings per chunk.
-4. Persist vectors and metadata in an index.
-
-### Query Pipeline (Online)
-1. Convert incoming user query into vector space.
-2. Search index for top-k nearest neighbors.
-3. Assemble context prompt: System + Context + Query.
-4. Pass context prompt to LLM for final synthesis.
-
 <!--
-Walk through the separation between ingestion (offline/batch) and query resolution (online/real-time).
-
-Ingestion happens asynchronously as data changes. Query resolution must run within user latency budgets.
+Connect back to M3: RAG is the custom-knowledge pattern. It earns its
+complexity when the answer depends on facts outside model weights.
 -->
 
 ---
 
-# Text Chunking Strategies
+# M4.1 · RAG Is Not Fine-Tuning
 
-**Fixed Character / Token** — *e.g. 512 tokens, 50 overlap*
-- **Pros**: Fast, simple implementation.
-- **Cons**: Splits sentences and key facts mid-phrase.
-- **Use**: Generic unstructured text without strong formatting.
+| Need | Better first tool |
+| --- | --- |
+| Add or remove a policy fact | RAG |
+| Cite the source document | RAG |
+| Change output format or tone | fine-tuning |
+| Reduce repeated instruction cost | fine-tuning |
 
-**Structural / Sentence** — *e.g. Markdown headers, Python functions*
-- **Pros**: Preserves natural semantic boundaries.
-- **Cons**: Variable chunk size; headers can yield tiny chunks.
-- **Use**: Technical documentation, codebases, manuals.
+Fine-tuning teaches behavior. Retrieval supplies facts.
 
-**Semantic Splitting** — *e.g. Embedding distance threshold*
-- **Pros**: Groups text by semantic coherence.
-- **Cons**: High computational cost during ingestion.
-- **Use**: Dense articles with shifting topics.
+Source: `CODEALONGS/m4/01_why_rag_exists.py`
 
 <!--
-Chunk size represents a trade-off:
-- Smaller chunks (128–256 tokens): Higher retrieval precision, but risks losing surrounding context.
-- Larger chunks (1024+ tokens): Retains context, but increases noise and consumes context window space.
-- Overlap (10-20%): Prevents information loss at boundary splits.
+The important boundary for Day 2: M4/M5 teach custom knowledge. M6 teaches
+custom behavior. If a fact changes tomorrow, edit the file and re-index; do
+not retrain weights.
 -->
 
 ---
 
-# Naive RAG Implementation
+# M4.2 · Simple RAG In LlamaIndex
+
+The first working shape is intentionally small:
 
 ```python
-# snippets/m4/naive_rag.py — snippet file not yet written
-# (module is a stub; the snippet must be authored before
-#  delivery, per the module's transclusion reference)
+documents = SimpleDirectoryReader("data").load_data()
+index = VectorStoreIndex.from_documents(documents)
+answer = index.as_query_engine().query(question)
 ```
 
-### Pipeline Breakdown
-
-1. **`SimpleDirectoryReader`**: Loads documents from specified filesystem path.
-2. **`VectorStoreIndex`**: Chunks document text, calls embedding model, and constructs in-memory vector store.
-3. **`as_query_engine`**: Assembles retrieval prompt and passes retrieved context to LLM.
+Source: `CODEALONGS/m4/02_simple_rag_llamaindex.py`
 
 <!--
-This is the baseline implementation using LlamaIndex.
-
-While naive RAG works well on small, distinct document sets, production enterprise datasets expose three major failure modes:
-1. Vocabulary mismatch (synonyms missed by dense vector distance).
-2. Out-of-order information loss across chunks.
-3. Irrelevant context polluting the prompt when top-k returns noisy chunks.
+Show the win early. Participants should see that a framework can build the
+whole thing quickly before we open the abstraction and inspect its parts.
 -->
 
 ---
 
-# Improving Retrieval: Naive vs. Advanced RAG
+# M4.2 · What The Framework Hid
 
-### Limitations of Naive Vector Search
+That short demo still did every RAG step:
 
-- **Exact Term Sensitivity**: Product SKU codes or acronyms can fail dense vector distance lookups.
-- **Fixed Top-k Noise**: Fetching top 10 chunks may return 2 relevant passages and 8 irrelevant passages.
-- **Single-Query Dependence**: User queries are often vague or poorly framed for vector search.
+```text
+document reader -> splitter -> embedding model -> vector index
+question -> retriever -> prompt builder -> answer
+```
 
-### The Production RAG Pipeline
+M4 opens those objects one at a time.
 
-1. **Query Transformation**: Rewrite user query into multiple specific search variations.
-2. **Hybrid Search**: Combine Dense Vector Search (semantic) with Sparse BM25 Search (exact keywords).
-3. **Cross-Encoder Reranking**: Re-score top 20 candidate chunks down to top 3 high-precision passages.
+Source: `CODEALONGS/m4/03_complete_pipeline_objects.py`
 
 <!--
-Explain why production RAG uses hybrid search + reranking.
-
-Dense embeddings capture conceptual similarity ("cost" ≈ "price"), while sparse BM25 index captures exact identifiers ("AAPL", "Rule 401b").
-
-A cross-encoder reranker evaluates the full query-chunk pair jointly, scoring relevance far more accurately than bi-encoder vector similarity alone.
+This prevents LlamaIndex from feeling magical. The rest of the module explains
+what the framework did on their behalf.
 -->
 
 ---
 
-# Hybrid Search & Reranking
+# M4.3 · The Complete RAG Pipeline
+
+```text
+load documents
+  -> chunk documents
+  -> embed chunks
+  -> store in an index
+  -> retrieve top-k chunks
+  -> build grounded prompt
+  -> generate cited answer
+```
+
+Frameworks package these same steps. They do not remove them.
+
+<!--
+Name the steps before showing framework names. The learner should be able to
+point at each object in code before trusting an abstraction.
+-->
+
+---
+
+# M4.3 · Frameworks Wrap The Same Steps
+
+| Framework | What it gives you |
+| --- | --- |
+| LlamaIndex | document readers, nodes, indexes, query engines |
+| LangChain | loaders, splitters, vector store adapters, chains |
+| Haystack | document stores, retrievers, pipelines |
+
+The abstraction is useful only after the pipeline is legible.
+
+<!--
+Do not turn this into a framework survey. Show that every cookbook line hides
+the same load/chunk/embed/index/retrieve/prompt sequence.
+-->
+
+---
+
+# M4.4 · Chunking
+
+Documents are not retrieval units.
+
+```text
+document  ->  chunks / nodes  ->  searchable rows
+```
+
+A chunk should be the smallest useful piece of evidence the answer can cite.
+
+Source: `CODEALONGS/m4/04_sentence_splitter_nodes.py`
+
+<!--
+This is the main design idea of M4. Chunking is not cosmetic formatting; it is
+the unit of retrieval.
+-->
+
+---
+
+# M4.4 · Fixed vs Structural Chunks
+
+| Strategy | Strength | Risk |
+| --- | --- | --- |
+| Fixed size | simple, predictable | cuts through facts and headings |
+| Structural | follows author boundaries | variable chunk size |
+
+For policies, manuals, and code, structural chunking is the baseline.
+
+<!--
+Use the mini policy file. Fixed chunks are easy to explain, but policy rules
+already have headings. Use the document's own structure before inventing one.
+-->
+
+---
+
+# M4.4 · Size, Overlap, Metadata
+
+Three decisions travel with every chunk:
+
+- **size**: precise retrieval vs enough surrounding context
+- **overlap**: protects boundary facts, but duplicates text
+- **metadata**: source, title, page, type, last updated
+
+```text
+chunk text + metadata = citeable retrieval unit
+```
+
+Source: `CODEALONGS/m4/05_nodes_with_metadata.py`
+
+<!--
+Metadata is the bridge from search result to citation. If you do not carry the
+source forward here, you cannot show it later without guesswork.
+-->
+
+---
+
+# M4.5 · Indexing And Vector Databases
+
+An index stores one searchable representation per chunk.
+
+```text
+chunk -> embedding/vector -> index row
+```
+
+Each row needs:
+
+- vector
+- chunk text
+- source metadata
+- stable id
+
+Source: `CODEALONGS/m4/06_vector_store_index.py`
+
+<!--
+The snippet uses word-count vectors so the mechanism is visible. Real RAG uses
+learned embedding vectors, but the shape of the object is the same.
+-->
+
+---
+
+# M4.5 · Re-Indexing Is A Real Cost
+
+You re-index when you change:
+
+- the source documents
+- the chunking strategy
+- the embedding model
+- metadata that is embedded or filtered
+
+In-memory indexes are fine for learning. Persistent vector stores matter when
+the corpus is large or reused.
+
+Source: `CODEALONGS/m4/07_storage_context.py`
+
+<!--
+This gives vector databases their place without making them mystical. They are
+persistent searchable stores for vectors plus metadata.
+-->
+
+---
+
+# M4.6 · Retrieval And Grounded Answering
+
+At query time:
+
+```text
+user question -> query vector -> similarity search -> top-k chunks
+```
+
+The retrieval result is not just text:
+
+```text
+score + chunk + metadata + source
+```
+
+Source: `CODEALONGS/m4/08_vector_retriever_top_k.py`
+
+<!--
+Make the result shape explicit. Debugging starts by printing the retrieved
+chunks and asking whether the answer is actually present.
+-->
+
+---
+
+# M4.6 · Scores Are Rankings, Not Truth
+
+`top_k` controls how many chunks the model reads.
+
+Too low:
+
+- answer may be missing
+
+Too high:
+
+- prompt gets noisy
+- cost rises
+- model can be distracted
+
+Similarity scores rank candidates. They do not certify correctness.
+
+<!--
+This prepares M5 without teaching M5 yet. Reranking and hybrid search exist
+because top_k is blunt.
+-->
+
+---
+
+# M4.6 · Grounded Prompt Construction
 
 ```python
-# snippets/m4/hybrid_rerank.py — snippet file not yet written
-# (module is a stub; the snippet must be authored before
-#  delivery, per the module's transclusion reference)
+prompt = f"""Use only the context below.
+
+Context:
+{retrieved_text}
+
+Question: {question}
+Answer with the source title."""
 ```
 
-### Two-Stage Retrieval
-
-1. **Stage 1 (Retrieval)**:
-   - Over-fetch top 10–20 candidates using hybrid vector + keyword search.
-   - Low latency, high recall.
-2. **Stage 2 (Reranking)**:
-   - Pass candidate passages to `SentenceTransformerRerank` (cross-encoder).
-   - Re-score and trim candidates to top 2 high-precision chunks.
+Source: `CODEALONGS/m4/09_query_engine_sources.py`
 
 <!--
-Walk through the code logic.
-
-Stage 1 optimizes for recall (getting the right document into the candidate pool).
-Stage 2 optimizes for precision (ensuring only relevant context reaches the LLM context window).
+RAG's prompt trick is deliberately simple. Most quality work is making the
+retrieved text good enough to paste here.
 -->
 
 ---
 
-# Structured Retrieval: Text-to-SQL
+# M4.6 · Missing Answers
 
-### When Vector RAG Fails
+A good RAG system must say when the answer is not in the retrieved context.
 
-Vector similarity search cannot reliably calculate sums, averages, or point-in-time constraints over tabular numbers:
+Failure modes:
 
-> *"What was the total return of Alice's portfolio between March and June 2020?"*
+- retrieval missed the right chunk
+- the corpus does not contain the answer
+- the model ignored the instruction
 
-Vector search returns static CSV rows; it cannot perform mathematical aggregation across trade dates.
-
-### Governed Structured Retrieval
-
-- **Data Product**: Curate views over DuckDB / Parquet files rather than exposing raw production databases.
-- **Pydantic Validation**: Force Text-to-SQL models to output validated SQL syntax.
-- **Execution Sandbox**: Run SQL queries in read-only sessions with timeouts.
+M5 starts by measuring which one happened.
 
 <!--
-Point-in-time correctness and financial aggregations require structured retrieval (Text-to-SQL / Pandas execution), not document vector search.
+This is the bridge to evaluation. Do not solve it yet; name the diagnostic
+question.
+-->
 
-In Chronos Wealth, portfolio trades and historical close prices live in SQLite/Parquet, so portfolio value calculations execute as SQL queries.
+---
+
+# M4.7 · End-To-End Baseline RAG
+
+The full baseline:
+
+```text
+load -> chunk -> index -> retrieve -> answer
+```
+
+Run the whole pipeline over the policy corpus, then inspect every object it
+created.
+
+Source: `CODEALONGS/m4/10_end_to_end_llamaindex_rag.py`
+
+<!--
+This is the possession check. If learners can print document, chunks, index
+rows, retrieved chunks, prompt, and answer, they own baseline RAG.
 -->
 
 ---
 
 <!-- _class: lead -->
 
-# 🧪 Lab: Building a Portfolio RAG Assistant for Chronos Wealth (70 min)
+# M4.L · Lab: First Policy RAG
 
-1. Ingest market reports and investment policy PDFs using structural chunking.
-2. Index document chunks with local embedding weights (`snowflake-arctic-embed-xs`).
-3. Build a hybrid query engine with a cross-encoder reranker.
-4. Implement SQL tool retrieval over SQLite portfolio data to answer point-in-time balance queries.
+Build a policy assistant that:
 
-Done when: `uv run pytest tests/labs -m lab` passes Lab 3 tests clean.
+1. loads the policy file
+2. chunks by headings
+3. indexes each chunk
+4. retrieves top-k evidence for a question
+5. answers only from retrieved context
+6. prints the source title
+
+Done when the answer cites the retrieved policy chunk and does not invent a
+missing rule.
 
 <!--
-Introduce Lab 3.
-
-Participants complete the RAG pipeline by connecting unstructured policy document retrieval with structured SQL querying over Chronos Wealth portfolio tables.
+Keep the lab scoped to baseline mechanics. The lab should leave a baseline
+that M5 can improve.
 -->

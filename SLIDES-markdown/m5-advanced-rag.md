@@ -6,191 +6,236 @@ paginate: true
 
 <!-- _class: lead -->
 
-> Draft version: content is being refined.
+# M5.0 · Advanced RAG Improvements & Evaluation
 
-# M5 · Advanced RAG Patterns & Evaluation
+M4 built baseline RAG. M5 improves it only after naming the failure.
 
-Advanced query transformations and empirical retrieval metrics
+By the end of this module, you can:
 
-By the end of this module you can:
-
-- Implement Parent-Child hierarchical indexing to decouple search from context
-- Apply Hypothetical Document Embeddings (HyDE) to resolve query-doc embedding gaps
-- Decompose multi-part user queries into parallel sub-retrieval execution pipelines
-- Measure retrieval quality empirically using the RAG Triad (`deepeval`)
-- Diagnose whether production failures stem from retrieval noise or model reasoning
+- run a small RAGAS-style baseline evaluation
+- improve chunk shape when context is incomplete
+- improve search when dense retrieval misses exact terms
+- rerank noisy candidates before generation
+- rewrite or decompose queries when the question is the problem
 
 <!--
-Set expectations: 45 minutes of lecture, followed by a RAG evaluation clinic.
-
-When basic RAG fails in production, teams often misdiagnose the issue as a "weak model" and attempt fine-tuning.
-
-In practice, 80% of RAG failures stem from retrieval deficiencies: poor chunk boundaries, vector distance mismatches between questions and answers, or context window pollution.
+The module thesis: advanced RAG is diagnosis-driven. Do not present these
+techniques as a checklist to add everywhere.
 -->
 
 ---
 
-**Advanced RAG Patterns · 1/3**
+# M5.1 · Evaluate The Baseline
 
-# Pattern 1: Hierarchical Chunking (Parent-Child)
+Start with a small golden set:
 
-### The Dilemma
+| Item | Example |
+| --- | --- |
+| question | "Can AAPL be 42%?" |
+| expected fact | 35% single-asset limit |
+| expected source | Concentration limit |
 
-- **Small Chunks (128 tokens)**: High retrieval precision; vector embedding captures a distinct concept; missing surrounding context for LLM reasoning.
-- **Large Chunks (1024 tokens)**: Preserves complete context; diluted vector embedding; lower retrieval match score.
+Then inspect retrieved context before scoring the answer.
 
-### Parent-Child Architecture
+<!--
+Keep the evaluation set small for class, but call it what it is: a diagnostic
+tool, not a benchmark.
+-->
+
+---
+
+# M5.1 · Quick RAGAS Pass
+
+RAGAS-style checks ask different questions:
+
+- **context precision**: how much retrieved context was useful?
+- **context recall**: did we retrieve the needed evidence?
+- **faithfulness**: is the answer supported by context?
+- **answer relevance**: did it answer the question?
+
+Source: `CODEALONGS/m5/01_evaluate_baseline.py`
+
+<!--
+If precision fails, look at retrieval. If faithfulness fails with good
+context, look at the prompt/model. If relevance fails, look at the question
+and answer shape.
+-->
+
+---
+
+# M5.2 · Improve Chunks
+
+Baseline chunking fails in two opposite ways:
+
+| Chunk shape | Failure |
+| --- | --- |
+| too small | precise hit, incomplete answer |
+| too large | enough context, noisy retrieval |
+
+Advanced chunking separates search unit from answer unit.
+
+<!--
+This section grows directly from M4.3. The baseline gave learners a chunking
+knob; M5 shows when that knob is not enough.
+-->
+
+---
+
+# M5.2 · Sentence-Window Chunking
 
 ```text
-  [ Document ]
-      |
-  [ Parent Chunk: 1024 tokens ] (Stored in Docstore)
-      |
-      +---> [ Child 1: 128t ] --\
-      +---> [ Child 2: 128t ] ----> Indexed in Vector DB
-      +---> [ Child 3: 128t ] --/
+document
+  -> sentence chunk
+  -> sentence chunk + nearby window for answering
 ```
 
-1. Search matches on **Child Chunk** (high precision).
-2. Fetch parent ID from metadata.
-3. Pass **Parent Chunk** to LLM prompt (full context).
+Search a focused sentence. Answer with its surrounding window.
+
+Source: `CODEALONGS/m5/03_sentence_window_chunking.py`
 
 <!--
-Walk through Parent-Child indexing.
-
-Decoupling the unit of RETRIEVAL (small child chunk) from the unit of SYNTHESIS (large parent chunk) resolves the chunk-size dilemma.
+Name related patterns here: sentence windows, hierarchical parsing, and
+auto-merging retrieval. The important idea is smaller retrieval units with
+larger synthesis context.
 -->
 
 ---
 
-**Advanced RAG Patterns · 2/3**
+# M5.3 · Improve Search
 
-# Pattern 2: Hypothetical Document Embeddings (HyDE)
+Dense retrieval finds meaning.
 
-```python
-# snippets/m5/hyde.py — snippet file not yet written
-# (module is a stub; the snippet must be authored before
-#  delivery, per the module's transclusion reference)
-```
+Sparse retrieval finds exact terms.
 
-### Resolving Asymmetric Search
+Real enterprise questions contain:
 
-1. **Problem**:
-   - User queries ("How do I harvest tax losses?") look vectors away from target answer passages ("Loss harvesting involves selling assets at a net loss...").
-2. **HyDE Process**:
-   - Ask LLM to write a *hypothetical answer* to the prompt.
-   - Embed hypothetical answer vector instead of user query.
-   - Search index using answer-to-answer vector distance.
+- tickers
+- policy codes
+- percentages
+- client names
+- ticket IDs
+
+Dense search alone often misses those.
 
 <!--
-HyDE transforms an asymmetric query-to-document search into a symmetric document-to-document search.
-
-Even if the hypothetical answer contains mild factual inaccuracies, its overall vector trajectory sits close to authentic answer documents in vector space.
+This is the exact-term failure. Do not bury it in vector math; it is a search
+engineering problem the room already understands from keyword systems.
 -->
 
 ---
 
-**Advanced RAG Patterns · 3/3**
-
-# Pattern 3: Sub-Query Decomposition
-
-### Multi-Part User Queries
-
-Users routinely ask questions requiring information from distinct domain areas:
-
-> *"Compare AAPL's 2020 revenue growth against our internal technology exposure limit."*
-
-Single vector search fails because no single document contains both AAPL financial statements and internal policy rules.
-
-### Query Decomposition Pipeline
+# M5.3 · Hybrid Search
 
 ```text
-               [ Complex Query ]
-                       |
-             (LLM Query Splitter)
-                       |
-       +---------------+---------------+
-       |                               |
-  [ Sub-Query 1:               [ Sub-Query 2:
-   AAPL Revenue ]               Tech Limits ]
-       |                               |
- (Vector Search 1)               (Vector Search 2)
-       |                               |
-       +---------------+---------------+
-                       |
-             [ Combined Context ]
-                       |
-                [ LLM Answer ]
+dense vector search + sparse BM25 search -> fused candidates
 ```
 
+Use hybrid retrieval when exact identifiers matter.
+
+Source: `CODEALONGS/m5/05_hybrid_search.py`
+
 <!--
-Multi-query decomposition uses a fast model to parse complex questions into independent sub-queries, executes searches in parallel, and merges candidate context prior to final synthesis.
+The snippet uses a tiny deterministic score so the failure is visible: dense
+can rank the wrong thing first, sparse rescues the exact term.
 -->
 
 ---
 
-# Measuring Retrieval Quality: The RAG Triad
+# M5.4 · Improve Ranking
 
-```python
-# snippets/m5/rag_eval.py — snippet file not yet written
-# (module is a stub; the snippet must be authored before
-#  delivery, per the module's transclusion reference)
+`top_k` is blunt:
+
+- too narrow misses context
+- too wide adds noise
+
+Reranking uses two stages:
+
+```text
+retrieve wide -> rerank candidates -> keep the best few
 ```
 
-### The 3 Core RAG Metrics
-
-1. **Context Precision**:
-   - Percentage of retrieved chunks that are actually relevant.
-   - High score = minimal prompt noise.
-2. **Faithfulness / Groundedness**:
-   - Is every statement in completion supported by retrieved context?
-   - Low score = hallucination.
-3. **Answer Relevance**:
-   - Does completion directly answer the original query?
-
 <!--
-The RAG Triad isolates failure locations:
-- Low Context Precision $\rightarrow$ Fix retriever, chunking, or reranker.
-- Low Faithfulness $\rightarrow$ Reduce system prompt creativity or change model.
-- Low Answer Relevance $\rightarrow$ Fix prompt instructions or query decomposition.
+Make the cost trade explicit. The reranker is a second model or scoring step,
+so it belongs where precision matters.
 -->
 
 ---
 
-# Diagnostic Matrix: Failure Mode vs. Fix
+# M5.4 · Reranking
 
-| Symptom | Primary Failure Cause | Correct Engineering Action | Incorrect Reaction |
-|---|---|---|---|
-| **Hallucination in answer** | Retriever fetched irrelevant context | Add reranker; trim top-k; tighten system prompt | Fine-tune model |
-| **Missing exact product IDs** | Dense vector keyword mismatch | Enable BM25 hybrid search | Switch to larger LLM |
-| **Truncated / missing context** | Small chunk boundary cut sentence | Switch to Parent-Child chunking | Increase temperature |
-| **Model ignores retrieved facts** | Context pollution or weak prompt | Re-order context (Lost in the Middle fix) | Fine-tune weights |
+A retriever scores each chunk independently.
 
-**Key Takeaway**: 80% of production RAG issues are solved in the retrieval pipeline, not by modifying weights.
+A reranker reads the query and candidate together.
+
+Source: `CODEALONGS/m5/07_rerank_results.py`
+
+Reranker scores are not similarity scores. Do not compare the numbers as if
+they are the same unit.
 
 <!--
-Walk through the diagnostic table.
+This is often the highest-value improvement after hybrid search, but it is
+still a measured fix, not a default ornament.
+-->
 
-Most instincts to fine-tune stem from observing hallucinated or incomplete RAG answers.
+---
 
-Fixing chunking, hybrid search, or context ordering resolves these failures in hours, avoiding weeks of model fine-tuning.
+# M5.5 · Improve The Query
+
+Sometimes retrieval fails because the user's question is a bad search query:
+
+- vague wording
+- comparison question
+- multiple facts in one sentence
+- answer spread across documents
+
+Fix the search text before searching.
+
+<!--
+This section owns HyDE and decomposition. These techniques add LLM calls, so
+they should be reserved for query shapes that need them.
+-->
+
+---
+
+# M5.5 · Query Transformations
+
+Three common transformations:
+
+- query rewriting
+- HyDE: search with a hypothetical answer
+- sub-question decomposition
+
+Source: `CODEALONGS/m5/09_query_transformations.py`
+
+Use them when the measured failure is the query, not the chunks or index.
+
+<!--
+HyDE and decomposition belong here, not M4. They change the query before
+retrieval and add latency/cost.
 -->
 
 ---
 
 <!-- _class: lead -->
 
-# 🧪 Lab: Evaluating & Diagnostic Tuning of Portfolio RAG (45 min)
+# M5.L · Lab: Diagnose And Tune RAG
 
-1. Run `deepeval` test suite over 30 evaluation queries in Chronos Wealth.
-2. Measure Context Precision, Faithfulness, and Answer Relevance baseline scores.
-3. Add a HyDE transformer and measure precision delta.
-4. Replace fixed chunking with Parent-Child indexing and evaluate Context Precision improvements.
+1. Run the M4 baseline.
+2. Evaluate a small golden question set.
+3. Name the primary failure.
+4. Apply one matching fix.
+5. Measure before and after.
 
-Done when: `pytest tests/labs/test_lab5_eval.py` verifies all RAG metrics >= 0.75.
+```text
+bad chunks -> advanced chunking
+missed exact terms -> hybrid search
+noisy top_k -> reranking
+bad query -> rewrite / HyDE / decomposition
+```
+
+Done when the fix is justified by evidence, not preference.
 
 <!--
-Introduce Lab 5.
-
-Participants quantitatively benchmark retrieval metrics before and after applying advanced RAG transformations, proving quality improvements empirically.
+The lab should force one change at a time. If learners change chunking,
+retrieval, and prompt together, they cannot know what helped.
 -->

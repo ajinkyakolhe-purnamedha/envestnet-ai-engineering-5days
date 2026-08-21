@@ -69,7 +69,7 @@ Change the instruction and then change the context.
 2. Which change should alter the answer's available facts?
 3. Which failure belongs to a Python business rule instead?
 
-Code-along: `CODEALONGS/day_1/m3_application_patterns/02_assemble_prompt_code_along.ipynb`
+Try it in: `CODEALONGS/day_1/m3_application_patterns/01_assemble_prompt.py`
 
 ---
 
@@ -255,15 +255,19 @@ Every rung adds capability—and new failure modes to own.
 # M3.3 · Pattern 1 — Direct call
 
 ```python
-def direct_answer(question: str) -> str:
-    return f"Draft answer to: {question}"
+messages = [
+    {"role": "system", "content": "You are a concise advisor assistant."},
+    {"role": "user", "content": "Explain the risk in a portfolio with 52% in AAPL."},
+]
+
+reply = call_smolm(messages)
 ```
 
 Use it for a self-contained language task such as rewriting a supplied adviser
 note, support reply, or internal update. Its failure is unsupported facts or
 output that a downstream system cannot safely consume.
 
-Source: `CODEALONGS/day_1/m3_application_patterns/03_base_call.py`
+Source: `CODEALONGS/day_1/m3_application_patterns/02_direct_llm_call.py`
 
 <!--
 Direct is a valid pattern, not a beginner's mistake. It is the correct starting
@@ -287,7 +291,7 @@ intent = client.create(response_model=TradeIntent, messages=messages)
 Use Instructor plus Pydantic as the primary implementation: the application
 requests a typed response rather than hoping a prose parser succeeds.
 
-Source: `CODEALONGS/day_1/m3_application_patterns/05_prompted_extraction.py`
+Source: `CODEALONGS/day_1/m3_application_patterns/03_prompted_extraction.py`
 
 <!--
 Show Instructor and Pydantic as the teaching boundary. The cookbook snippet
@@ -332,9 +336,12 @@ or document-bound knowledge.
 
 Deep implementation belongs to M4.
 
+Source: `CODEALONGS/day_1/m3_application_patterns/04_simple_rag_architecture.py`
+
 <!--
 Use the M2 embeddings preview as the bridge. RAG is named here as an
-application pattern; avoid a pipeline diagram or code that steals M4's work.
+application pattern; keep implementation to retrieve -> prompt -> answer.
+M4 owns LlamaIndex, indexes, chunking, retrieval tuning, and grounded answers.
 -->
 
 ---
@@ -406,7 +413,7 @@ the module from becoming a technology shopping list.
 | Extract a support-ticket hand-off | Prompted application | Why is prose unsafe downstream? |
 | Answer from changing internal policy documents | RAG | Why cannot model memory be the source? |
 
-Code-along: `CODEALONGS/day_1/m3_application_patterns/08_choose_pattern_code_along.ipynb`
+Try it in: `CODEALONGS/day_1/m3_application_patterns/05_choose_pattern.py`
 
 ---
 
@@ -419,7 +426,7 @@ assert not validate_trade_request({"symbol": "AAPL", "allocation_percent": 36})
 Use ordinary Python for facts that have an exact answer: policy caps, required
 fields, permitted symbols, citation presence, and authorization boundaries.
 
-Source: `CODEALONGS/day_1/m3_application_patterns/09_test_contract.py`
+Source: `CODEALONGS/day_1/m3_application_patterns/06_test_contract.py`
 
 <!--
 The model can propose; deterministic application code decides what is allowed.
@@ -437,7 +444,7 @@ Try a permitted allocation, an over-cap allocation, and an unknown symbol.
 - Which concern needs later evaluation rather than a Boolean test?
 - Why should a model not be its own final policy judge?
 
-Code-along: `CODEALONGS/day_1/m3_application_patterns/10_test_contract_code_along.ipynb`
+Try it in: `CODEALONGS/day_1/m3_application_patterns/06_test_contract.py`
 
 ---
 

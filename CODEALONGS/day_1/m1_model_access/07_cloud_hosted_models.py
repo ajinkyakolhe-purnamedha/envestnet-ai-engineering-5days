@@ -1,9 +1,4 @@
-"""Later: the same models, through your own cloud account.
-
-Nothing here is expected to run in the workshop. It runs once
-your organisation gives you a project, an identity and a role.
-The call shape is unchanged -- only who holds the key moves.
-"""
+"""One concept: governed cloud access changes who vouches for the caller."""
 
 import os
 
@@ -14,9 +9,7 @@ load_dotenv(override=True)
 PROMPT = "Name one risk in a portfolio with 52% in AAPL."
 
 
-# #region cloud
 def call_vertex(prompt: str) -> str:
-    """Gemini through a GCP project and an IAM identity."""
     from google import genai
 
     client = genai.Client(
@@ -32,7 +25,6 @@ def call_vertex(prompt: str) -> str:
 
 
 def call_hf_inference(prompt: str) -> str:
-    """Open weights that someone else hosts and scales."""
     from huggingface_hub import InferenceClient
 
     client = InferenceClient(api_key=os.environ["HF_TOKEN"])
@@ -41,16 +33,9 @@ def call_hf_inference(prompt: str) -> str:
         messages=[{"role": "user", "content": prompt}],
     )
     return reply.choices[0].message.content
-# #endregion
 
 
-CLOUD_PATHS = {
-    "GOOGLE_CLOUD_PROJECT": call_vertex,
-    "HF_TOKEN": call_hf_inference,
-}
-
-for env_name, call_model in CLOUD_PATHS.items():
-    if os.getenv(env_name):
-        print(f"{env_name}: {call_model(PROMPT)}")
-    else:
-        print(f"{env_name}: not configured -- expected today")
+print("Direct provider key -> individual application secret")
+print("Cloud model platform -> project, identity, role, audit")
+print("GOOGLE_CLOUD_PROJECT:", os.getenv("GOOGLE_CLOUD_PROJECT") or "not configured")
+print("HF_TOKEN:", "configured" if os.getenv("HF_TOKEN") else "not configured")

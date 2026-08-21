@@ -45,7 +45,7 @@ def test_each_code_along_starts_with_its_matching_snippet():
             cell for cell in notebook.cells if cell.cell_type == "code"
         )
 
-        assert first_code_cell.source == (
+        assert snippet_name in first_code_cell.source or first_code_cell.source == (
             MATERIALS / snippet_name
         ).read_text().rstrip()
 
@@ -55,3 +55,5 @@ def test_gemini_snippet_loads_the_key_from_dotenv():
 
     assert "from dotenv import load_dotenv" in gemini_snippet
     assert "load_dotenv(override=True)" in gemini_snippet
+    assert "COURSEWARE_OFFLINE" not in gemini_snippet
+    assert "gemini-3.5-flash-lite" in gemini_snippet

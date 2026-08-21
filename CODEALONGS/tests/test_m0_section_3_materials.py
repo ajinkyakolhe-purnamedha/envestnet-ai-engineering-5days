@@ -53,6 +53,7 @@ def test_each_code_along_starts_with_the_matching_snippet(
 ):
     notebook = nbformat.read(MATERIALS / notebook_name, as_version=4)
     first_code_cell = next(cell for cell in notebook.cells if cell.cell_type == "code")
+
     assert first_code_cell.source == (MATERIALS / snippet_name).read_text().rstrip()
 
 

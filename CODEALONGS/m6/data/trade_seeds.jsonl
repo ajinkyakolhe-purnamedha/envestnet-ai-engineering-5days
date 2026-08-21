@@ -1,0 +1,3 @@
+{"instruction":"Extract trades from an advisor note as JSON.","input":"Sell 40 AAPL for Mrs Rao and buy 150 MSFT if cash allows.","output":"[{\"symbol\":\"AAPL\",\"action\":\"sell\",\"shares\":40},{\"symbol\":\"MSFT\",\"action\":\"buy\",\"shares\":150}]"}
+{"instruction":"Extract trades from an advisor note as JSON.","input":"Client asked to buy 25 NVDA tomorrow morning.","output":"[{\"symbol\":\"NVDA\",\"action\":\"buy\",\"shares\":25}]"}
+{"instruction":"Extract trades from an advisor note as JSON.","input":"No trade today. Client only asked about tax loss harvesting.","output":"[]"}

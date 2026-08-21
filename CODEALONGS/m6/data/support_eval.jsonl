@@ -1,0 +1,3 @@
+{"input":"I cannot sign in with SSO this morning.","expected":"{\"category\":\"access\",\"priority\":\"high\"}"}
+{"input":"The CSV download is returning an empty file.","expected":"{\"category\":\"product_bug\",\"priority\":\"medium\"}"}
+{"input":"How do I add a backup billing contact?","expected":"{\"category\":\"how_to\",\"priority\":\"low\"}"}

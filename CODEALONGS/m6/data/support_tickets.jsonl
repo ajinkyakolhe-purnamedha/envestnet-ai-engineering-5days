@@ -1,0 +1,8 @@
+{"instruction":"Classify the support ticket as JSON.","input":"I was charged twice for my subscription and need this fixed today.","output":"{\"category\":\"billing\",\"priority\":\"high\"}"}
+{"instruction":"Classify the support ticket as JSON.","input":"The dashboard export button is missing after the update.","output":"{\"category\":\"product_bug\",\"priority\":\"medium\"}"}
+{"instruction":"Classify the support ticket as JSON.","input":"Can you explain how to invite a teammate to the workspace?","output":"{\"category\":\"how_to\",\"priority\":\"low\"}"}
+{"instruction":"Classify the support ticket as JSON.","input":"Our SSO login is down for every user in the company.","output":"{\"category\":\"access\",\"priority\":\"high\"}"}
+{"instruction":"Classify the support ticket as JSON.","input":"Please send a copy of our latest invoice.","output":"{\"category\":\"billing\",\"priority\":\"low\"}"}
+{"instruction":"Classify the support ticket as JSON.","input":"The mobile app crashes when I upload a PDF receipt.","output":"{\"category\":\"product_bug\",\"priority\":\"high\"}"}
+{"instruction":"Classify the support ticket as JSON.","input":"Where can I change notification settings?","output":"{\"category\":\"how_to\",\"priority\":\"low\"}"}
+{"instruction":"Classify the support ticket as JSON.","input":"A former employee can still access our account.","output":"{\"category\":\"access\",\"priority\":\"high\"}"}

@@ -27,7 +27,7 @@ def test_m1_has_paired_snippets_and_code_alongs() -> None:
             cell["source"] for cell in nbformat.read(notebook, as_version=4)["cells"]
             if cell["cell_type"] == "code"
         )
-        assert f"run_path(\"{snippet_name}\")" in first_code
+        assert f'run_path("{snippet_name}")' in first_code
 
 
 def test_m1_deck_uses_new_courseware_and_correct_cloud_boundary() -> None:
@@ -42,6 +42,39 @@ def test_m1_deck_uses_new_courseware_and_correct_cloud_boundary() -> None:
     assert "Gemini through Vertex AI" in deck
     assert "Bedrock is a separate cloud catalogue" in deck
     assert "open weights" in deck.lower()
+
+
+def test_m1_snippets_are_direct_teaching_cards() -> None:
+    limits = {
+        "01_closed_model_call.py": 55,
+        "03_local_model_call.py": 32,
+        "05_advisor_assistant.py": 48,
+        "07_cloud_hosted_models.py": 42,
+    }
+    for snippet_name, max_lines in limits.items():
+        source = (MATERIALS / snippet_name).read_text()
+        teaching_lines = [
+            line for line in source.splitlines()
+            if line.strip() and not line.strip().startswith("#")
+        ]
+        assert len(teaching_lines) <= max_lines
+
+    advisor_source = (MATERIALS / "05_advisor_assistant.py").read_text()
+    assert "hosted_backend" not in advisor_source
+    assert "local_backend" not in advisor_source
+    assert "call_smolm" in advisor_source
+
+
+def test_m1_smolm_helper_is_small() -> None:
+    source = (MATERIALS / "m1_smolm_setup.py").read_text()
+    assert len(source.splitlines()) <= 25
+    assert "def call_smolm" in source
+
+
+def test_m1_advisor_assistant_calls_local_smolm() -> None:
+    module = run_path(MATERIALS / "05_advisor_assistant.py")
+    assert module["reply"]
+    assert "AAPL" in module["prompt"]
 
 
 def test_m1_defers_the_cloud_boundary_until_after_the_lab() -> None:

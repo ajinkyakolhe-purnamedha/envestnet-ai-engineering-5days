@@ -22,21 +22,20 @@ model call lives once your organisation owns it.
 
 ## Keys, and what runs without them
 
-Nothing in pairs 03–04 needs a key or a network — the weights are committed to
-`OFFLINE-AI-Models/`. Everything else degrades gracefully: a snippet reports
-which providers are unconfigured and keeps going, and a failing provider never
-stops the others.
+Nothing in pairs 03–06 needs a key or a network — the local SmolLM weights are
+committed to `OFFLINE-AI-Models/`. Pair 01 reports which hosted providers are
+configured, and pair 07 is a governed-cloud epilogue.
 
 | Variable | Used by | Where it comes from |
 |---|---|---|
-| `GEMINI_API_KEY` | pairs 01–02, 05–06 | the repository `.env` |
+| `GEMINI_API_KEY` | pairs 01–02 | the repository `.env` |
 | `OPENAI_API_KEY` | pair 01–02 | the repository `.env` |
 | `ANTHROPIC_API_KEY` | pair 01–02 | the repository `.env` |
 | `GOOGLE_CLOUD_PROJECT` | pair 07–08 | an authenticated Google Cloud identity |
 | `HF_TOKEN` | pair 07–08 | a Hugging Face account |
 
-Pair 05–06 picks a backend for itself: Gemini when the key works, the local
-model when it does not. The demonstration survives a dead key or flat wifi.
+Pair 05–06 calls the local SmolLM model through the same application boundary
+the lab later extends.
 
 ## Lab
 

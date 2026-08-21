@@ -1,21 +1,18 @@
-"""Three proprietary SDKs, one identical call shape."""
+"""One concept: proprietary SDK calls all have client -> call -> text."""
 
 import os
 
-import anthropic
 from dotenv import load_dotenv
-from google import genai
-from openai import OpenAI
 
 load_dotenv(override=True)
 
 PROMPT = "Name one risk in a portfolio with 52% in AAPL."
 
 
-# #region providers
 def call_gemini(prompt: str) -> str:
-    key = os.environ["GEMINI_API_KEY"]
-    client = genai.Client(api_key=key)
+    from google import genai
+
+    client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
     reply = client.models.generate_content(
         model="gemini-3.5-flash-lite",
         contents=prompt,
@@ -24,43 +21,27 @@ def call_gemini(prompt: str) -> str:
 
 
 def call_openai(prompt: str) -> str:
-    key = os.environ["OPENAI_API_KEY"]
-    client = OpenAI(api_key=key)
-    reply = client.responses.create(
-        model="gpt-5-mini",
-        input=prompt,
-    )
+    from openai import OpenAI
+
+    client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
+    reply = client.responses.create(model="gpt-5-mini", input=prompt)
     return reply.output_text
 
 
 def call_claude(prompt: str) -> str:
-    key = os.environ["ANTHROPIC_API_KEY"]
-    client = anthropic.Anthropic(api_key=key)
+    import anthropic
+
+    client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
     reply = client.messages.create(
         model="claude-opus-5",
         max_tokens=256,
         messages=[{"role": "user", "content": prompt}],
     )
-    return next(
-        b.text for b in reply.content if b.type == "text"
-    )
-# #endregion
+    return next(block.text for block in reply.content if block.type == "text")
 
 
-PROVIDERS = {
-    "GEMINI_API_KEY": call_gemini,
-    "OPENAI_API_KEY": call_openai,
-    "ANTHROPIC_API_KEY": call_claude,
-}
-
-for env_name, call_model in PROVIDERS.items():
-    if not os.getenv(env_name):
-        print(f"{env_name}: not set, skipped")
-        continue
-    try:
-        print(f"{env_name}: {call_model(PROMPT)}")
-    except Exception as error:
-        # A model call is a network call. Quota, billing and
-        # outages are normal, so one dead key must not stop
-        # the other two from running.
-        print(f"{env_name}: call failed -- {type(error).__name__}")
+print("Same shape each time: create client -> call model -> return text.")
+print("Prompt:", PROMPT)
+print("GEMINI_API_KEY:", "configured" if os.getenv("GEMINI_API_KEY") else "skipped")
+print("OPENAI_API_KEY:", "configured" if os.getenv("OPENAI_API_KEY") else "skipped")
+print("ANTHROPIC_API_KEY:", "configured" if os.getenv("ANTHROPIC_API_KEY") else "skipped")

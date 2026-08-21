@@ -10,7 +10,7 @@ day_1/
 └── m3_application_patterns/
 ```
 
-M0 contains three sequential sections inside its module folder. M1–M3 each
+M0 contains three sequential sections inside its module folder. M1-M3 each
 contain their snippets, code-along notebooks, and lab materials directly in
 their module folder. The matching slide decks live in `SLIDES-markdown/`.
 

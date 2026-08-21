@@ -10,7 +10,7 @@ import nbformat
 
 MATERIALS = (
     Path(__file__).resolve().parents[1]
-    / "day_1"
+   
     / "m0_python_foundations"
     / "01_share_purchase"
 )

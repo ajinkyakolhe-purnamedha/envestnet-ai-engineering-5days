@@ -51,7 +51,7 @@ def assemble_prompt(instruction, context, question):
 If tone is wrong, inspect the instruction. If a fact is wrong or missing,
 inspect the context. If the call is malformed, inspect assembly.
 
-Source: `CODEALONGS/day_1/m3_application_patterns/01_assemble_prompt.py`
+Source: `CODEALONGS/m3_application_patterns/01_assemble_prompt.py`
 
 <!--
 This boundary helps students stop saying “the prompt failed.” Ask which input
@@ -69,7 +69,7 @@ Change the instruction and then change the context.
 2. Which change should alter the answer's available facts?
 3. Which failure belongs to a Python business rule instead?
 
-Try it in: `CODEALONGS/day_1/m3_application_patterns/01_assemble_prompt.py`
+Try it in: `CODEALONGS/m3_application_patterns/01_assemble_prompt.py`
 
 ---
 
@@ -267,7 +267,7 @@ Use it for a self-contained language task such as rewriting a supplied adviser
 note, support reply, or internal update. Its failure is unsupported facts or
 output that a downstream system cannot safely consume.
 
-Source: `CODEALONGS/day_1/m3_application_patterns/02_direct_llm_call.py`
+Source: `CODEALONGS/m3_application_patterns/02_direct_llm_call.py`
 
 <!--
 Direct is a valid pattern, not a beginner's mistake. It is the correct starting
@@ -291,7 +291,7 @@ intent = client.create(response_model=TradeIntent, messages=messages)
 Use Instructor plus Pydantic as the primary implementation: the application
 requests a typed response rather than hoping a prose parser succeeds.
 
-Source: `CODEALONGS/day_1/m3_application_patterns/03_prompted_extraction.py`
+Source: `CODEALONGS/m3_application_patterns/03_prompted_extraction.py`
 
 <!--
 Show Instructor and Pydantic as the teaching boundary. The cookbook snippet
@@ -336,7 +336,7 @@ or document-bound knowledge.
 
 Deep implementation belongs to M4.
 
-Source: `CODEALONGS/day_1/m3_application_patterns/04_simple_rag_architecture.py`
+Source: `CODEALONGS/m3_application_patterns/04_simple_rag_architecture.py`
 
 <!--
 Use the M2 embeddings preview as the bridge. RAG is named here as an
@@ -413,7 +413,7 @@ the module from becoming a technology shopping list.
 | Extract a support-ticket hand-off | Prompted application | Why is prose unsafe downstream? |
 | Answer from changing internal policy documents | RAG | Why cannot model memory be the source? |
 
-Try it in: `CODEALONGS/day_1/m3_application_patterns/05_choose_pattern.py`
+Try it in: `CODEALONGS/m3_application_patterns/05_choose_pattern.py`
 
 ---
 
@@ -426,7 +426,7 @@ assert not validate_trade_request({"symbol": "AAPL", "allocation_percent": 36})
 Use ordinary Python for facts that have an exact answer: policy caps, required
 fields, permitted symbols, citation presence, and authorization boundaries.
 
-Source: `CODEALONGS/day_1/m3_application_patterns/06_test_contract.py`
+Source: `CODEALONGS/m3_application_patterns/06_test_contract.py`
 
 <!--
 The model can propose; deterministic application code decides what is allowed.
@@ -444,7 +444,7 @@ Try a permitted allocation, an over-cap allocation, and an unknown symbol.
 - Which concern needs later evaluation rather than a Boolean test?
 - Why should a model not be its own final policy judge?
 
-Try it in: `CODEALONGS/day_1/m3_application_patterns/06_test_contract.py`
+Try it in: `CODEALONGS/m3_application_patterns/06_test_contract.py`
 
 ---
 
@@ -459,7 +459,7 @@ answer a question from changing policy documents. Then fill:
 4. Model/deployment boundary
 5. First deterministic test
 
-Source: `CODEALONGS/day_1/m3_application_patterns/lab/mini_lab.md`
+Source: `CODEALONGS/m3_application_patterns/lab/mini_lab.md`
 
 ---
 
@@ -480,7 +480,7 @@ fine-tuning, and agentic implementation to their owning modules.
 Acceptance: every row has a real data boundary, the least-complex fitting
 pattern, a concrete reason a simpler choice fails, and one observable test.
 
-Lab pack: `CODEALONGS/day_1/m3_application_patterns/lab/`
+Lab pack: `CODEALONGS/m3_application_patterns/lab/`
 
 <!-- **Instructor only:** timebox to 60–90 minutes and ask each group to defend why not simpler before discussing tools. -->
 

@@ -13,7 +13,7 @@ import pytest
 
 MATERIALS = (
     Path(__file__).resolve().parents[1]
-    / "day_1"
+   
     / "m0_python_foundations"
     / "03_wealth_demo"
 )

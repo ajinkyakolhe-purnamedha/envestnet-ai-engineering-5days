@@ -71,7 +71,7 @@ print("Cost:", cost)
 print("Cash left:", cash_left)
 ```
 
-Snippet and code-along: `CODEALONGS/day_1/m0_python_foundations/01_share_purchase/01_purchase_cost.py` → `02_purchase_cost_code_along.ipynb`
+Snippet and code-along: `CODEALONGS/m0_python_foundations/01_share_purchase/01_purchase_cost.py` → `02_purchase_cost_code_along.ipynb`
 
 **Java**
 
@@ -226,7 +226,7 @@ uv add openai anthropic boto3   # other hosted providers
 - `uv run ...` uses that project environment without asking participants to activate anything first.
 - Add the library for the feature you are building; do not install every library in the list.
 
-Code card: `CODEALONGS/day_1/m0_python_foundations/02_packages_and_model_access/01_install_packages.sh`
+Code card: `CODEALONGS/m0_python_foundations/02_packages_and_model_access/01_install_packages.sh`
 
 <!--
 `uv init` creates the project metadata. Each `uv add` records a dependency in
@@ -312,7 +312,7 @@ answer = generate("Say hello.", max_new_tokens=20, do_sample=False)
 print(answer[0]["generated_text"])
 ```
 
-Full running version: `CODEALONGS/day_1/m0_python_foundations/02_packages_and_model_access/02_huggingface_offline.py`
+Full running version: `CODEALONGS/m0_python_foundations/02_packages_and_model_access/02_huggingface_offline.py`
 
 **What to notice**
 
@@ -360,7 +360,7 @@ response = client.models.generate_content(
 print(response.text)
 ```
 
-Full running version: `CODEALONGS/day_1/m0_python_foundations/02_packages_and_model_access/03_gemini_api.py`
+Full running version: `CODEALONGS/m0_python_foundations/02_packages_and_model_access/03_gemini_api.py`
 
 - Same prompt → response shape
 - Model runs at Google's boundary, not on this laptop
@@ -386,7 +386,7 @@ participants open the Section 3 folder before advancing.
 
 Framing: we're not covering "all of Python". We're growing one small wealth
 application through the Python engineering moves used throughout the week.
-Every material is in `CODEALONGS/day_1/m0_python_foundations/03_wealth_demo/`; snippets run
+Every material is in `CODEALONGS/m0_python_foundations/03_wealth_demo/`; snippets run
 with `uv run --project CODEALONGS python <snippet-path>`.
 -->
 
@@ -405,7 +405,7 @@ purchase_cost: float = shares * purchase_price
 print(f"{symbol} purchase cost: {purchase_cost}")
 ```
 
-Snippet: `CODEALONGS/day_1/m0_python_foundations/03_wealth_demo/01_variables_and_hints.py`
+Snippet: `CODEALONGS/m0_python_foundations/03_wealth_demo/01_variables_and_hints.py`
 
 **What to notice**
 
@@ -437,7 +437,7 @@ def purchase_cost(shares: int, price: float) -> float:
     return shares * price
 ```
 
-Snippet and code-along: `CODEALONGS/day_1/m0_python_foundations/03_wealth_demo/03_functions.py` → `04_functions_code_along.ipynb`
+Snippet and code-along: `CODEALONGS/m0_python_foundations/03_wealth_demo/03_functions.py` → `04_functions_code_along.ipynb`
 
 **What to notice**
 
@@ -472,7 +472,7 @@ class Holding:
         return self.shares * latest_price
 ```
 
-Snippet and code-along: `CODEALONGS/day_1/m0_python_foundations/03_wealth_demo/05_classes.py` → `06_classes_code_along.ipynb`
+Snippet and code-along: `CODEALONGS/m0_python_foundations/03_wealth_demo/05_classes.py` → `06_classes_code_along.ipynb`
 
 **What to notice**
 
@@ -510,7 +510,7 @@ row = connection.execute(
 ).fetchone()
 ```
 
-Snippet and code-along: `CODEALONGS/day_1/m0_python_foundations/03_wealth_demo/07_database.py` → `08_database_code_along.ipynb`
+Snippet and code-along: `CODEALONGS/m0_python_foundations/03_wealth_demo/07_database.py` → `08_database_code_along.ipynb`
 
 **What to notice**
 
@@ -546,7 +546,7 @@ def health() -> dict[str, str]:
     return {"status": "ok"}
 ```
 
-Snippet and code-along: `CODEALONGS/day_1/m0_python_foundations/03_wealth_demo/09_server.py` → `10_server_code_along.ipynb`
+Snippet and code-along: `CODEALONGS/m0_python_foundations/03_wealth_demo/09_server.py` → `10_server_code_along.ipynb`
 
 **What to notice**
 
@@ -580,7 +580,7 @@ selected_date = "2020-06-01"
 logger.info("Selected %s price dated %s", symbol, selected_date)
 ```
 
-Snippet and code-along: `CODEALONGS/day_1/m0_python_foundations/03_wealth_demo/11_logging_testing_debugging.py` → `12_logging_testing_debugging_code_along.ipynb`
+Snippet and code-along: `CODEALONGS/m0_python_foundations/03_wealth_demo/11_logging_testing_debugging.py` → `12_logging_testing_debugging_code_along.ipynb`
 
 **What to notice**
 
@@ -591,7 +591,7 @@ Snippet and code-along: `CODEALONGS/day_1/m0_python_foundations/03_wealth_demo/1
 **Run and test the complete application**
 
 ```bash
-cd CODEALONGS/day_1/m0_python_foundations/03_wealth_demo
+cd CODEALONGS/m0_python_foundations/03_wealth_demo
 uv run uvicorn wealth_demo.server:app --reload
 uv run python -m unittest wealth_demo.test_wealth_demo -v
 ```
@@ -599,7 +599,7 @@ uv run python -m unittest wealth_demo.test_wealth_demo -v
 - Escalate to `uv run pytest -x --pdb` or `breakpoint()` only when needed
 
 <!--
-Run the local server from `CODEALONGS/day_1/m0_python_foundations/03_wealth_demo`, then
+Run the local server from `CODEALONGS/m0_python_foundations/03_wealth_demo`, then
 visit `/health` and `/portfolio`. The debugging exercise changes the date query
 to the wrong direction; use the failed test and the INFO log's selected date to
 identify and correct it.

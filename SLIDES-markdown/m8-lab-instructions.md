@@ -1,3 +1,6 @@
+> **⚠️ OUTDATED** — These lab instructions are out of date (paths and setup
+> may no longer match the repo). Reworked labs are coming later.
+
 # M8 Lab — Ship The Advisor Assistant Into Chronos
 
 You will build a real agentic feature inside the capstone: ask the Chronos

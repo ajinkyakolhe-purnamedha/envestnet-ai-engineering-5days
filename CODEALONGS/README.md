@@ -1,26 +1,38 @@
-# Python Courseware
+# CODEALONGS — the workshop code-along project
 
-Cookbooks are syntax flash cards: each tiny Python file demonstrates one visible operation and can be run independently. Read them in filename order inside each folder.
+One `uv` project holding the code participants run along with the decks,
+the labs, and the material-consistency tests that keep the courseware
+honest. One top-level folder per module, matching the decks in
+`SLIDES-markdown/`:
 
-Code-alongs combine those features into one small capability. Open the notebooks in order and run each from top to bottom.
+| Day | Modules | Folders |
+| --- | --- | --- |
+| 1 | M0–M3 | `m0_python_foundations/` · `m1_model_access/` · `m2_model_tokens_context/` · `m3_application_patterns/` |
+| 2 | M4–M6 | `m4/` (RAG) · `m5/` (retrieval evaluation) · `m6/` (fine-tuning) |
+| 3 | M7–M9 | `m7/` (agent loop) · `m8/` (frameworks) · `m9/` (memory, verification, HITL) |
 
-## Cookbook order
+## The module format
 
-1. `cookbooks/01_python_syntax/`
-2. `cookbooks/02_data_validation_and_web/`
-3. `cookbooks/03_python_for_ai/`
+Each module folder contains:
 
-## Code-along order
+- **Numbered snippets** (`01_…py`, `02_…py`, …) — one visible idea per file,
+  small enough to read on a slide; run them in filename order. The decks
+  quote these files, so the code here is the source of truth.
+- **`README.md`** — a "snippet → one essential idea" table.
+- **A setup helper** (`*_setup.py`) — swaps in the local offline models so
+  everything runs without downloads or credentials.
+- **`lab/`** — `README.md`, `mini_lab.*`, `starter.*`, `hints.md`, and an
+  instructor solution. Present for m1–m3; m4–m9 labs are coming later.
 
-1. `01_python_portfolio.ipynb`
-2. `02_validation_errors_and_tests.ipynb`
-3. `03_historical_data_with_pandas.ipynb`
-4. `04_database_and_fastapi.ipynb`
-5. `05_llm_application_in_python.ipynb`
-6. `06_rag_as_a_python_pipeline.ipynb`
-7. `07_agents_as_python_control_flow.ipynb`
-8. `07b_m7_manual_agent_loop.ipynb` - competing M7 notebook aligned to "The Agent Loop, By Hand"
-9. `07c_m7_code_cookbook.ipynb` - notebook conversion of the M7 runnable code cookbook
+m0 and m1 additionally keep paired code-along notebooks
+(`NN+1_thing_code_along.ipynb`, whose first cell is `run_path("NN_thing.py")`)
+as the gentler day-one on-ramp. m2 onward is snippets-only by design.
+
+m0 is itself split into three sequential sections
+(`01_share_purchase/`, `02_packages_and_model_access/`, `03_wealth_demo/`).
+
+Shared folders: `data/` (synthetic prices, portfolio, policy files) and
+`tests/` (material tests, one file per module — see below).
 
 ## Install and run
 
@@ -28,22 +40,34 @@ From the `CODEALONGS/` folder:
 
 ```bash
 uv sync --extra courseware
-uv run python cookbooks/01_python_syntax/06_basic_f_strings.py
-uv run jupyter lab
+uv run python m2_model_tokens_context/06_text_to_token_ids.py
+uv run python m4/01_why_rag_exists.py
+uv run --extra courseware jupyter lab     # for the m0/m1 notebooks
 ```
 
-The notebooks and cookbooks use paths relative to the `CODEALONGS/` folder, so run everything from there.
+Run everything from `CODEALONGS/` unless a module README says otherwise.
+The M0.3 wealth demo has its own unittest suite and server — see its README.
 
-## Optional model call
+## Offline behaviour
 
-The model examples run with a labelled offline response when configuration is absent. To enable an OpenAI-compatible endpoint, set:
+The model examples degrade gracefully: with no `MODEL_ENDPOINT` /
+`MODEL_API_KEY` / `MODEL_NAME` set they return a labelled offline response,
+and `COURSEWARE_OFFLINE=1` skips all external calls. The M1 cloud examples
+read `GEMINI_API_KEY`, `GOOGLE_CLOUD_PROJECT`, and `HF_TOKEN` from the
+untracked repo-root `.env`. Local weights live in `../OFFLINE-AI-Models/`.
+
+## Material tests
+
+`tests/` doesn't test an application — it tests the materials: that each
+snippet runs, behaves the way its deck claims, and that the decks'
+`Source:` pointers reference real files.
 
 ```bash
-export MODEL_ENDPOINT="https://your-endpoint/v1"
-export MODEL_API_KEY="your-key"
-export MODEL_NAME="your-model"
+uv run pytest                                     # everything
+uv run pytest tests/test_m2_materials.py -k trim  # one test
 ```
 
-Set `COURSEWARE_OFFLINE=1` to skip all external calls. The LlamaIndex section also skips when its optional package is unavailable; install `llama-index-core` separately if you want to run that final comparison.
+Extend the matching test file when you change a module.
 
-All prices, portfolios, and policies in this package are deterministic synthetic educational data. These materials do not provide financial advice.
+All prices, portfolios, and policies here are deterministic synthetic
+educational data. These materials do not provide financial advice.

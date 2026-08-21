@@ -7,7 +7,7 @@ import nbformat
 
 
 ROOT = Path(__file__).resolve().parents[1]
-MATERIALS = ROOT / "day_1" / "m1_model_access"
+MATERIALS = ROOT / "m1_model_access"
 DECK = ROOT.parent / "SLIDES-markdown" / "m1-intro-to-ai-models.md"
 
 
@@ -38,7 +38,7 @@ def test_m1_deck_uses_new_courseware_and_correct_cloud_boundary() -> None:
         "05_advisor_assistant.py",
         "07_cloud_hosted_models.py",
     ):
-        assert f"CODEALONGS/day_1/m1_model_access/{snippet_name}" in deck
+        assert f"CODEALONGS/m1_model_access/{snippet_name}" in deck
     assert "Gemini through Vertex AI" in deck
     assert "Bedrock is a separate cloud catalogue" in deck
     assert "open weights" in deck.lower()

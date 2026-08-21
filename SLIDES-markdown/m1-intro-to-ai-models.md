@@ -238,7 +238,7 @@ def call_claude(prompt):
         b.text for b in reply.content if b.type == "text")
 ```
 
-Source: `CODEALONGS/day_1/m1_model_access/01_closed_model_call.py`
+Source: `CODEALONGS/m1_model_access/01_closed_model_call.py`
 
 <!--
 Read down the left edge, not across: client, call, return. Three vendors, one
@@ -294,7 +294,7 @@ reply = generate(
 print(reply[0]["generated_text"])
 ```
 
-Source: `CODEALONGS/day_1/m1_model_access/03_local_model_call.py`
+Source: `CODEALONGS/m1_model_access/03_local_model_call.py`
 
 No key. No network. No per-call bill.
 
@@ -401,7 +401,7 @@ def answer(question, facts, call_model):
     return reply
 ```
 
-Source: `CODEALONGS/day_1/m1_model_access/05_advisor_assistant.py`
+Source: `CODEALONGS/m1_model_access/05_advisor_assistant.py`
 
 <!--
 This is the module's payoff and the first thing all day that is an
@@ -508,7 +508,7 @@ reply = client.models.generate_content(
 )
 ```
 
-Source: `CODEALONGS/day_1/m1_model_access/07_cloud_hosted_models.py`
+Source: `CODEALONGS/m1_model_access/07_cloud_hosted_models.py`
 
 Gemini through Vertex AI changes the **identity and governance boundary**, not
 the business question.

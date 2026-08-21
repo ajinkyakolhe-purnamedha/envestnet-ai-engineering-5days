@@ -6,7 +6,7 @@ import sys
 
 
 ROOT = Path(__file__).resolve().parents[1]
-MATERIALS = ROOT / "day_1" / "m2_model_tokens_context"
+MATERIALS = ROOT / "m2_model_tokens_context"
 DECK = ROOT.parent / "SLIDES-markdown" / "m2-model-tokens-context.md"
 
 
@@ -122,9 +122,9 @@ def test_text_to_token_ids_keeps_tokens_separate_from_embeddings() -> None:
 
 def test_m2_deck_and_lab_use_the_new_courseware() -> None:
     deck = DECK.read_text()
-    assert "CODEALONGS/day_1/m1_model_access/" in deck
+    assert "CODEALONGS/m1_model_access/" in deck
     for snippet_name in SNIPPETS:
-        assert f"CODEALONGS/day_1/m2_model_tokens_context/{snippet_name}" in deck
+        assert f"CODEALONGS/m2_model_tokens_context/{snippet_name}" in deck
     assert "_code_along.py" not in deck
     assert "litellm" in deck
     assert "tokencost" in deck

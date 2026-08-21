@@ -1,3 +1,6 @@
+> **⚠️ OUTDATED** — These lab instructions are out of date (paths and setup
+> may no longer match the repo). Reworked labs are coming later.
+
 # M9 Lab — Everything You Built, Gated
 
 You finish the advisor assistant: your M8 workflow's drafts go behind a

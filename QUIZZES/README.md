@@ -1,13 +1,19 @@
 # Module quizzes
 
-Each participant quiz has 15 questions: 10 multiple-choice questions, 3
-code-reading/debugging questions, 1 scenario question, and 1 capstone-transfer
-question.
+End-of-module participant quizzes, grounded in the matching deck in
+`SLIDES-markdown/`. Two formats coexist:
 
-The standard quizzes are in the module root. Advanced versions for experienced
-engineers are under `advanced/` and use the same question mix with closer
-distractors and more multi-constraint reasoning.
+**M0–M3 (Day 1)** — 15 questions each: 10 multiple choice, 3
+code-reading/debugging, 1 lab-scenario question, and 1 question transferring
+the idea into the Chronos capstone. Advanced variants for experienced
+engineers live under `advanced/` — same mix, closer distractors, more
+multi-constraint reasoning. The answer reference is the instructor-only
+Microsoft Forms material (not in this folder).
 
-The questions are grounded in the matching deck and the current Day 1 lab.
-Questions 1–10 check concepts, 11–13 check implementation judgment, 14 checks
-the lab scenario, and 15 asks learners to transfer the idea into Chronos.
+**M4–M6 (Day 2)** — 10 situation-judgement multiple-choice questions, one
+per essential idea in the module. Every option is a true statement from the
+course; only one answers the question actually asked. Questions with more
+than one right answer say so in the stem. The rationale-based answer key is
+in `answer-keys/` (gitignored — questions ship, keys don't).
+
+No quizzes yet for M7–M9, and no advanced variants for M4–M6.

@@ -11,6 +11,6 @@ This folder is the teaching pair for M0 Section 1.
 Run the snippet from `CODEALONGS/`:
 
 ```bash
-uv run python day_1/m0_python_foundations/01_share_purchase/01_purchase_cost.py
+uv run python m0_python_foundations/01_share_purchase/01_purchase_cost.py
 uv run jupyter lab
 ```

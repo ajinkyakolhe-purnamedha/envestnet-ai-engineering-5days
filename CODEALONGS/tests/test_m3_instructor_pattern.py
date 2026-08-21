@@ -5,7 +5,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DECK = ROOT.parent / "SLIDES-markdown" / "m3-application-patterns.md"
-SOURCE = ROOT / "day_1" / "m3_application_patterns" / "03_prompted_extraction.py"
+SOURCE = ROOT / "m3_application_patterns" / "03_prompted_extraction.py"
 
 
 def test_m3_pattern_2_uses_instructor_and_separates_validation_layers() -> None:

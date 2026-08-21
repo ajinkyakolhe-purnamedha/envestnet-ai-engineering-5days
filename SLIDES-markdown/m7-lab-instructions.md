@@ -1,3 +1,6 @@
+> **⚠️ OUTDATED** — These lab instructions are out of date (paths and setup
+> may no longer match the repo). Reworked labs are coming later.
+
 # M7 Lab Instructions
 
 ## Goal

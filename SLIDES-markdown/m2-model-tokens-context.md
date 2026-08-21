@@ -37,7 +37,7 @@ reply        the model output
 The application assembles the request. The model only sees what is sent in this
 turn.
 
-M1 starting point: `CODEALONGS/day_1/m1_model_access/05_advisor_assistant.py`
+M1 starting point: `CODEALONGS/m1_model_access/05_advisor_assistant.py`
 
 ---
 
@@ -53,7 +53,7 @@ messages = [
 reply = call_smolm(messages)
 ```
 
-Source: `CODEALONGS/day_1/m2_model_tokens_context/01_single_turn_call.py`
+Source: `CODEALONGS/m2_model_tokens_context/01_single_turn_call.py`
 
 <!--
 This calls the local SmolLM model so learners see real generated output while
@@ -69,7 +69,7 @@ the run still works offline.
 3. Ask the same question again.
 4. Name which input caused the answer to change.
 
-Try it in: `CODEALONGS/day_1/m2_model_tokens_context/01_single_turn_call.py`
+Try it in: `CODEALONGS/m2_model_tokens_context/01_single_turn_call.py`
 
 ---
 
@@ -87,7 +87,7 @@ turn_two_messages = [
 ]
 ```
 
-Source: `CODEALONGS/day_1/m2_model_tokens_context/02_multiturn_history_resend.py`
+Source: `CODEALONGS/m2_model_tokens_context/02_multiturn_history_resend.py`
 
 ---
 
@@ -98,7 +98,7 @@ Source: `CODEALONGS/day_1/m2_model_tokens_context/02_multiturn_history_resend.py
 3. Explain why `that` becomes ambiguous.
 4. Decide which history the application must resend.
 
-Try it in: `CODEALONGS/day_1/m2_model_tokens_context/02_multiturn_history_resend.py`
+Try it in: `CODEALONGS/m2_model_tokens_context/02_multiturn_history_resend.py`
 
 ---
 
@@ -111,7 +111,7 @@ Same question. Different supplied policy. Different answer.
 50% context -> Yes. AAPL at 42% is within the supplied 50% policy.
 ```
 
-Source: `CODEALONGS/day_1/m2_model_tokens_context/03_context_changes_answer.py`
+Source: `CODEALONGS/m2_model_tokens_context/03_context_changes_answer.py`
 
 <!--
 This is the bridge to RAG: the application can change the answer by changing
@@ -128,7 +128,7 @@ them.
 3. Re-run the model call.
 4. Identify whether the failure belongs to model behaviour or supplied context.
 
-Try it in: `CODEALONGS/day_1/m2_model_tokens_context/03_context_changes_answer.py`
+Try it in: `CODEALONGS/m2_model_tokens_context/03_context_changes_answer.py`
 
 ---
 
@@ -155,7 +155,7 @@ token_counter(model="gpt-4o-mini", messages=turn_two)
 token_counter(model="gpt-4o-mini", messages=turn_three)
 ```
 
-Source: `CODEALONGS/day_1/m2_model_tokens_context/04_count_multiturn_tokens.py`
+Source: `CODEALONGS/m2_model_tokens_context/04_count_multiturn_tokens.py`
 
 ---
 
@@ -166,7 +166,7 @@ Source: `CODEALONGS/day_1/m2_model_tokens_context/04_count_multiturn_tokens.py`
 3. Name what grew: instruction, history, context, or prompt.
 4. Decide what the application should keep, summarize, or retrieve.
 
-Try it in: `CODEALONGS/day_1/m2_model_tokens_context/04_count_multiturn_tokens.py`
+Try it in: `CODEALONGS/m2_model_tokens_context/04_count_multiturn_tokens.py`
 
 ---
 
@@ -192,7 +192,7 @@ medium_cost = price(messages, "gpt-4.1")
 large_cost  = price(messages, "gpt-4o")
 ```
 
-Source: `CODEALONGS/day_1/m2_model_tokens_context/05_cost_same_conversation.py`
+Source: `CODEALONGS/m2_model_tokens_context/05_cost_same_conversation.py`
 
 <!--
 The conversation stays fixed. Only model choice changes. That is why model
@@ -208,7 +208,7 @@ selection is a product economics decision, not a benchmark hobby.
 3. Recompute one model's cost.
 4. Decide what evidence would justify escalating model tier.
 
-Try it in: `CODEALONGS/day_1/m2_model_tokens_context/05_cost_same_conversation.py`
+Try it in: `CODEALONGS/m2_model_tokens_context/05_cost_same_conversation.py`
 
 ---
 
@@ -224,7 +224,7 @@ tokenizer
 
 Token IDs are model-specific identifiers. They are not embeddings yet.
 
-Source: `CODEALONGS/day_1/m2_model_tokens_context/06_text_to_token_ids.py`
+Source: `CODEALONGS/m2_model_tokens_context/06_text_to_token_ids.py`
 
 ---
 
@@ -235,7 +235,7 @@ Source: `CODEALONGS/day_1/m2_model_tokens_context/06_text_to_token_ids.py`
 3. Compare character count with token count.
 4. Explain why provider usage metadata matters.
 
-Try it in: `CODEALONGS/day_1/m2_model_tokens_context/06_text_to_token_ids.py`
+Try it in: `CODEALONGS/m2_model_tokens_context/06_text_to_token_ids.py`
 
 ---
 
@@ -249,7 +249,7 @@ For meaning search, compare vectors rather than strings. A concentration-risk
 question can sit near a concentration-limit policy even when the wording is not
 identical.
 
-Source: `CODEALONGS/day_1/m2_model_tokens_context/07_vectors_for_meaning_search.py`
+Source: `CODEALONGS/m2_model_tokens_context/07_vectors_for_meaning_search.py`
 
 ---
 
@@ -260,7 +260,7 @@ Source: `CODEALONGS/day_1/m2_model_tokens_context/07_vectors_for_meaning_search.
 3. Explain why similar is not the same as true.
 4. Carry this into M4: what should the model see before answering?
 
-Try it in: `CODEALONGS/day_1/m2_model_tokens_context/07_vectors_for_meaning_search.py`
+Try it in: `CODEALONGS/m2_model_tokens_context/07_vectors_for_meaning_search.py`
 
 ---
 
@@ -269,11 +269,11 @@ Try it in: `CODEALONGS/day_1/m2_model_tokens_context/07_vectors_for_meaning_sear
 Run the supplied conversation across three model choices.
 
 ```bash
-cd CODEALONGS/day_1/m2_model_tokens_context
+cd CODEALONGS/m2_model_tokens_context
 uv run python lab/mini_lab.py
 ```
 
-Source: `CODEALONGS/day_1/m2_model_tokens_context/lab/mini_lab.py`
+Source: `CODEALONGS/m2_model_tokens_context/lab/mini_lab.py`
 
 ---
 
@@ -286,7 +286,7 @@ Complete the lab pack:
 3. Count and price the same conversation.
 4. Remove history or context and name what the assistant loses.
 
-Lab pack: `CODEALONGS/day_1/m2_model_tokens_context/lab/`
+Lab pack: `CODEALONGS/m2_model_tokens_context/lab/`
 
 ---
 

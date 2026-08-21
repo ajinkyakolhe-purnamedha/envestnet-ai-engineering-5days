@@ -8,7 +8,7 @@ import pytest
 
 
 ROOT = Path(__file__).resolve().parents[1]
-MATERIALS = ROOT / "day_1" / "m3_application_patterns"
+MATERIALS = ROOT / "m3_application_patterns"
 DECK = ROOT.parent / "SLIDES-markdown" / "m3-application-patterns.md"
 
 
@@ -130,7 +130,7 @@ def test_m3_deck_and_lab_use_new_courseware_and_five_patterns() -> None:
     for pattern in ("Direct call", "Prompted application", "RAG", "Fine-tuning", "Agentic workflow"):
         assert pattern in deck
     for snippet_name in SNIPPETS:
-        assert f"CODEALONGS/day_1/m3_application_patterns/{snippet_name}" in deck
+        assert f"CODEALONGS/m3_application_patterns/{snippet_name}" in deck
     assert "_code_along" not in deck
     assert "SLIDES-markdown/m3/" not in deck
     for name in ("README.md", "mini_lab.md", "starter.md", "hints.md", "instructor_solution.md", "decision_table.csv"):

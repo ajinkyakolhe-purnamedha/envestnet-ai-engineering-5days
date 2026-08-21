@@ -1,45 +1,41 @@
-# Marp Slides
+# Workshop decks (Marp)
 
-[Marp](https://marp.app) versions of the workshop decks, converted from the
-built Slidev modules (now in `../archive/slidev/modules/`), which expand
-`../outline.md`. Each deck carries the full slide content, the code snippets
-inlined from the Slidev repo's `snippets/` (now `../archive/slidev/snippets/`),
-and the complete presenter notes as HTML comments — Marp shows those in
-presenter view and can print them in a notes PDF.
+Every deck is a standalone [Marp](https://marp.app) markdown file:
+frontmatter `marp: true`, slides split by `---`, a lead title slide, and the
+full spoken narrative as an HTML comment at the end of each slide — Marp
+shows those in presenter view and can print them in a notes PDF. A
+slides-only export is close to unreadable by design; the notes carry the
+teaching.
 
-| File | Module | Slides |
-|---|---|---|
-| `00-overview.md` | Workshop title, Day 1 / Day 2 agendas, capstone | 5 |
-| `m0-python.md` | M0 · Python & its power in AI | 20 |
-| `m1-intro-to-ai-models.md` | M1 · Introduction to AI Models | 17 |
-| `m2-model-tokens-context.md` | M2 · Model, Tokens & Context | 16 |
-| `m3-application-patterns.md` | M3 · LLM Application Patterns | 8 |
-| `m4-building-rags.md` | M4 · Building A Complete Baseline RAG | 18 |
-| `m5-advanced-rag.md` | M5 · Advanced RAG Improvements & Evaluation | 12 |
-| `m6-fine-tuning.md` | M6 · LLM Fine-Tuning | 19 |
-| `m7-agentic-applications.md` | M7 · Agentic LLMs | 19 |
-| `m8-agentic-frameworks.md` | M8 · Agentic Frameworks | 18 |
+| File | Module |
+|---|---|
+| `m0-python.md` | M0 · Python foundations |
+| `m1-intro-to-ai-models.md` | M1 · Introduction to AI models |
+| `m2-model-tokens-context.md` | M2 · Model, tokens & context |
+| `m3-application-patterns.md` | M3 · LLM application patterns |
+| `m4-building-rags.md` | M4 · Building a complete baseline RAG |
+| `m5-advanced-rag.md` | M5 · Advanced RAG improvements & evaluation |
+| `m6-fine-tuning.md` | M6 · LLM fine-tuning |
+| `m7-agentic-applications.md` | M7 · The agent loop, by hand |
+| `m8-agentic-frameworks.md` | M8 · Agentic frameworks & orchestration |
+| `m9-memory-verification-hitl.md` | M9 · Memory, verification & human-in-the-loop |
 
-M4-M8 companion files:
+The code a deck quotes lives in `../CODEALONGS/` — one folder per module,
+each with its own README of ordered snippets. Code fences in the decks carry
+a `Source:` pointer to the real file there; the code is the source of truth.
+`data/` holds the small `prices.csv` and `investment_policy.md` some
+snippets read.
 
-- `../CODEALONGS/m4/README.md`: ordered baseline RAG demonstration snippets.
-- `../CODEALONGS/m5/README.md`: ordered advanced RAG and evaluation snippets.
-- `../CODEALONGS/m6/README.md`: ordered fine-tuning concept snippets.
-- `../CODEALONGS/m7/README.md`: ordered plain-Python agent loop snippets.
-- `../CODEALONGS/m8/README.md`: ordered smolagents and LlamaIndex framework snippets.
+Around a deck you may also find `mN-lab-instructions.md` (participant lab
+steps — **the m7–m9 ones are currently marked OUTDATED**; reworked labs are
+coming later) and gitignored `mN-instructor-notes.md`. M7 additionally has
+`m7-concepts-reference.md` (dense text version of the deck).
 
-M7 companion files:
+## Preview and export
 
-- `m7-concepts-reference.md`: dense text reference for the concepts covered in the M7 slides.
-- `m7-lab-instructions.md`: notebook lab instructions plus optional Capstone integration hints.
-
-Note: M3 still references placeholder snippet files from the older draft. M4,
-M5, M6, M7, and M8 now point to runnable snippets under `../CODEALONGS/`.
-
-## Preview
-
-- **VS Code**: install the "Marp for VS Code" extension, open any file, hit preview.
-- **CLI**: no install needed with npx:
+- **VS Code**: install the "Marp for VS Code" extension, open any file, hit
+  preview.
+- **CLI** (no install needed):
 
 ```bash
 npx @marp-team/marp-cli m0-python.md          # → m0-python.html

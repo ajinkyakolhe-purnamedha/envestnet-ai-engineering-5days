@@ -3,7 +3,7 @@
 Same generate call, but a streamer hands over each piece the
 moment it exists — that is all a chat UI's typing effect is.
 Fully offline. Run from CODEALONGS/:
-    uv run python m9/streaming.py
+    uv run python m9_memory_verification_hitl/streaming.py
 """
 
 from threading import Thread

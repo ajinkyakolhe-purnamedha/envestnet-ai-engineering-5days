@@ -130,7 +130,7 @@ def price_tool(symbol: str) -> dict:
 
 `@tool` uses the function name, type hints, and docstring.
 
-Code: `CODEALONGS/m8/01_smolagents_tool_agent.py`
+Code: `CODEALONGS/m8_agentic_frameworks/01_smolagents_tool_agent.py`
 
 ---
 
@@ -169,7 +169,7 @@ Do not hide these failures.
 
 Teach the trace.
 
-Code: `CODEALONGS/m8/02_smolagents_trace_limits.py`
+Code: `CODEALONGS/m8_agentic_frameworks/02_smolagents_trace_limits.py`
 
 ---
 
@@ -205,7 +205,7 @@ The tool is still your Python function.
 
 The framework provides metadata and runtime integration.
 
-Code: `CODEALONGS/m8/03_llamaindex_function_agent.py`
+Code: `CODEALONGS/m8_agentic_frameworks/03_llamaindex_function_agent.py`
 
 ---
 
@@ -249,7 +249,7 @@ policy_tool = QueryEngineTool.from_defaults(
 
 Now the agent can ask policy questions during its workflow.
 
-Code: `CODEALONGS/m8/04_llamaindex_rag_tool.py`
+Code: `CODEALONGS/m8_agentic_frameworks/04_llamaindex_rag_tool.py`
 
 ---
 
@@ -289,7 +289,7 @@ Most production agentic apps are workflows with model-planned parts.
 
 Not infinite loops.
 
-Code: `CODEALONGS/m8/05_agentic_workflow_patterns.py`
+Code: `CODEALONGS/m8_agentic_frameworks/05_agentic_workflow_patterns.py`
 
 ---
 
@@ -376,7 +376,7 @@ question
   -> trace result
 ```
 
-Code: `CODEALONGS/m8/06_end_to_end_agentic_app.py`
+Code: `CODEALONGS/m8_agentic_frameworks/06_end_to_end_agentic_app.py`
 
 ---
 

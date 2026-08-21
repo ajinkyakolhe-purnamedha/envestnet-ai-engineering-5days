@@ -14,5 +14,5 @@ M6 uses six simple scripts:
 Run from `CODEALONGS`:
 
 ```bash
-uv run python m6/01_huggingface_llm.py
+uv run python m6_fine_tuning/01_huggingface_llm.py
 ```

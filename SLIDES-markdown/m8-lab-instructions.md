@@ -17,18 +17,18 @@ interfaces.
 
 ## Part A · Warm-up (10 minutes, offline)
 
-From the repo root (the snippets live in `SLIDES-markdown/m8/`; the
+From the repo root (the snippets live in `SLIDES-markdown/m8_agentic_frameworks/`; the
 `uv` environment lives in `CODE-ALONGS/`):
 
 ```bash
 cd SLIDES-markdown
 uv sync --project ../CODE-ALONGS --extra agents
 # the trace from the framework run
-uv run --project ../CODE-ALONGS python m8/smolagents_agent.py
+uv run --project ../CODE-ALONGS python m8_agentic_frameworks/smolagents_agent.py
 # the fix
-uv run --project ../CODE-ALONGS python m8/pattern_chaining.py
+uv run --project ../CODE-ALONGS python m8_agentic_frameworks/pattern_chaining.py
 # the front door
-uv run --project ../CODE-ALONGS python m8/pattern_routing.py
+uv run --project ../CODE-ALONGS python m8_agentic_frameworks/pattern_routing.py
 ```
 
 Read each trace. You are about to rebuild this workflow over real data.

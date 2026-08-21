@@ -5,7 +5,7 @@ Each snippet is a tiny runnable demonstration; run them in filename order.
 
 ```bash
 cd CODEALONGS
-uv run python m5/01_evaluate_baseline.py
+uv run python m5_advanced_rag/01_evaluate_baseline.py
 ```
 
 | Snippet | Teaches one thing |

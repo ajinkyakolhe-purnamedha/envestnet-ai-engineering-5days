@@ -6,7 +6,7 @@ import sys
 
 
 ROOT = Path(__file__).resolve().parents[1]
-M9 = ROOT / "m9"
+M9 = ROOT / "m9_memory_verification_hitl"
 DECK = ROOT.parent / "SLIDES-markdown" / "m9-memory-verification-hitl.md"
 
 SNIPPETS = [
@@ -53,7 +53,7 @@ def test_m9_deck_references_ordered_runnable_snippets() -> None:
     assert numbered_files == SNIPPETS
 
     for snippet in SNIPPETS:
-        assert f"CODEALONGS/m9/{snippet}" in deck
+        assert f"CODEALONGS/m9_memory_verification_hitl/{snippet}" in deck
         assert (M9 / snippet).exists()
 
     readme = (M9 / "README.md").read_text()

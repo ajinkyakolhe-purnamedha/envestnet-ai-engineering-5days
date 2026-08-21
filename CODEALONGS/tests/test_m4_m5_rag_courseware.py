@@ -5,8 +5,8 @@ from runpy import run_path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-M4 = ROOT / "m4"
-M5 = ROOT / "m5"
+M4 = ROOT / "m4_building_rags"
+M5 = ROOT / "m5_advanced_rag"
 SLIDES = ROOT.parent / "SLIDES-markdown"
 M4_DECK = SLIDES / "m4-building-rags.md"
 M5_DECK = SLIDES / "m5-advanced-rag.md"
@@ -39,7 +39,7 @@ def test_m4_has_six_section_baseline_rag_story() -> None:
         "09_query_engine_sources.py",
         "10_end_to_end_llamaindex_rag.py",
     ]:
-        assert f"CODEALONGS/m4/{snippet}" in deck
+        assert f"CODEALONGS/m4_building_rags/{snippet}" in deck
         assert (M4 / snippet).exists()
         text = (M4 / snippet).read_text()
         assert "workshop_llamaindex_setup" in text
@@ -69,7 +69,7 @@ def test_m5_has_evaluation_then_advanced_rag_improvements() -> None:
         "07_rerank_results.py",
         "09_query_transformations.py",
     ]:
-        assert f"CODEALONGS/m5/{snippet}" in deck
+        assert f"CODEALONGS/m5_advanced_rag/{snippet}" in deck
         assert (M5 / snippet).exists()
         text = (M5 / snippet).read_text()
         assert "llama_index.core" in text

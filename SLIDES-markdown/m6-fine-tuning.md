@@ -41,7 +41,7 @@ Good fine-tuning targets:
 - repeated classification or extraction shape
 - lower-latency small-model behavior
 
-Source: `CODEALONGS/m6/01_huggingface_llm.py`
+Source: `CODEALONGS/m6_fine_tuning/01_huggingface_llm.py`
 
 <!--
 Use generic support-ticket JSON here so the code teaches fine-tuning mechanics,
@@ -82,7 +82,7 @@ Fine-tuning starts with examples:
 
 Each row describes the behavior the model should repeat.
 
-Source: `CODEALONGS/m6/02_jsonl_dataset_format.py`
+Source: `CODEALONGS/m6_fine_tuning/02_jsonl_dataset_format.py`
 
 <!--
 The dataset is the project. If rows are inconsistent, training faithfully
@@ -105,7 +105,7 @@ Instruction rows become chat messages:
 
 Then the tokenizer renders the model-specific text.
 
-Source: `CODEALONGS/m6/02_jsonl_dataset_format.py`
+Source: `CODEALONGS/m6_fine_tuning/02_jsonl_dataset_format.py`
 
 <!--
 Do not hand-roll the final prompt string if the tokenizer has a chat template.
@@ -124,7 +124,7 @@ all examples -> train set + held-out eval set
 
 The eval set is how you know whether the adapter helped.
 
-Source: `CODEALONGS/m6/02_jsonl_dataset_format.py`
+Source: `CODEALONGS/m6_fine_tuning/02_jsonl_dataset_format.py`
 
 <!--
 If learners look at eval rows while iterating on the dataset, the eval is no
@@ -143,7 +143,7 @@ It learns from:
 - `attention_mask`
 - `labels`
 
-Source: `CODEALONGS/m6/03_tokenize_and_mask_labels.py`
+Source: `CODEALONGS/m6_fine_tuning/03_tokenize_and_mask_labels.py`
 
 <!--
 This is the M2 token lesson applied to training. The text is only the source;
@@ -160,7 +160,7 @@ Prompt tokens get label `-100`.
 
 Completion tokens keep their token IDs as labels.
 
-Source: `CODEALONGS/m6/03_tokenize_and_mask_labels.py`
+Source: `CODEALONGS/m6_fine_tuning/03_tokenize_and_mask_labels.py`
 
 <!--
 This is the silent bug worth spending time on. Without masking, the model
@@ -180,7 +180,7 @@ PEFT freezes the base model and trains adapters.
 - dropout
 - target modules
 
-Source: `CODEALONGS/m6/05_peft_lora_sft_trainer.py`
+Source: `CODEALONGS/m6_fine_tuning/05_peft_lora_sft_trainer.py`
 
 <!--
 PEFT is the right library for this section. Use the real config object, not a
@@ -199,7 +199,7 @@ After wrapping:
 - adapter weights are trainable
 - trainable parameter count drops sharply
 
-Source: `CODEALONGS/m6/05_peft_lora_sft_trainer.py`
+Source: `CODEALONGS/m6_fine_tuning/05_peft_lora_sft_trainer.py`
 
 <!--
 The snippet uses a tiny in-memory model so it runs fast. The PEFT mechanism is
@@ -218,7 +218,7 @@ BitsAndBytesConfig(load_in_4bit=True)
 
 The LoRA adapters still train in higher precision.
 
-Source: `CODEALONGS/m6/05_peft_lora_sft_trainer.py`
+Source: `CODEALONGS/m6_fine_tuning/05_peft_lora_sft_trainer.py`
 
 <!--
 Treat this as GPU training shape. bitsandbytes 4-bit loading is not a Mac
@@ -238,7 +238,7 @@ classroom requirement.
 - eval/save strategy
 - max sequence length
 
-Source: `CODEALONGS/m6/04_sft_trainer_dataset.py`
+Source: `CODEALONGS/m6_fine_tuning/04_sft_trainer_dataset.py`
 
 <!--
 Use TRL for SFT because it is the right trainer for language-model supervised
@@ -255,7 +255,7 @@ fine-tuning.
 model + tokenizer + dataset + SFTConfig + LoraConfig
 ```
 
-Source: `CODEALONGS/m6/04_sft_trainer_dataset.py`
+Source: `CODEALONGS/m6_fine_tuning/04_sft_trainer_dataset.py`
 
 The snippet constructs the trainer but does not call `trainer.train()`.
 
@@ -320,7 +320,7 @@ Score held-out outputs:
 - exact match
 - required phrase present when needed
 
-Source: `CODEALONGS/m6/06_evaluate_and_save_adapter.py`
+Source: `CODEALONGS/m6_fine_tuning/06_evaluate_and_save_adapter.py`
 
 Always compare against base + prompt.
 
@@ -341,7 +341,7 @@ That means:
 - version one adapter per task
 - rollback by loading the previous adapter
 
-Source: `CODEALONGS/m6/06_evaluate_and_save_adapter.py`
+Source: `CODEALONGS/m6_fine_tuning/06_evaluate_and_save_adapter.py`
 
 <!--
 This is the deployment payoff of PEFT. The artifact is small, inspectable,

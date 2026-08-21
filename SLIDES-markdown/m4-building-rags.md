@@ -59,7 +59,7 @@ complexity when the answer depends on facts outside model weights.
 
 Fine-tuning teaches behavior. Retrieval supplies facts.
 
-Source: `CODEALONGS/m4/01_why_rag_exists.py`
+Source: `CODEALONGS/m4_building_rags/01_why_rag_exists.py`
 
 <!--
 The important boundary for Day 2: M4/M5 teach custom knowledge. M6 teaches
@@ -79,7 +79,7 @@ index = VectorStoreIndex.from_documents(documents)
 answer = index.as_query_engine().query(question)
 ```
 
-Source: `CODEALONGS/m4/02_simple_rag_llamaindex.py`
+Source: `CODEALONGS/m4_building_rags/02_simple_rag_llamaindex.py`
 
 <!--
 Show the win early. Participants should see that a framework can build the
@@ -99,7 +99,7 @@ question -> retriever -> prompt builder -> answer
 
 M4 opens those objects one at a time.
 
-Source: `CODEALONGS/m4/03_complete_pipeline_objects.py`
+Source: `CODEALONGS/m4_building_rags/03_complete_pipeline_objects.py`
 
 <!--
 This prevents LlamaIndex from feeling magical. The rest of the module explains
@@ -156,7 +156,7 @@ document  ->  chunks / nodes  ->  searchable rows
 
 A chunk should be the smallest useful piece of evidence the answer can cite.
 
-Source: `CODEALONGS/m4/04_sentence_splitter_nodes.py`
+Source: `CODEALONGS/m4_building_rags/04_sentence_splitter_nodes.py`
 
 <!--
 This is the main design idea of M4. Chunking is not cosmetic formatting; it is
@@ -193,7 +193,7 @@ Three decisions travel with every chunk:
 chunk text + metadata = citeable retrieval unit
 ```
 
-Source: `CODEALONGS/m4/05_nodes_with_metadata.py`
+Source: `CODEALONGS/m4_building_rags/05_nodes_with_metadata.py`
 
 <!--
 Metadata is the bridge from search result to citation. If you do not carry the
@@ -217,7 +217,7 @@ Each row needs:
 - source metadata
 - stable id
 
-Source: `CODEALONGS/m4/06_vector_store_index.py`
+Source: `CODEALONGS/m4_building_rags/06_vector_store_index.py`
 
 <!--
 The snippet uses word-count vectors so the mechanism is visible. Real RAG uses
@@ -238,7 +238,7 @@ You re-index when you change:
 In-memory indexes are fine for learning. Persistent vector stores matter when
 the corpus is large or reused.
 
-Source: `CODEALONGS/m4/07_storage_context.py`
+Source: `CODEALONGS/m4_building_rags/07_storage_context.py`
 
 <!--
 This gives vector databases their place without making them mystical. They are
@@ -261,7 +261,7 @@ The retrieval result is not just text:
 score + chunk + metadata + source
 ```
 
-Source: `CODEALONGS/m4/08_vector_retriever_top_k.py`
+Source: `CODEALONGS/m4_building_rags/08_vector_retriever_top_k.py`
 
 <!--
 Make the result shape explicit. Debugging starts by printing the retrieved
@@ -305,7 +305,7 @@ Question: {question}
 Answer with the source title."""
 ```
 
-Source: `CODEALONGS/m4/09_query_engine_sources.py`
+Source: `CODEALONGS/m4_building_rags/09_query_engine_sources.py`
 
 <!--
 RAG's prompt trick is deliberately simple. Most quality work is making the
@@ -344,7 +344,7 @@ load -> chunk -> index -> retrieve -> answer
 Run the whole pipeline over the policy corpus, then inspect every object it
 created.
 
-Source: `CODEALONGS/m4/10_end_to_end_llamaindex_rag.py`
+Source: `CODEALONGS/m4_building_rags/10_end_to_end_llamaindex_rag.py`
 
 <!--
 This is the possession check. If learners can print document, chunks, index

@@ -5,7 +5,7 @@ snippet is a tiny runnable demonstration; run them in filename order.
 
 ```bash
 cd CODEALONGS
-uv run python m4/01_why_rag_exists.py
+uv run python m4_building_rags/01_why_rag_exists.py
 ```
 
 | Snippet | Teaches one thing |

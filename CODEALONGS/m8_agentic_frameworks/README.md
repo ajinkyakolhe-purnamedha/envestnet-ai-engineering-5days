@@ -3,7 +3,7 @@
 Run from the repository root:
 
 ```bash
-uv run --project CODEALONGS python CODEALONGS/m8/01_smolagents_tool_agent.py
+uv run --project CODEALONGS python CODEALONGS/m8_agentic_frameworks/01_smolagents_tool_agent.py
 ```
 
 Snippets:

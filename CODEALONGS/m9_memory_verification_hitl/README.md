@@ -8,7 +8,7 @@ product-safe path.
 Run from the repository root:
 
 ```bash
-uv run --project CODEALONGS python CODEALONGS/m9/01_memory_is_messages.py
+uv run --project CODEALONGS python CODEALONGS/m9_memory_verification_hitl/01_memory_is_messages.py
 ```
 
 Snippets:

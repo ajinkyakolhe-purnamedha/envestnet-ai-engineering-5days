@@ -4,7 +4,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "m4"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "m4_building_rags"))
 
 from llama_index.core import SimpleDirectoryReader, VectorStoreIndex
 from llama_index.core.tools import QueryEngineTool

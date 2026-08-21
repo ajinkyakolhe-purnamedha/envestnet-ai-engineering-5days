@@ -8,8 +8,8 @@ honest. One top-level folder per module, matching the decks in
 | Day | Modules | Folders |
 | --- | --- | --- |
 | 1 | M0–M3 | `m0_python_foundations/` · `m1_model_access/` · `m2_model_tokens_context/` · `m3_application_patterns/` |
-| 2 | M4–M6 | `m4/` (RAG) · `m5/` (retrieval evaluation) · `m6/` (fine-tuning) |
-| 3 | M7–M9 | `m7/` (agent loop) · `m8/` (frameworks) · `m9/` (memory, verification, HITL) |
+| 2 | M4–M6 | `m4_building_rags/` (RAG) · `m5_advanced_rag/` (retrieval evaluation) · `m6_fine_tuning/` (fine-tuning) |
+| 3 | M7–M9 | `m7_agentic_applications/` (agent loop) · `m8_agentic_frameworks/` (frameworks) · `m9_memory_verification_hitl/` (memory, verification, HITL) |
 
 ## The module format
 
@@ -41,7 +41,7 @@ From the `CODEALONGS/` folder:
 ```bash
 uv sync --extra courseware
 uv run python m2_model_tokens_context/06_text_to_token_ids.py
-uv run python m4/01_why_rag_exists.py
+uv run python m4_building_rags/01_why_rag_exists.py
 uv run --extra courseware jupyter lab     # for the m0/m1 notebooks
 ```
 

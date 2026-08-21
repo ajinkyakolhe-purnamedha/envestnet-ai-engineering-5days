@@ -107,7 +107,7 @@ In LlamaIndex, memory is still the transcript the app sends again.
 history + new question -> next model call
 ```
 
-Code: `CODEALONGS/m9/01_memory_is_messages.py`
+Code: `CODEALONGS/m9_memory_verification_hitl/01_memory_is_messages.py`
 
 ---
 
@@ -124,7 +124,7 @@ retrieval memory   long-term store, RAG again
 
 Start with a LlamaIndex memory window.
 
-Code: `CODEALONGS/m9/02_bounded_memory.py`
+Code: `CODEALONGS/m9_memory_verification_hitl/02_bounded_memory.py`
 
 ---
 
@@ -160,7 +160,7 @@ latest:  "Why is that a problem for Alice?"
 route:   policy
 ```
 
-Code: `CODEALONGS/m9/03_effective_question.py`
+Code: `CODEALONGS/m9_memory_verification_hitl/03_effective_question.py`
 
 ---
 
@@ -214,7 +214,7 @@ Examples:
 
 Rules are not enough, but they are always worth having.
 
-Code: `CODEALONGS/m9/04_verify_generated_draft.py`
+Code: `CODEALONGS/m9_memory_verification_hitl/04_verify_generated_draft.py`
 
 ---
 
@@ -233,7 +233,7 @@ Then compare it with a known rule.
 
 The judge starts advisory. It earns veto power with measured data.
 
-Code: `CODEALONGS/m9/05_model_judge.py`
+Code: `CODEALONGS/m9_memory_verification_hitl/05_model_judge.py`
 
 ---
 
@@ -303,7 +303,7 @@ advisor reviews  -> approved | rejected
 client sees only approved
 ```
 
-Code: `CODEALONGS/m9/06_human_gate_and_state.py`
+Code: `CODEALONGS/m9_memory_verification_hitl/06_human_gate_and_state.py`
 
 ---
 
@@ -353,7 +353,7 @@ human decisions       durable rows
 audit trace           durable rows/logs
 ```
 
-Code: `CODEALONGS/m9/06_human_gate_and_state.py`
+Code: `CODEALONGS/m9_memory_verification_hitl/06_human_gate_and_state.py`
 
 ---
 
@@ -392,7 +392,7 @@ history
   -> client sees approved note
 ```
 
-Code: `CODEALONGS/m9/06_human_gate_and_state.py`
+Code: `CODEALONGS/m9_memory_verification_hitl/06_human_gate_and_state.py`
 
 ---
 

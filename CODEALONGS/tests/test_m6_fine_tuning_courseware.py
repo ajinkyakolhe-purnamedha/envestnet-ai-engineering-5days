@@ -5,7 +5,7 @@ from runpy import run_path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-M6 = ROOT / "m6"
+M6 = ROOT / "m6_fine_tuning"
 SLIDES = ROOT.parent / "SLIDES-markdown"
 M6_DECK = SLIDES / "m6-fine-tuning.md"
 
@@ -54,7 +54,7 @@ def test_m6_deck_references_ordered_runnable_snippets() -> None:
     assert numbered_files == SNIPPETS
 
     for snippet in SNIPPETS:
-        assert f"CODEALONGS/m6/{snippet}" in deck
+        assert f"CODEALONGS/m6_fine_tuning/{snippet}" in deck
         assert (M6 / snippet).exists()
 
     readme = (M6 / "README.md").read_text()

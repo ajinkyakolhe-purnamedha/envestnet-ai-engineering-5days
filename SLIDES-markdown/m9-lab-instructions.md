@@ -11,7 +11,7 @@ wired — you write four functions and watch two dashboards come alive.
 **60 minutes. The payoff lands at the halfway mark** — build in the
 order below, which is NOT deck order: gate first.
 
-No warm-up section this time: you already ran the `m9/` toys during the
+No warm-up section this time: you already ran the `m9_memory_verification_hitl/` toys during the
 module's three experiments.
 
 ---
@@ -142,7 +142,7 @@ uv run python -m pytest -q
 ## Stretch options, in payoff order
 
 1. **The judge** — see above; completes the ladder in the product.
-2. **Judge, better** — reword the prompt in `m9/llm_judge.py`
+2. **Judge, better** — reword the prompt in `m9_memory_verification_hitl/llm_judge.py`
    (SLIDES-markdown), re-run, beat the measured 2/6 agreement. That
    loop — reword, re-measure — is judge engineering.
 3. **Stream it** — SSE endpoint behind the draft function (the single

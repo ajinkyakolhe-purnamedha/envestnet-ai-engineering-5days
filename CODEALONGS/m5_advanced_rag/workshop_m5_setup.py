@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 
 
-M4_DIR = Path(__file__).resolve().parents[1] / "m4"
+M4_DIR = Path(__file__).resolve().parents[1] / "m4_building_rags"
 sys.path.insert(0, str(M4_DIR))
 
 from workshop_llamaindex_setup import POLICY_DIR, use_local_models  # noqa: E402

@@ -53,7 +53,7 @@ RAGAS-style checks ask different questions:
 - **faithfulness**: is the answer supported by context?
 - **answer relevance**: did it answer the question?
 
-Source: `CODEALONGS/m5/01_evaluate_baseline.py`
+Source: `CODEALONGS/m5_advanced_rag/01_evaluate_baseline.py`
 
 <!--
 If precision fails, look at retrieval. If faithfulness fails with good
@@ -91,7 +91,7 @@ document
 
 Search a focused sentence. Answer with its surrounding window.
 
-Source: `CODEALONGS/m5/03_sentence_window_chunking.py`
+Source: `CODEALONGS/m5_advanced_rag/03_sentence_window_chunking.py`
 
 <!--
 Name related patterns here: sentence windows, hierarchical parsing, and
@@ -132,7 +132,7 @@ dense vector search + sparse BM25 search -> fused candidates
 
 Use hybrid retrieval when exact identifiers matter.
 
-Source: `CODEALONGS/m5/05_hybrid_search.py`
+Source: `CODEALONGS/m5_advanced_rag/05_hybrid_search.py`
 
 <!--
 The snippet uses a tiny deterministic score so the failure is visible: dense
@@ -167,7 +167,7 @@ A retriever scores each chunk independently.
 
 A reranker reads the query and candidate together.
 
-Source: `CODEALONGS/m5/07_rerank_results.py`
+Source: `CODEALONGS/m5_advanced_rag/07_rerank_results.py`
 
 Reranker scores are not similarity scores. Do not compare the numbers as if
 they are the same unit.
@@ -205,7 +205,7 @@ Three common transformations:
 - HyDE: search with a hypothetical answer
 - sub-question decomposition
 
-Source: `CODEALONGS/m5/09_query_transformations.py`
+Source: `CODEALONGS/m5_advanced_rag/09_query_transformations.py`
 
 Use them when the measured failure is the query, not the chunks or index.
 

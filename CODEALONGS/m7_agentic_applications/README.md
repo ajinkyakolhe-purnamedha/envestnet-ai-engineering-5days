@@ -3,7 +3,7 @@
 Run from the repository root:
 
 ```bash
-uv run --project CODEALONGS python CODEALONGS/m7/01_regular_vs_agentic_llm.py
+uv run --project CODEALONGS python CODEALONGS/m7_agentic_applications/01_regular_vs_agentic_llm.py
 ```
 
 Snippets:

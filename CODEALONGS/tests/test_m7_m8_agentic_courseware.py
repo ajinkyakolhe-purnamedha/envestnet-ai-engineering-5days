@@ -5,8 +5,8 @@ from runpy import run_path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-M7 = ROOT / "m7"
-M8 = ROOT / "m8"
+M7 = ROOT / "m7_agentic_applications"
+M8 = ROOT / "m8_agentic_frameworks"
 SLIDES = ROOT.parent / "SLIDES-markdown"
 M7_DECK = SLIDES / "m7-agentic-applications.md"
 M8_DECK = SLIDES / "m8-agentic-frameworks.md"
@@ -61,7 +61,7 @@ def test_m7_deck_references_ordered_runnable_snippets() -> None:
     assert numbered_files == M7_SNIPPETS
 
     for snippet in M7_SNIPPETS:
-        assert f"CODEALONGS/m7/{snippet}" in deck
+        assert f"CODEALONGS/m7_agentic_applications/{snippet}" in deck
         assert (M7 / snippet).exists()
 
     readme = (M7 / "README.md").read_text()
@@ -138,7 +138,7 @@ def test_m8_deck_references_ordered_runnable_snippets() -> None:
     assert numbered_files == M8_SNIPPETS
 
     for snippet in M8_SNIPPETS:
-        assert f"CODEALONGS/m8/{snippet}" in deck
+        assert f"CODEALONGS/m8_agentic_frameworks/{snippet}" in deck
         assert (M8 / snippet).exists()
 
     readme = (M8 / "README.md").read_text()

@@ -5,7 +5,7 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-M7_DIR = Path(__file__).resolve().parents[1] / "m7"
+M7_DIR = Path(__file__).resolve().parents[1] / "m7_agentic_applications"
 sys.path.insert(0, str(M7_DIR))
 
 from workshop_agentic_setup import (  # noqa: E402

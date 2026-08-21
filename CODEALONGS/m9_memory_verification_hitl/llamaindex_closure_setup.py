@@ -5,8 +5,8 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-M4_DIR = Path(__file__).resolve().parents[1] / "m4"
-M8_DIR = Path(__file__).resolve().parents[1] / "m8"
+M4_DIR = Path(__file__).resolve().parents[1] / "m4_building_rags"
+M8_DIR = Path(__file__).resolve().parents[1] / "m8_agentic_frameworks"
 sys.path.insert(0, str(M4_DIR))
 sys.path.insert(0, str(M8_DIR))
 

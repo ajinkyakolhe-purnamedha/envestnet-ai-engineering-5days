@@ -42,7 +42,7 @@ RAG is for grounding in text.
 
 Agents are for taking controlled steps through software.
 
-Code: `CODEALONGS/m7/01_regular_vs_agentic_llm.py`
+Code: `CODEALONGS/m7_agentic_applications/01_regular_vs_agentic_llm.py`
 
 ---
 
@@ -102,7 +102,7 @@ The function already has the important engineering parts:
 - failure modes
 - ownership
 
-Code: `CODEALONGS/m7/02_functions_as_tools.py`
+Code: `CODEALONGS/m7_agentic_applications/02_functions_as_tools.py`
 
 ---
 
@@ -162,7 +162,7 @@ That JSON is not execution.
 
 It is a request for Python to execute something.
 
-Code: `CODEALONGS/m7/03_llm_tool_request.py`
+Code: `CODEALONGS/m7_agentic_applications/03_llm_tool_request.py`
 
 ---
 
@@ -240,7 +240,7 @@ Python runs the function.
 
 The model sees the observation on the next turn.
 
-Code: `CODEALONGS/m7/04_python_dispatch.py`
+Code: `CODEALONGS/m7_agentic_applications/04_python_dispatch.py`
 
 ---
 
@@ -321,7 +321,7 @@ for turn in range(max_turns):
     state["observations"].append(observation)
 ```
 
-Code: `CODEALONGS/m7/05_react_loop.py`
+Code: `CODEALONGS/m7_agentic_applications/05_react_loop.py`
 
 ---
 
@@ -426,7 +426,7 @@ Every framework packages the same pieces:
 | planner | model in agent | LLM in agent |
 | observations | step logs | tool outputs/callbacks |
 
-Code: `CODEALONGS/m7/06_framework_mapping.py`
+Code: `CODEALONGS/m7_agentic_applications/06_framework_mapping.py`
 
 ---
 

@@ -4,6 +4,7 @@ import pandas as pd
 import streamlit as st
 
 import api_client
+import performance_comparison_charts
 from api_client import ApiError
 
 
@@ -40,6 +41,8 @@ def render_advisor_dashboard_screen(user: dict) -> None:
     else:
         st.info("This client has no holdings.")
 
+    _render_client_performance_vs_peers(client_user_id, portfolio["holdings"])
+
     st.subheader("Advisor Report")
     if st.button("Generate report", type="primary"):
         try:
@@ -65,6 +68,43 @@ def render_advisor_dashboard_screen(user: dict) -> None:
 
     _render_assistant_chat_panel(advisor_user_id, client_user_id)
     _render_approval_queue_panel(advisor_user_id)
+
+
+def _render_client_performance_vs_peers(
+    client_user_id: int, holdings: list[dict]
+) -> None:
+    """One held symbol against the average of the other supported assets.
+    History is fetched as the client, so it ends at the client's
+    simulated date — the advisor sees no further than the client can."""
+    st.subheader("Performance vs Peers")
+    assets = api_client.fetch_supported_assets()
+    all_symbols = [asset["symbol"] for asset in assets]
+    held_symbols = [holding["symbol"] for holding in holdings]
+    default_symbol = held_symbols[0] if held_symbols else all_symbols[0]
+    symbol = st.selectbox(
+        "Focus symbol", all_symbols, index=all_symbols.index(default_symbol)
+    )
+    if not symbol:
+        return
+    normalized = performance_comparison_charts.fetch_normalized_price_frame(
+        client_user_id, all_symbols
+    )
+    if normalized.empty or symbol not in normalized.columns:
+        st.info("No price history before this client's simulated date.")
+        return
+    line_column, delta_column = st.columns(2)
+    line_column.altair_chart(
+        performance_comparison_charts.symbol_vs_peer_average_chart(
+            normalized, symbol
+        ),
+        use_container_width=True,
+    )
+    delta_column.altair_chart(
+        performance_comparison_charts.performance_delta_area_chart(
+            normalized, symbol
+        ),
+        use_container_width=True,
+    )
 
 
 def _render_assistant_chat_panel(advisor_user_id: int, client_user_id: int) -> None:

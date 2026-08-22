@@ -9,7 +9,9 @@ uv run --project CODEALONGS python CODEALONGS/m8_agentic_frameworks/01_smolagent
 Snippets:
 
 - `01_smolagents_tool_agent.py` - smolagents running a tool-calling loop
+- `01b_llamaindex_tool_agent.py` - LlamaIndex alternative: `ReActAgent` running the same loop with a scripted planner
 - `02_smolagents_trace_limits.py` - framework trace and `max_steps`
+- `02b_llamaindex_trace_limits.py` - LlamaIndex alternative: real bad-tool-call trace stopped by `max_iterations`
 - `03_llamaindex_function_agent.py` - LlamaIndex `FunctionTool` and `FunctionAgent`
 - `04_llamaindex_rag_tool.py` - policy RAG as `QueryEngineTool`
 - `05_agentic_workflow_patterns.py` - routing, parallel gather, and evaluator pattern

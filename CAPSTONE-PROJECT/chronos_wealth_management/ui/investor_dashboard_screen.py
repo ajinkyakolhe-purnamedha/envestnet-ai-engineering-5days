@@ -4,6 +4,7 @@ import pandas as pd
 import streamlit as st
 
 import api_client
+import performance_comparison_charts
 from api_client import ApiError
 
 
@@ -25,7 +26,7 @@ def render_investor_dashboard_screen(user: dict) -> None:
     _render_portfolio_summary(portfolio)
     _render_advisor_messages(user_id)
     _render_holdings_table(portfolio)
-    _render_symbol_price_chart(user_id)
+    _render_performance_comparison(user_id)
     _render_account_value_history_chart(user_id)
     _render_trade_form(user_id)
     _render_time_advance_buttons(user_id)
@@ -79,17 +80,33 @@ def _render_holdings_table(portfolio: dict) -> None:
     st.markdown(f"Unrealized gain/loss: {_format_gain_loss(total_gain_loss)}")
 
 
-def _render_symbol_price_chart(user_id: int) -> None:
-    st.subheader("Symbol Price History")
+def _render_performance_comparison(user_id: int) -> None:
+    """Symbols indexed to a common start so growth is comparable,
+    always ending at the account's simulated date."""
+    st.subheader("Performance Comparison")
     assets = api_client.fetch_supported_assets()
-    symbol = st.selectbox("Symbol", [asset["symbol"] for asset in assets])
-    if symbol:
-        history = api_client.fetch_symbol_price_history(symbol, user_id)
-        if history:
-            history_frame = pd.DataFrame(history)
-            st.line_chart(history_frame.set_index("date")["close"])
-        else:
-            st.info(f"No price history for {symbol} before the simulated date.")
+    all_symbols = [asset["symbol"] for asset in assets]
+    symbols = st.multiselect("Symbols", all_symbols, default=all_symbols)
+    horizon = st.pills("Horizon (trading days)", [30, 60, 90, 120], default=60)
+    if len(symbols) < 2:
+        st.info("Pick at least two symbols to compare.")
+        return
+    normalized = performance_comparison_charts.fetch_normalized_price_frame(
+        user_id, symbols, horizon or 60
+    )
+    if normalized.empty:
+        st.info("No price history before the simulated date.")
+        return
+    st.altair_chart(
+        performance_comparison_charts.normalized_performance_chart(normalized),
+        use_container_width=True,
+    )
+    best_symbol, best_growth, worst_symbol, worst_growth = (
+        performance_comparison_charts.best_and_worst_performers(normalized)
+    )
+    best_column, worst_column = st.columns(2)
+    best_column.metric(f"Best: {best_symbol}", f"{best_growth:+.1%}")
+    worst_column.metric(f"Worst: {worst_symbol}", f"{worst_growth:+.1%}")
 
 
 def _render_account_value_history_chart(user_id: int) -> None:

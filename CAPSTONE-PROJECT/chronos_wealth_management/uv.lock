@@ -222,6 +222,7 @@ name = "chronos-wealth"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "altair" },
     { name = "fastapi" },
     { name = "pandas" },
     { name = "pydantic" },
@@ -246,6 +247,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "altair", specifier = ">=5.0.0" },
     { name = "fastapi", specifier = ">=0.141.1" },
     { name = "pandas", specifier = ">=3.0.5" },
     { name = "pydantic", specifier = ">=2.13.4" },

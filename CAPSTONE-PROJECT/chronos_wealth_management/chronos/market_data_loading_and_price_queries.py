@@ -7,9 +7,8 @@ import pandas as pd
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from chronos.shared_database.database_connection import MARKET_PRICES_CSV_PATH
-from chronos.shared_database.database_tables import Asset, Price
-from chronos.shared_database.domain_errors import (
+from chronos.application_database import MARKET_PRICES_CSV_PATH, Asset, Price
+from chronos.application_errors_and_permissions import (
     MarketDataSetupError,
     PriceUnavailableError,
     RecordNotFoundError,

@@ -2,7 +2,7 @@
 
 from contextlib import contextmanager
 from fastapi import HTTPException
-from chronos.shared_database.database_tables import User
+from chronos.application_database import User
 
 INVESTOR_ROLE = "INVESTOR"
 ADVISOR_ROLE = "ADVISOR"

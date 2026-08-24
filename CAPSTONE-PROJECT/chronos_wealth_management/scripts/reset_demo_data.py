@@ -5,11 +5,11 @@ Run from the project root:
     uv run python -m scripts.reset_demo_data
 """
 
-from chronos.app_startup.seed_demo_users_accounts_and_assets import (
+from chronos.demo_users_and_startup_data import (
     reset_demo_investor_accounts,
     seed_demo_users_accounts_and_assets,
 )
-from chronos.shared_database.database_connection import (
+from chronos.application_database import (
     SessionLocal,
     create_database_tables,
 )

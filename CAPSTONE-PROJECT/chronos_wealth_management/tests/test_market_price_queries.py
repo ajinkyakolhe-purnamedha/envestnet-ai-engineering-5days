@@ -7,10 +7,8 @@ import pytest
 from chronos.market_data_loading_and_price_queries import (
     get_latest_price_on_or_before_date,
 )
-from chronos.market_price_queries.get_symbol_price_history import (
-    get_symbol_price_history_until_date,
-)
-from chronos.shared_database.domain_errors import PriceUnavailableError
+from chronos.investor_accounts_portfolios_and_history import get_symbol_price_history
+from chronos.application_errors_and_permissions import PriceUnavailableError
 
 
 def test_price_lookup_uses_latest_on_or_before_date(db):
@@ -31,7 +29,7 @@ def test_price_lookup_before_first_price_fails(db):
 
 def test_symbol_history_returns_no_future_prices(db):
     end_date = date(2020, 6, 1)
-    history = get_symbol_price_history_until_date(db, "AAPL", end_date)
+    history = get_symbol_price_history(db, "AAPL", end_date)
     assert history
     assert all(price.date <= end_date for price in history)
     assert [price.date for price in history] == sorted(
@@ -40,14 +38,14 @@ def test_symbol_history_returns_no_future_prices(db):
 
 
 def test_symbol_history_respects_trading_days_limit(db):
-    history = get_symbol_price_history_until_date(
+    history = get_symbol_price_history(
         db, "AAPL", date(2020, 9, 14), trading_days=5
     )
     assert len(history) == 5
     assert history[-1].date == date(2020, 9, 14)
 
 def test_trading_days_beyond_available_returns_everything(db):
-    history = get_symbol_price_history_until_date(
+    history = get_symbol_price_history(
         db, "AAPL", date(2020, 9, 14), trading_days=500
     )
     assert len(history) == 20
@@ -65,7 +63,7 @@ def test_unknown_symbol_is_rejected(db):
     from chronos.market_data_loading_and_price_queries import (
         require_supported_asset,
     )
-    from chronos.shared_database.domain_errors import RecordNotFoundError
+    from chronos.application_errors_and_permissions import RecordNotFoundError
 
     with pytest.raises(RecordNotFoundError):
         require_supported_asset(db, "ZZZZ")

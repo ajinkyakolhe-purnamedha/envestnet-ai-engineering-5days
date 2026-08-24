@@ -11,11 +11,11 @@ from chronos.advisor_analysis_reports_and_client_lists import (
 from chronos.investor_accounts_portfolios_and_history import (
     build_current_portfolio_snapshot, get_account_for_investor_user,
 )
-from chronos.shared_database.api_schemas import (
+from chronos.api_schemas_advisor import (
     AdvisorAssistantAnswerResponse, AdvisorNoteDraftResponse, ClientAdvisorMessageResponse,
 )
-from chronos.shared_database.database_tables import AdvisorNoteDraft
-from chronos.shared_database.domain_errors import NoteDraftAlreadyDecidedError, RecordNotFoundError
+from chronos.application_database import AdvisorNoteDraft
+from chronos.application_errors_and_permissions import NoteDraftAlreadyDecidedError, RecordNotFoundError
 
 PENDING_STATUS = "pending"
 APPROVED_STATUS = "approved"

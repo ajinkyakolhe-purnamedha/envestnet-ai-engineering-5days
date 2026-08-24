@@ -17,7 +17,7 @@ from chronos.advisor_assistant_drafts_and_approval import (
     list_pending_drafts_for_advisor,
     submit_note_for_approval,
 )
-from chronos.shared_database.api_schemas import (
+from chronos.api_schemas_advisor import (
     AdvisorAssistantAnswerResponse,
     AdvisorNoteDraftResponse,
     ClientAdvisorMessageResponse,

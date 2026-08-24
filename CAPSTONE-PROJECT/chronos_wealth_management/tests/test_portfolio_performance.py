@@ -4,19 +4,15 @@ from datetime import date
 
 import pytest
 
-from chronos.investor_trading.execute_investor_trade import execute_investor_trade
-from chronos.portfolio_performance.build_account_value_history import (
+from chronos.investor_trade_execution_and_preview import execute_investor_trade
+from chronos.investor_accounts_portfolios_and_history import (
     build_account_value_history,
-)
-from chronos.portfolio_performance.calculate_current_portfolio_value import (
     build_current_portfolio_snapshot,
-)
-from chronos.portfolio_performance.calculate_holding_gain_loss import (
     calculate_holding_cost_basis,
     calculate_holding_market_value,
     calculate_unrealized_gain_loss,
 )
-from chronos.shared_database.api_schemas import TradeRequest
+from chronos.api_schemas_investor import TradeRequest
 
 
 def test_arithmetic_helpers():

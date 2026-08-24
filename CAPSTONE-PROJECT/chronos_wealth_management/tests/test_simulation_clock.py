@@ -4,8 +4,8 @@ from datetime import date
 
 import pytest
 
-from chronos.shared_database.domain_errors import InvalidSimulatedDateError
-from chronos.simulation_clock.advance_simulated_investment_date import (
+from chronos.application_errors_and_permissions import InvalidSimulatedDateError
+from chronos.investor_accounts_portfolios_and_history import (
     advance_simulated_investment_date,
     calculate_next_simulated_date,
     get_available_market_date_range,

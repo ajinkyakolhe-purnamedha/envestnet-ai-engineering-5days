@@ -3,31 +3,27 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from chronos.api_routes.http_error_translation import translate_domain_errors
-from chronos.app_startup.seed_demo_users_accounts_and_assets import (
-    reset_demo_investor_accounts,
-    seed_demo_users_accounts_and_assets,
-)
-from chronos.demo_users.demo_user_login import (
+from chronos.application_errors_and_permissions import require_investor_user, translate_domain_errors
+from chronos.demo_users_and_startup_data import (
     get_demo_user_by_id,
     list_demo_users,
     login_demo_user_by_email,
+    reset_demo_investor_accounts,
+    seed_demo_users_accounts_and_assets,
 )
-from chronos.demo_users.user_role_permissions import require_investor_user
 from chronos.investor_accounts_portfolios_and_history import (
     advance_simulated_investment_date,
     build_current_portfolio_snapshot,
     build_investor_account_response,
     get_account_for_investor_user,
 )
-from chronos.shared_database.api_schemas import (
+from chronos.api_schemas_investor import (
     AdvanceSimulationRequest,
-    DemoResetResponse,
-    LoginRequest,
     SimulationAdvanceResponse,
     UserResponse,
 )
-from chronos.shared_database.database_connection import get_database_session
+from chronos.api_schemas_system import DemoResetResponse, LoginRequest
+from chronos.application_database import get_database_session
 
 router = APIRouter()
 

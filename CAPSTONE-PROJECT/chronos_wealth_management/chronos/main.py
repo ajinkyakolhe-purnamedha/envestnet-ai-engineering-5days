@@ -5,13 +5,13 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from chronos import api_routes_advisor, api_routes_investor, api_routes_system
-from chronos.app_startup.seed_demo_users_accounts_and_assets import (
+from chronos.demo_users_and_startup_data import (
     seed_demo_users_accounts_and_assets,
 )
 from chronos.market_data_loading_and_price_queries import (
     ensure_market_prices_loaded,
 )
-from chronos.shared_database.database_connection import (
+from chronos.application_database import (
     SessionLocal,
     create_database_tables,
 )

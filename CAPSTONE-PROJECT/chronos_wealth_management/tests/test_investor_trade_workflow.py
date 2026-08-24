@@ -6,11 +6,10 @@ Fixture prices at the starting simulated date 2020-06-01: AAPL 108, MSFT 196.
 import pytest
 from sqlalchemy import select
 
-from chronos.investor_trading.execute_investor_trade import execute_investor_trade
-from chronos.investor_trading.preview_investor_trade import preview_investor_trade
-from chronos.shared_database.api_schemas import TradeRequest
-from chronos.shared_database.database_tables import Holding
-from chronos.shared_database.domain_errors import (
+from chronos.investor_trade_execution_and_preview import execute_investor_trade, preview_investor_trade
+from chronos.api_schemas_investor import TradeRequest
+from chronos.application_database import Holding
+from chronos.application_errors_and_permissions import (
     InsufficientCashError,
     InsufficientSharesError,
 )

@@ -3,9 +3,11 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from chronos.api_routes.http_error_translation import translate_domain_errors
-from chronos.demo_users.demo_user_login import get_demo_user_by_id
-from chronos.demo_users.user_role_permissions import require_investor_user
+from chronos.application_errors_and_permissions import (
+    require_investor_user,
+    translate_domain_errors,
+)
+from chronos.demo_users_and_startup_data import get_demo_user_by_id
 from chronos.investor_accounts_portfolios_and_history import (
     build_account_value_history,
     build_current_portfolio_snapshot,
@@ -22,7 +24,7 @@ from chronos.market_data_loading_and_price_queries import (
     get_supported_assets,
     require_supported_asset,
 )
-from chronos.shared_database.api_schemas import (
+from chronos.api_schemas_investor import (
     AccountResponse,
     AccountValueHistoryPointResponse,
     AssetResponse,
@@ -32,7 +34,7 @@ from chronos.shared_database.api_schemas import (
     TradeRequest,
     TradeResponse,
 )
-from chronos.shared_database.database_connection import get_database_session
+from chronos.application_database import get_database_session
 
 router = APIRouter()
 

@@ -1,28 +1,19 @@
-"""The advisor workflow has two production owners; legacy paths only delegate."""
+"""The advisor workflow has two production owners."""
 
 
-def test_analysis_report_and_client_list_legacy_paths_delegate_to_owner():
+def test_analysis_report_and_client_list_owner_exports_its_behavior():
     from chronos.advisor_analysis_reports_and_client_lists import (
         analyze_client_portfolio,
         build_advisor_recommendations,
         generate_advisor_review_report,
         list_clients_for_advisor,
     )
-    from chronos.advisor_workspace.analyze_client_portfolio import (
-        analyze_client_portfolio as legacy_analyze,
-        build_advisor_recommendations as legacy_recommendations,
-    )
-    from chronos.advisor_workspace.generate_advisor_review_report import (
-        generate_advisor_review_report as legacy_generate,
-    )
-    from chronos.advisor_workspace.list_advisor_clients import (
-        list_clients_for_advisor as legacy_list,
-    )
-
-    assert legacy_analyze is analyze_client_portfolio
-    assert legacy_recommendations is build_advisor_recommendations
-    assert legacy_generate is generate_advisor_review_report
-    assert legacy_list is list_clients_for_advisor
+    assert all(function.__module__ == "chronos.advisor_analysis_reports_and_client_lists" for function in (
+        analyze_client_portfolio,
+        build_advisor_recommendations,
+        generate_advisor_review_report,
+        list_clients_for_advisor,
+    ))
 
 
 def test_m9_draft_and_approval_legacy_paths_delegate_to_owner():

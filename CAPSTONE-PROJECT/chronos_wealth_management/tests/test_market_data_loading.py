@@ -8,9 +8,9 @@ from chronos.market_data_loading_and_price_queries import (
     ensure_market_prices_loaded,
     load_market_prices_into_database,
 )
-from chronos.shared_database.domain_errors import MarketDataSetupError
+from chronos.application_errors_and_permissions import MarketDataSetupError
 from chronos.market_data_loading_and_price_queries import load_market_prices_from_csv
-from chronos.shared_database.database_tables import Price
+from chronos.application_database import Price
 from tests.conftest import FIXTURE_PRICES_CSV
 
 
@@ -44,7 +44,7 @@ def test_reload_updates_changed_close_instead_of_duplicating(db):
     load_market_prices_into_database(db, prices)
     db.commit()
 
-    from chronos.shared_database.database_tables import Price
+    from chronos.application_database import Price
 
     updated = db.scalar(
         select(Price.close)
@@ -70,7 +70,7 @@ def test_csv_with_missing_columns_is_rejected(tmp_path):
 def test_ensure_prices_errors_when_database_and_csv_are_both_empty(
     db, tmp_path, monkeypatch
 ):
-    from chronos.shared_database.database_tables import Price
+    from chronos.application_database import Price
 
     db.query(Price).delete()
     db.flush()
@@ -84,6 +84,6 @@ def test_ensure_prices_errors_when_database_and_csv_are_both_empty(
 def test_ensure_prices_is_a_no_op_when_prices_exist(db):
     ensure_market_prices_loaded(db)  # must not raise or need the CSV
 
-    from chronos.shared_database.database_tables import Price
+    from chronos.application_database import Price
 
     assert db.scalar(select(func.count(Price.id))) == 40

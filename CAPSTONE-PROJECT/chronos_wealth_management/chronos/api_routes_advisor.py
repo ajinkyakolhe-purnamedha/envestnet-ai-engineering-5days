@@ -16,17 +16,17 @@ from chronos.advisor_assistant_runtime import (
     list_pending_advisor_note_drafts,
     submit_advisor_note_for_approval,
 )
-from chronos.api_routes.http_error_translation import translate_domain_errors
-from chronos.demo_users.demo_user_login import get_demo_user_by_id
-from chronos.demo_users.user_role_permissions import (
+from chronos.application_errors_and_permissions import (
     require_advisor_user,
     require_investor_user,
+    translate_domain_errors,
 )
+from chronos.demo_users_and_startup_data import get_demo_user_by_id
 from chronos.investor_accounts_portfolios_and_history import (
     build_current_portfolio_snapshot,
     get_account_for_investor_user,
 )
-from chronos.shared_database.api_schemas import (
+from chronos.api_schemas_advisor import (
     AdvisorAssistantAnswerResponse,
     AdvisorAssistantAskRequest,
     AdvisorClientSummaryResponse,
@@ -34,9 +34,9 @@ from chronos.shared_database.api_schemas import (
     AdvisorReportResponse,
     ClientAdvisorMessageResponse,
     NoteDraftDecisionRequest,
-    PortfolioResponse,
 )
-from chronos.shared_database.database_connection import get_database_session
+from chronos.api_schemas_investor import PortfolioResponse
+from chronos.application_database import get_database_session
 
 router = APIRouter()
 

@@ -5,8 +5,8 @@ import json
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from chronos.demo_users.demo_user_login import get_demo_user_by_id
-from chronos.demo_users.user_role_permissions import (
+from chronos.demo_users_and_startup_data import get_demo_user_by_id
+from chronos.application_errors_and_permissions import (
     INVESTOR_ROLE,
     require_advisor_user,
     require_investor_user,
@@ -15,14 +15,14 @@ from chronos.investor_accounts_portfolios_and_history import (
     build_current_portfolio_snapshot,
     get_account_for_investor_user,
 )
-from chronos.shared_database.api_schemas import (
+from chronos.api_schemas_advisor import (
     AdvisorClientSummaryResponse,
     AdvisorMetricResponse,
     AdvisorReportResponse,
-    PortfolioResponse,
 )
-from chronos.shared_database.database_tables import AdvisorReport, User
-from chronos.shared_database.domain_errors import RecordNotFoundError
+from chronos.api_schemas_investor import PortfolioResponse
+from chronos.application_database import AdvisorReport, User
+from chronos.application_errors_and_permissions import RecordNotFoundError
 
 CONCENTRATION_THRESHOLD = 0.35
 HIGH_CASH_THRESHOLD = 0.40

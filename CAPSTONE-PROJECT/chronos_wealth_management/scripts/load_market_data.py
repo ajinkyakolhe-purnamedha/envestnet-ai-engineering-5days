@@ -13,7 +13,7 @@ from chronos.market_data_loading_and_price_queries import (
     load_market_prices_into_database,
 )
 from chronos.market_data_loading_and_price_queries import save_market_prices_to_csv
-from chronos.shared_database.database_connection import (
+from chronos.application_database import (
     MARKET_PRICES_CSV_PATH,
     SessionLocal,
     create_database_tables,

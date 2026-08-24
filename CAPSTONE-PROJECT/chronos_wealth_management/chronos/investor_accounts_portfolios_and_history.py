@@ -6,11 +6,11 @@ from datetime import date, timedelta
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
-from chronos.app_startup.seed_demo_users_accounts_and_assets import STARTING_SIMULATED_DATE
+from chronos.demo_users_and_startup_data import STARTING_SIMULATED_DATE
 from chronos.market_data_loading_and_price_queries import get_latest_price_on_or_before_date
-from chronos.shared_database.api_schemas import AccountResponse, AccountValueHistoryPointResponse, HoldingValueResponse, PortfolioResponse
-from chronos.shared_database.database_tables import Account, Holding, Price, Trade
-from chronos.shared_database.domain_errors import InvalidSimulatedDateError, RecordNotFoundError
+from chronos.api_schemas_investor import AccountResponse, AccountValueHistoryPointResponse, HoldingValueResponse, PortfolioResponse
+from chronos.application_database import Account, Holding, Price, Trade
+from chronos.application_errors_and_permissions import InvalidSimulatedDateError, RecordNotFoundError
 
 STEP_MONTHS = {"1M": 1, "1Q": 3}
 

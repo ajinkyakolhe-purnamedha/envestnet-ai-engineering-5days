@@ -2,7 +2,7 @@
 
 from datetime import date
 
-from chronos.shared_database.database_tables import Account, User
+from chronos.application_database import Account, User
 from tests.conftest import ADVISOR_EMAIL, ALICE_EMAIL
 
 

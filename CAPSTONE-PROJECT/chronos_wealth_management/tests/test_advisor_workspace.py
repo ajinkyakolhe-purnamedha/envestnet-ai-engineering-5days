@@ -4,20 +4,15 @@ from datetime import date
 
 import pytest
 
-from chronos.advisor_workspace.analyze_client_portfolio import (
+from chronos.advisor_analysis_reports_and_client_lists import (
     analyze_client_portfolio,
     build_advisor_recommendations,
 )
-from chronos.advisor_workspace.generate_advisor_review_report import (
-    generate_advisor_review_report,
-)
-from chronos.advisor_workspace.list_advisor_clients import list_clients_for_advisor
-from chronos.investor_trading.execute_investor_trade import execute_investor_trade
-from chronos.portfolio_performance.calculate_current_portfolio_value import (
-    build_current_portfolio_snapshot,
-)
-from chronos.shared_database.api_schemas import TradeRequest
-from chronos.shared_database.domain_errors import WrongRoleError
+from chronos.advisor_analysis_reports_and_client_lists import generate_advisor_review_report, list_clients_for_advisor
+from chronos.investor_trade_execution_and_preview import execute_investor_trade
+from chronos.investor_accounts_portfolios_and_history import build_current_portfolio_snapshot
+from chronos.api_schemas_investor import TradeRequest
+from chronos.application_errors_and_permissions import WrongRoleError
 
 
 def test_list_clients_requires_advisor_role(db, alice):
@@ -91,7 +86,7 @@ def test_advisor_cannot_trade_for_clients(client, advisor):
     assert response.status_code == 403
 
 def test_report_for_unknown_client_is_not_found(db, advisor):
-    from chronos.shared_database.domain_errors import RecordNotFoundError
+    from chronos.application_errors_and_permissions import RecordNotFoundError
 
     with pytest.raises(RecordNotFoundError):
         generate_advisor_review_report(db, advisor.id, 999)

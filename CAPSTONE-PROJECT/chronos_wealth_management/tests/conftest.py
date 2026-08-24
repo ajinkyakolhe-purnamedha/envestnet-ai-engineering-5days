@@ -17,19 +17,19 @@ os.environ["CHRONOS_DATABASE_URL"] = (
 import pytest
 from fastapi.testclient import TestClient
 
-from chronos.app_startup.seed_demo_users_accounts_and_assets import (
+from chronos.demo_users_and_startup_data import (
     seed_demo_users_accounts_and_assets,
 )
 from chronos.market_data_loading_and_price_queries import (
     load_market_prices_into_database,
 )
 from chronos.market_data_loading_and_price_queries import load_market_prices_from_csv
-from chronos.shared_database.database_connection import (
+from chronos.application_database import (
     SessionLocal,
     engine,
     get_database_session,
 )
-from chronos.shared_database.database_tables import Account, Base, User
+from chronos.application_database import Account, Base, User
 
 FIXTURE_PRICES_CSV = Path(__file__).parent / "fixtures" / "prices_sample.csv"
 

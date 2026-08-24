@@ -6,7 +6,7 @@ from chronos.advisor_assistant_runtime import (
     judge_advisor_note,
     submit_advisor_note_for_approval,
 )
-from chronos.shared_database.domain_errors import NoteDraftAlreadyDecidedError
+from chronos.application_errors_and_permissions import NoteDraftAlreadyDecidedError
 
 
 def test_runtime_answers_with_the_production_reference_when_no_history(db, alice):

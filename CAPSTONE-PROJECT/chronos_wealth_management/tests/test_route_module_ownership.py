@@ -1,5 +1,7 @@
 """The three route owner modules are the only route modules registered by the app."""
 
+from pathlib import Path
+
 
 def test_main_registers_the_three_route_owner_modules():
     import inspect
@@ -19,22 +21,20 @@ def test_main_registers_the_three_route_owner_modules():
     assert "app.include_router(api_routes_advisor.router)" in source
 
 
-def test_legacy_route_modules_only_export_their_owner_router():
-    from chronos.api_routes import (
-        advisor_workspace_routes,
-        demo_user_routes,
-        investor_account_routes,
-        investor_trade_routes,
-        market_price_routes,
-        simulation_clock_routes,
-    )
-    from chronos.api_routes_advisor import router as advisor_router
-    from chronos.api_routes_investor import router as investor_router
-    from chronos.api_routes_system import router as system_router
+def test_legacy_compatibility_packages_are_absent():
+    chronos_root = Path(__file__).resolve().parents[1] / "chronos"
+    legacy_package_names = {
+        "advisor_workspace",
+        "api_routes",
+        "app_startup",
+        "demo_users",
+        "investor_accounts",
+        "investor_trading",
+        "market_data_setup",
+        "market_price_queries",
+        "portfolio_performance",
+        "shared_database",
+        "simulation_clock",
+    }
 
-    assert advisor_workspace_routes.router is advisor_router
-    assert demo_user_routes.router is system_router
-    assert simulation_clock_routes.router is system_router
-    assert investor_account_routes.router is investor_router
-    assert investor_trade_routes.router is investor_router
-    assert market_price_routes.router is investor_router
+    assert not any((chronos_root / package_name).exists() for package_name in legacy_package_names)

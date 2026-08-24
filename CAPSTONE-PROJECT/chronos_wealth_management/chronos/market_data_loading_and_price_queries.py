@@ -107,7 +107,11 @@ def ensure_market_prices_loaded(db: Session) -> None:
 
 
 def get_latest_price_on_or_before_date(db: Session, symbol: str, simulated_date: date) -> Price:
-    """Return the latest available price, never after the simulated date."""
+    """Return the latest available price, never after the simulated date.
+
+    This is the single point-in-time pricing boundary for portfolio and trade
+    workflows, so later market data cannot affect an earlier simulation date.
+    """
     price = db.scalar(
         select(Price).where(Price.symbol == symbol, Price.date <= simulated_date)
         .order_by(Price.date.desc()).limit(1)
@@ -115,11 +119,6 @@ def get_latest_price_on_or_before_date(db: Session, symbol: str, simulated_date:
     if price is None:
         raise PriceUnavailableError(f"No price for {symbol} on or before {simulated_date}")
     return price
-
-
-def find_price_for_simulated_date(db: Session, symbol: str, simulated_date: date) -> Price:
-    """Compatibility-friendly name for the point-in-time price lookup."""
-    return get_latest_price_on_or_before_date(db, symbol, simulated_date)
 
 
 def get_supported_assets(db: Session) -> list[Asset]:
@@ -131,11 +130,6 @@ def require_supported_asset(db: Session, symbol: str) -> Asset:
     if asset is None:
         raise RecordNotFoundError(f"Unknown symbol {symbol!r}")
     return asset
-
-
-def load_prices_into_database(db: Session, prices: pd.DataFrame) -> int:
-    """Compatibility-friendly name for loading normalized prices."""
-    return load_market_prices_into_database(db, prices)
 
 
 def _normalize_single_symbol(symbol_prices: pd.DataFrame, symbol: str) -> pd.DataFrame:

@@ -1,4 +1,8 @@
-"""Production owner for advisor-assistant drafts, memory, and human approval."""
+"""Production owner for advisor-assistant drafts, memory, and human approval.
+
+The runtime module owns the route-facing assistant loop; this module owns the
+durable draft and approval state it uses.
+"""
 
 import json
 

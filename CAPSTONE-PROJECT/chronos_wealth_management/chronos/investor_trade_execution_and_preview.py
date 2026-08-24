@@ -21,12 +21,10 @@ def preview_investor_trade(
     db: Session, account: Account, request: TradeRequest
 ) -> TradePreviewResponse:
     """Return the point-in-time outcome of a trade without writing any rows."""
-    symbol = require_supported_asset(db, request.symbol).symbol
-    price = get_latest_price_on_or_before_date(db, symbol, account.simulated_date)
-    shares = request.amount / price.close
+    symbol, price, shares = _resolve_trade_at_simulated_price(db, account, request)
 
     valid = True
-    message = f"{request.side} {shares:.4f} shares of {symbol} at ${price.close:.2f}"
+    message = f"{request.side} {shares:.4f} shares of {symbol} at ${price:.2f}"
 
     if request.side == "BUY" and request.amount > account.cash_balance + SHARE_EPSILON:
         valid = False
@@ -48,7 +46,7 @@ def preview_investor_trade(
         symbol=symbol,
         side=request.side,
         amount=request.amount,
-        price=price.close,
+        price=price,
         shares=shares,
         simulated_date=account.simulated_date,
         valid=valid,
@@ -60,12 +58,10 @@ def execute_investor_trade(
     db: Session, account: Account, request: TradeRequest
 ) -> Trade:
     """Execute a trade using the account's simulated-date price."""
-    symbol = require_supported_asset(db, request.symbol).symbol
-    price = get_latest_price_on_or_before_date(db, symbol, account.simulated_date)
-    shares = request.amount / price.close
+    symbol, price, shares = _resolve_trade_at_simulated_price(db, account, request)
 
     if request.side == "BUY":
-        _apply_buy(db, account, symbol, shares, price.close, request.amount)
+        _apply_buy(db, account, symbol, shares, price, request.amount)
     else:
         _apply_sell(db, account, symbol, shares, request.amount)
 
@@ -74,7 +70,7 @@ def execute_investor_trade(
         symbol=symbol,
         side=request.side,
         shares=shares,
-        price=price.close,
+        price=price,
         amount=request.amount,
         simulated_date=account.simulated_date,
     )
@@ -90,6 +86,18 @@ def list_trades_for_investor_account(db: Session, account_id: int) -> list[Trade
             select(Trade).where(Trade.account_id == account_id).order_by(Trade.id)
         )
     )
+
+
+def _resolve_trade_at_simulated_price(
+    db: Session, account: Account, request: TradeRequest
+) -> tuple[str, float, float]:
+    """Normalize a trade symbol and price it once at the account's clock date."""
+    symbol = require_supported_asset(db, request.symbol).symbol
+    market_price = get_latest_price_on_or_before_date(
+        db, symbol, account.simulated_date
+    )
+    price = market_price.close
+    return symbol, price, request.amount / price
 
 
 def _apply_buy(
@@ -109,7 +117,14 @@ def _apply_buy(
 
     holding = _find_holding(db, account.id, symbol)
     if holding is None:
-        db.add(Holding(account_id=account.id, symbol=symbol, shares=shares, average_cost=price))
+        db.add(
+            Holding(
+                account_id=account.id,
+                symbol=symbol,
+                shares=shares,
+                average_cost=price,
+            )
+        )
     else:
         total_cost = holding.shares * holding.average_cost + shares * price
         holding.shares += shares

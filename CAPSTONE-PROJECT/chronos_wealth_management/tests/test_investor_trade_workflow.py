@@ -6,7 +6,11 @@ Fixture prices at the starting simulated date 2020-06-01: AAPL 108, MSFT 196.
 import pytest
 from sqlalchemy import select
 
-from chronos.investor_trade_execution_and_preview import execute_investor_trade, preview_investor_trade
+from chronos.investor_trade_execution_and_preview import (
+    _resolve_trade_at_simulated_price,
+    execute_investor_trade,
+    preview_investor_trade,
+)
 from chronos.api_schemas_investor import TradeRequest
 from chronos.application_database import Holding
 from chronos.application_errors_and_permissions import (
@@ -21,6 +25,18 @@ def _buy(db, account, amount, symbol="AAPL"):
         account,
         TradeRequest(user_id=account.user_id, symbol=symbol, side="BUY", amount=amount),
     )
+
+
+def test_trade_resolution_uses_the_account_simulated_date(db, alice, alice_account):
+    symbol, price, shares = _resolve_trade_at_simulated_price(
+        db,
+        alice_account,
+        TradeRequest(user_id=alice.id, symbol="aapl", side="BUY", amount=10_800.0),
+    )
+
+    assert symbol == "AAPL"
+    assert price == 108.0
+    assert shares == pytest.approx(100.0)
 
 
 def test_buy_reduces_cash_and_creates_holding(db, alice, alice_account):

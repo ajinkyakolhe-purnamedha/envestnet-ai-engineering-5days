@@ -134,6 +134,26 @@ def test_demo_reset_restores_starting_state(client, alice):
     assert portfolio["cash_balance"] == 100_000.0
     assert portfolio["holdings"] == []
 
+
+def test_demo_reset_removes_advisor_drafts(client, alice, advisor):
+    created = client.post(
+        f"/advisor/clients/{alice.id}/assistant",
+        params={"advisor_user_id": advisor.id},
+        json={"question": "How is this portfolio positioned?"},
+    )
+    assert created.status_code == 200
+    assert created.json()["draft_id"] is not None
+
+    assert client.get(
+        "/advisor/drafts", params={"advisor_user_id": advisor.id}
+    ).json()
+    assert client.post("/demo/reset").status_code == 200
+
+    assert client.get(
+        "/advisor/drafts", params={"advisor_user_id": advisor.id}
+    ).json() == []
+    assert client.get("/messages", params={"user_id": alice.id}).json() == []
+
 def test_unknown_advisor_report_is_404(client, advisor):
     response = client.get(
         "/advisor/reports/999", params={"advisor_user_id": advisor.id}

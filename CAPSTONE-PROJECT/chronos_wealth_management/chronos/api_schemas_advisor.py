@@ -35,34 +35,6 @@ class AdvisorAssistantAskRequest(BaseModel):
     conversation_history: list[str] = []
 
 
-class AdvisorPreviewAskRequest(BaseModel):
-    question: str
-    previous_questions: list[str] = []
-
-
-class AdvisorPreviewReplyResponse(BaseModel):
-    note: str
-    note_source: Literal["template", "language_model"]
-    prompt_tokens: int | None = None
-    answer_tokens: int | None = None
-    estimated_cost_usd: float | None = None
-    duration_ms: int | None = None
-    cumulative_estimated_cost_usd: float | None = None
-    retained_questions: list[str] = []
-
-
-class TradeIntentPreviewRequest(BaseModel):
-    note: str
-
-
-class TradeIntentPreviewResponse(BaseModel):
-    action: Literal["buy", "sell"] | None = None
-    symbol: str | None = None
-    shares: int | None = None
-    validation_problems: list[str]
-    review_only: bool = True
-
-
 class AdvisorAssistantAnswerResponse(BaseModel):
     route: str
     refused: bool

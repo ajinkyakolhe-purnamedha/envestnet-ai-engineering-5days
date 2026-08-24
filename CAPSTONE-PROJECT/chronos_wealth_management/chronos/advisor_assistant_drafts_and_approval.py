@@ -98,8 +98,9 @@ def answer_client_question_for_m9(db: Session, client_user_id: int, question: st
                   f"cash should stay at or below {HIGH_CASH_THRESHOLD:.0%}."),
             note_source="m9_reference", review_problems=[], metrics=None)
     account = get_account_for_investor_user(db, client_user_id)
-    metrics = analyze_client_portfolio(build_current_portfolio_snapshot(db, account))
-    recommendations = build_advisor_recommendations(build_current_portfolio_snapshot(db, account))
+    portfolio = build_current_portfolio_snapshot(db, account)
+    metrics = analyze_client_portfolio(portfolio)
+    recommendations = build_advisor_recommendations(portfolio)
     verdict = _build_reference_verdict(metrics)
     first_recommendation = recommendations[0] if recommendations else "No advisory flags are present."
     return AdvisorAssistantAnswerResponse(route=route, refused=False, verdict=verdict,

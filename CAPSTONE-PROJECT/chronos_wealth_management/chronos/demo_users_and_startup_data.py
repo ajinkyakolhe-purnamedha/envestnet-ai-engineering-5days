@@ -104,6 +104,7 @@ def reset_demo_investor_accounts(db: Session) -> int:
     db.query(Holding).delete()
     db.query(Trade).delete()
     db.query(AdvisorReport).delete()
+    db.query(AdvisorNoteDraft).delete()
     accounts = db.scalars(select(Account)).all()
     for account in accounts:
         account.cash_balance = STARTING_CASH

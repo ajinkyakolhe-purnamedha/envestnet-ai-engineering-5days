@@ -7,11 +7,11 @@ from chronos.api_routes.http_error_translation import translate_domain_errors
 from chronos.demo_users.demo_user_login import get_demo_user_by_id
 from chronos.demo_users.user_role_permissions import require_investor_user
 from chronos.investor_accounts_portfolios_and_history import get_account_for_investor_user
-from chronos.investor_trading.execute_investor_trade import execute_investor_trade
-from chronos.investor_trading.list_investor_trades import (
+from chronos.investor_trade_execution_and_preview import (
+    execute_investor_trade,
     list_trades_for_investor_account,
+    preview_investor_trade,
 )
-from chronos.investor_trading.preview_investor_trade import preview_investor_trade
 from chronos.shared_database.api_schemas import (
     TradePreviewResponse,
     TradeRequest,

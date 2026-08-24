@@ -1,0 +1,28 @@
+"""GIVEN: gather deterministic facts for the Day 1 advisor preview."""
+
+from sqlalchemy.orm import Session
+
+from chronos.advisor_workspace.analyze_client_portfolio import (
+    analyze_client_portfolio,
+    build_advisor_recommendations,
+)
+from chronos.investor_accounts.get_investor_account import (
+    get_account_for_investor_user,
+)
+from chronos.portfolio_performance.calculate_current_portfolio_value import (
+    build_current_portfolio_snapshot,
+)
+from chronos.shared_database.api_schemas import (
+    AdvisorMetricResponse,
+    PortfolioResponse,
+)
+
+
+def gather_preview_facts(
+    db: Session, client_user_id: int
+) -> tuple[PortfolioResponse, AdvisorMetricResponse, list[str]]:
+    account = get_account_for_investor_user(db, client_user_id)
+    portfolio = build_current_portfolio_snapshot(db, account)
+    metrics = analyze_client_portfolio(portfolio)
+    recommendations = build_advisor_recommendations(portfolio)
+    return portfolio, metrics, recommendations

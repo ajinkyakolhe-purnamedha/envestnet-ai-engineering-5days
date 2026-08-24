@@ -6,9 +6,13 @@ from chronos.api_schemas_advisor import (
     AdvisorClientSummaryResponse,
     AdvisorMetricResponse,
     AdvisorNoteDraftResponse,
+    AdvisorPreviewAskRequest,
+    AdvisorPreviewReplyResponse,
     AdvisorReportResponse,
     ClientAdvisorMessageResponse,
     NoteDraftDecisionRequest,
+    TradeIntentPreviewRequest,
+    TradeIntentPreviewResponse,
 )
 from chronos.api_schemas_investor import (
     AccountResponse,

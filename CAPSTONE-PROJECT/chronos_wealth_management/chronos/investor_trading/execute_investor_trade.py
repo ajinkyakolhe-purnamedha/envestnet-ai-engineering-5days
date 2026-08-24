@@ -3,7 +3,7 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from chronos.market_price_queries.find_price_for_simulated_date import (
+from chronos.market_data_loading_and_price_queries import (
     get_latest_price_on_or_before_date,
     require_supported_asset,
 )

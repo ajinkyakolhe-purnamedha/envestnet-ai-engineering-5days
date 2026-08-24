@@ -20,10 +20,10 @@ from fastapi.testclient import TestClient
 from chronos.app_startup.seed_demo_users_accounts_and_assets import (
     seed_demo_users_accounts_and_assets,
 )
-from chronos.market_data_setup.load_prices_into_database import (
+from chronos.market_data_loading_and_price_queries import (
     load_market_prices_into_database,
 )
-from chronos.market_data_setup.save_prices_to_csv import load_market_prices_from_csv
+from chronos.market_data_loading_and_price_queries import load_market_prices_from_csv
 from chronos.shared_database.database_connection import (
     SessionLocal,
     engine,

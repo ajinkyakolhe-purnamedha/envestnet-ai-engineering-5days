@@ -7,7 +7,7 @@ from chronos.api_routes.http_error_translation import translate_domain_errors
 from chronos.investor_accounts.get_investor_account import (
     get_account_for_investor_user,
 )
-from chronos.market_price_queries.find_price_for_simulated_date import (
+from chronos.market_data_loading_and_price_queries import (
     get_supported_assets,
     require_supported_asset,
 )

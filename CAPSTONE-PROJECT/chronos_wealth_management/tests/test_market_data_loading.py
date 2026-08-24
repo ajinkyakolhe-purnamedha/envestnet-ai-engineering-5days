@@ -3,13 +3,13 @@
 import pytest
 from sqlalchemy import func, select
 
-import chronos.market_data_setup.load_prices_into_database as price_loading
-from chronos.market_data_setup.load_prices_into_database import (
+import chronos.market_data_loading_and_price_queries as price_loading
+from chronos.market_data_loading_and_price_queries import (
     ensure_market_prices_loaded,
     load_market_prices_into_database,
 )
 from chronos.shared_database.domain_errors import MarketDataSetupError
-from chronos.market_data_setup.save_prices_to_csv import load_market_prices_from_csv
+from chronos.market_data_loading_and_price_queries import load_market_prices_from_csv
 from chronos.shared_database.database_tables import Price
 from tests.conftest import FIXTURE_PRICES_CSV
 
@@ -57,7 +57,7 @@ def test_reload_updates_changed_close_instead_of_duplicating(db):
 
 
 def test_csv_with_missing_columns_is_rejected(tmp_path):
-    from chronos.market_data_setup.save_prices_to_csv import (
+    from chronos.market_data_loading_and_price_queries import (
         load_market_prices_from_csv as load_csv,
     )
 

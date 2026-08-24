@@ -15,7 +15,7 @@ from chronos.api_routes import (
 from chronos.app_startup.seed_demo_users_accounts_and_assets import (
     seed_demo_users_accounts_and_assets,
 )
-from chronos.market_data_setup.load_prices_into_database import (
+from chronos.market_data_loading_and_price_queries import (
     ensure_market_prices_loaded,
 )
 from chronos.shared_database.database_connection import (

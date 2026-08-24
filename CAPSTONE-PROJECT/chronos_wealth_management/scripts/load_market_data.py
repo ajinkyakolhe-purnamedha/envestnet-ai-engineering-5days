@@ -5,14 +5,14 @@ Run from the project root:
     uv run python -m scripts.load_market_data
 """
 
-from chronos.market_data_setup.download_prices_from_yfinance import (
+from chronos.market_data_loading_and_price_queries import (
     download_prices_from_yfinance,
     normalize_yfinance_prices,
 )
-from chronos.market_data_setup.load_prices_into_database import (
+from chronos.market_data_loading_and_price_queries import (
     load_market_prices_into_database,
 )
-from chronos.market_data_setup.save_prices_to_csv import save_market_prices_to_csv
+from chronos.market_data_loading_and_price_queries import save_market_prices_to_csv
 from chronos.shared_database.database_connection import (
     MARKET_PRICES_CSV_PATH,
     SessionLocal,

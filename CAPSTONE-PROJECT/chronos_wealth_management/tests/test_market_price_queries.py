@@ -4,7 +4,7 @@ from datetime import date
 
 import pytest
 
-from chronos.market_price_queries.find_price_for_simulated_date import (
+from chronos.market_data_loading_and_price_queries import (
     get_latest_price_on_or_before_date,
 )
 from chronos.market_price_queries.get_symbol_price_history import (
@@ -54,7 +54,7 @@ def test_trading_days_beyond_available_returns_everything(db):
 
 
 def test_lowercase_symbol_is_accepted(db):
-    from chronos.market_price_queries.find_price_for_simulated_date import (
+    from chronos.market_data_loading_and_price_queries import (
         require_supported_asset,
     )
 
@@ -62,7 +62,7 @@ def test_lowercase_symbol_is_accepted(db):
 
 
 def test_unknown_symbol_is_rejected(db):
-    from chronos.market_price_queries.find_price_for_simulated_date import (
+    from chronos.market_data_loading_and_price_queries import (
         require_supported_asset,
     )
     from chronos.shared_database.domain_errors import RecordNotFoundError

@@ -4,15 +4,10 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from chronos.api_routes.http_error_translation import translate_domain_errors
-from chronos.investor_accounts.get_investor_account import (
-    get_account_for_investor_user,
-)
+from chronos.investor_accounts_portfolios_and_history import get_account_for_investor_user, get_symbol_price_history
 from chronos.market_data_loading_and_price_queries import (
     get_supported_assets,
     require_supported_asset,
-)
-from chronos.market_price_queries.get_symbol_price_history import (
-    get_symbol_price_history_until_date,
 )
 from chronos.shared_database.api_schemas import (
     AssetResponse,
@@ -41,7 +36,7 @@ def read_symbol_price_history(
     with translate_domain_errors():
         asset = require_supported_asset(db, symbol)
         account = get_account_for_investor_user(db, user_id)
-        prices = get_symbol_price_history_until_date(
+        prices = get_symbol_price_history(
             db, asset.symbol, account.simulated_date, trading_days
         )
     return [

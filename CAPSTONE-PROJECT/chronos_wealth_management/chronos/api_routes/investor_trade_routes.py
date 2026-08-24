@@ -6,9 +6,7 @@ from sqlalchemy.orm import Session
 from chronos.api_routes.http_error_translation import translate_domain_errors
 from chronos.demo_users.demo_user_login import get_demo_user_by_id
 from chronos.demo_users.user_role_permissions import require_investor_user
-from chronos.investor_accounts.get_investor_account import (
-    get_account_for_investor_user,
-)
+from chronos.investor_accounts_portfolios_and_history import get_account_for_investor_user
 from chronos.investor_trading.execute_investor_trade import execute_investor_trade
 from chronos.investor_trading.list_investor_trades import (
     list_trades_for_investor_account,

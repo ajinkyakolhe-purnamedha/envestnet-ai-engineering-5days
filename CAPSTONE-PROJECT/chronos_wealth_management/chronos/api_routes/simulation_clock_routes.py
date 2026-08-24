@@ -6,21 +6,17 @@ from sqlalchemy.orm import Session
 from chronos.api_routes.http_error_translation import translate_domain_errors
 from chronos.demo_users.demo_user_login import get_demo_user_by_id
 from chronos.demo_users.user_role_permissions import require_investor_user
-from chronos.investor_accounts.get_investor_account import (
+from chronos.investor_accounts_portfolios_and_history import (
     build_investor_account_response,
     get_account_for_investor_user,
-)
-from chronos.portfolio_performance.calculate_current_portfolio_value import (
     build_current_portfolio_snapshot,
+    advance_simulated_investment_date,
 )
 from chronos.shared_database.api_schemas import (
     AdvanceSimulationRequest,
     SimulationAdvanceResponse,
 )
 from chronos.shared_database.database_connection import get_database_session
-from chronos.simulation_clock.advance_simulated_investment_date import (
-    advance_simulated_investment_date,
-)
 
 router = APIRouter()
 

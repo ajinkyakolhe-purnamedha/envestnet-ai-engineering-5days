@@ -8,10 +8,8 @@ from chronos.demo_users.user_role_permissions import (
     INVESTOR_ROLE,
     require_advisor_user,
 )
-from chronos.investor_accounts.get_investor_account import (
+from chronos.investor_accounts_portfolios_and_history import (
     get_account_for_investor_user,
-)
-from chronos.portfolio_performance.calculate_current_portfolio_value import (
     build_current_portfolio_snapshot,
 )
 from chronos.shared_database.api_schemas import AdvisorClientSummaryResponse

@@ -1,52 +1,10 @@
-"""Trade preview, execution, and history routes."""
+"""Compatibility exports for the investor route owner."""
 
-from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
-
-from chronos.api_routes.http_error_translation import translate_domain_errors
-from chronos.demo_users.demo_user_login import get_demo_user_by_id
-from chronos.demo_users.user_role_permissions import require_investor_user
-from chronos.investor_accounts_portfolios_and_history import get_account_for_investor_user
-from chronos.investor_trade_execution_and_preview import (
-    execute_investor_trade,
-    list_trades_for_investor_account,
-    preview_investor_trade,
+from chronos.api_routes_investor import (
+    execute_trade,
+    preview_trade,
+    read_investor_trades,
+    router,
 )
-from chronos.shared_database.api_schemas import (
-    TradePreviewResponse,
-    TradeRequest,
-    TradeResponse,
-)
-from chronos.shared_database.database_connection import get_database_session
 
-router = APIRouter()
-
-
-@router.get("/trades", response_model=list[TradeResponse])
-def read_investor_trades(
-    user_id: int, db: Session = Depends(get_database_session)
-):
-    with translate_domain_errors():
-        require_investor_user(get_demo_user_by_id(db, user_id))
-        account = get_account_for_investor_user(db, user_id)
-        return list_trades_for_investor_account(db, account.id)
-
-
-@router.post("/trades/preview", response_model=TradePreviewResponse)
-def preview_trade(
-    request: TradeRequest, db: Session = Depends(get_database_session)
-):
-    with translate_domain_errors():
-        require_investor_user(get_demo_user_by_id(db, request.user_id))
-        account = get_account_for_investor_user(db, request.user_id)
-        return preview_investor_trade(db, account, request)
-
-
-@router.post("/trades", response_model=TradeResponse)
-def execute_trade(
-    request: TradeRequest, db: Session = Depends(get_database_session)
-):
-    with translate_domain_errors():
-        require_investor_user(get_demo_user_by_id(db, request.user_id))
-        account = get_account_for_investor_user(db, request.user_id)
-        return execute_investor_trade(db, account, request)
+__all__ = ["execute_trade", "preview_trade", "read_investor_trades", "router"]

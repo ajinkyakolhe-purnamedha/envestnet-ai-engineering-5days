@@ -4,14 +4,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
-from chronos.api_routes import (
-    advisor_workspace_routes,
-    demo_user_routes,
-    investor_account_routes,
-    investor_trade_routes,
-    market_price_routes,
-    simulation_clock_routes,
-)
+from chronos import api_routes_advisor, api_routes_investor, api_routes_system
 from chronos.app_startup.seed_demo_users_accounts_and_assets import (
     seed_demo_users_accounts_and_assets,
 )
@@ -42,9 +35,6 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="Chronos Wealth", lifespan=lifespan)
 
-app.include_router(demo_user_routes.router)
-app.include_router(market_price_routes.router)
-app.include_router(investor_account_routes.router)
-app.include_router(investor_trade_routes.router)
-app.include_router(simulation_clock_routes.router)
-app.include_router(advisor_workspace_routes.router)
+app.include_router(api_routes_system.router)
+app.include_router(api_routes_investor.router)
+app.include_router(api_routes_advisor.router)

@@ -1,38 +1,5 @@
-"""Simulated time advance route with before/after portfolio snapshots."""
+"""Compatibility exports for the system route owner."""
 
-from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
+from chronos.api_routes_system import advance_simulation, router
 
-from chronos.api_routes.http_error_translation import translate_domain_errors
-from chronos.demo_users.demo_user_login import get_demo_user_by_id
-from chronos.demo_users.user_role_permissions import require_investor_user
-from chronos.investor_accounts_portfolios_and_history import (
-    build_investor_account_response,
-    get_account_for_investor_user,
-    build_current_portfolio_snapshot,
-    advance_simulated_investment_date,
-)
-from chronos.shared_database.api_schemas import (
-    AdvanceSimulationRequest,
-    SimulationAdvanceResponse,
-)
-from chronos.shared_database.database_connection import get_database_session
-
-router = APIRouter()
-
-
-@router.post("/simulation/advance", response_model=SimulationAdvanceResponse)
-def advance_simulation(
-    request: AdvanceSimulationRequest, db: Session = Depends(get_database_session)
-):
-    with translate_domain_errors():
-        require_investor_user(get_demo_user_by_id(db, request.user_id))
-        account = get_account_for_investor_user(db, request.user_id)
-        previous_portfolio = build_current_portfolio_snapshot(db, account)
-        account = advance_simulated_investment_date(db, account, request.step)
-        portfolio = build_current_portfolio_snapshot(db, account)
-    return SimulationAdvanceResponse(
-        account=build_investor_account_response(account),
-        previous_portfolio=previous_portfolio,
-        portfolio=portfolio,
-    )
+__all__ = ["advance_simulation", "router"]

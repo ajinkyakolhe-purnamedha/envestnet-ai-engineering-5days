@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from chronos.api_routes.http_error_translation import translate_domain_errors
 from chronos.app_startup.seed_demo_users_accounts_and_assets import (
     reset_demo_investor_accounts,
+    seed_demo_users_accounts_and_assets,
 )
 from chronos.demo_users.demo_user_login import (
     get_demo_user_by_id,
@@ -51,6 +52,7 @@ def login_demo_user(
 
 @router.post("/demo/reset", response_model=DemoResetResponse)
 def reset_demo_data(db: Session = Depends(get_database_session)):
+    seed_demo_users_accounts_and_assets(db)
     return DemoResetResponse(accounts_reset=reset_demo_investor_accounts(db))
 
 

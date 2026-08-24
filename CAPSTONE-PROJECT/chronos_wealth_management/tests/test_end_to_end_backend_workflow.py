@@ -99,11 +99,11 @@ def test_end_to_end_investor_and_advisor_workflow(client):
     assert advisor["role"] == "ADVISOR"
     advisor_id = advisor["id"]
 
-    # 15. advisor sees both investor clients
+    # 15. advisor sees the supported investor client
     clients = client.get(
         "/advisor/clients", params={"advisor_user_id": advisor_id}
     ).json()
-    assert {row["client_user_id"] for row in clients} == {1, 2}
+    assert {row["client_user_id"] for row in clients} == {alice_id}
 
     # 16. advisor reads Alice's portfolio through the advisor route
     advisor_view = client.get(

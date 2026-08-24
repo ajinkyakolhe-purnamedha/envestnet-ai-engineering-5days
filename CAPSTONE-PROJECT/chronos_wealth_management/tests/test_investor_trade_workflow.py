@@ -132,14 +132,10 @@ def test_sell_everything_then_rebuy_uses_fresh_average_cost(db, alice, alice_acc
     assert holding.average_cost == pytest.approx(110.0)
 
 
-def test_alice_trades_do_not_touch_bob_account(db, alice, alice_account):
-    from chronos.shared_database.database_tables import Account, User
-
+def test_alice_trade_affects_only_the_supported_demo_investor_account(
+    db, alice, alice_account
+):
     _buy(db, alice_account, 10_800.0)
 
-    bob = db.query(User).filter(User.email == "bob@example.com").one()
-    bob_account = db.query(Account).filter(Account.user_id == bob.id).one()
-    assert bob_account.cash_balance == pytest.approx(100_000.0)
-    assert (
-        db.scalar(select(Holding).where(Holding.account_id == bob_account.id)) is None
-    )
+    assert alice_account.cash_balance == pytest.approx(89_200.0)
+    assert db.scalar(select(Holding).where(Holding.account_id == alice_account.id))

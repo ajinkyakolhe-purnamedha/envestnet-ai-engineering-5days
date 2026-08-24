@@ -95,7 +95,8 @@ def test_advisor_endpoints_flow(client, alice, advisor):
     clients = client.get(
         "/advisor/clients", params={"advisor_user_id": advisor.id}
     ).json()
-    assert len(clients) == 2
+    assert len(clients) == 1
+    assert clients[0]["client_user_id"] == alice.id
 
     portfolio = client.get(
         f"/advisor/clients/{alice.id}/portfolio",
@@ -127,7 +128,7 @@ def test_demo_reset_restores_starting_state(client, alice):
     )
     reset = client.post("/demo/reset")
     assert reset.status_code == 200
-    assert reset.json()["accounts_reset"] == 2
+    assert reset.json()["accounts_reset"] == 1
 
     portfolio = client.get("/portfolio", params={"user_id": alice.id}).json()
     assert portfolio["cash_balance"] == 100_000.0

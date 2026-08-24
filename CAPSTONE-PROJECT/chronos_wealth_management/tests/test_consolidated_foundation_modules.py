@@ -14,6 +14,5 @@ def test_foundation_modules_export_expected_names():
     assert STARTING_CASH == 100_000.0
     assert [user["email"] for user in DEMO_USERS] == [
         "alice@example.com",
-        "bob@example.com",
         "advisor@example.com",
     ]

@@ -40,7 +40,6 @@ Demo logins (no passwords):
 
 ```text
 Alice Investor   alice@example.com    INVESTOR
-Bob Investor     bob@example.com      INVESTOR
 Demo Advisor     advisor@example.com  ADVISOR
 ```
 

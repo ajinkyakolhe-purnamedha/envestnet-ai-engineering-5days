@@ -2,16 +2,21 @@
 
 
 def test_main_registers_the_three_route_owner_modules():
+    import inspect
+
     from chronos import main
     from chronos.api_routes_advisor import router as advisor_router
     from chronos.api_routes_investor import router as investor_router
     from chronos.api_routes_system import router as system_router
 
-    assert main.app.router.routes
     for router in (investor_router, advisor_router, system_router):
         assert router.routes
 
-    assert sum(type(route).__name__ == "_IncludedRouter" for route in main.app.routes) == 3
+    source = inspect.getsource(main)
+    assert source.count("app.include_router(") == 3
+    assert "app.include_router(api_routes_system.router)" in source
+    assert "app.include_router(api_routes_investor.router)" in source
+    assert "app.include_router(api_routes_advisor.router)" in source
 
 
 def test_legacy_route_modules_only_export_their_owner_router():

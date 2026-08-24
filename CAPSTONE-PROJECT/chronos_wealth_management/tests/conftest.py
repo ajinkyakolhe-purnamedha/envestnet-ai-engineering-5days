@@ -34,7 +34,6 @@ from chronos.shared_database.database_tables import Account, Base, User
 FIXTURE_PRICES_CSV = Path(__file__).parent / "fixtures" / "prices_sample.csv"
 
 ALICE_EMAIL = "alice@example.com"
-BOB_EMAIL = "bob@example.com"
 ADVISOR_EMAIL = "advisor@example.com"
 
 

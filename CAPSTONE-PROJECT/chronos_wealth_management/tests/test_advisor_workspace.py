@@ -27,7 +27,8 @@ def test_list_clients_requires_advisor_role(db, alice):
 
 def test_list_clients_returns_investors(db, advisor):
     clients = list_clients_for_advisor(db, advisor.id)
-    assert len(clients) == 2
+    assert len(clients) == 1
+    assert clients[0].client_email == "alice@example.com"
     assert all(client.total_value == pytest.approx(100_000.0) for client in clients)
 
 

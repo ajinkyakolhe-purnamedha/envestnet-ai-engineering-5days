@@ -2,17 +2,24 @@
 
 from datetime import date
 
-from sqlalchemy import select
+from sqlalchemy import delete, or_, select
 from sqlalchemy.orm import Session
 
-from chronos.application_database import Account, AdvisorReport, Asset, Holding, Trade, User
+from chronos.application_database import (
+    Account,
+    AdvisorNoteDraft,
+    AdvisorReport,
+    Asset,
+    Holding,
+    Trade,
+    User,
+)
 from chronos.application_errors_and_permissions import RecordNotFoundError
 
 STARTING_CASH = 100_000.0
 STARTING_SIMULATED_DATE = date(2020, 6, 1)
 DEMO_USERS = [
     {"email": "alice@example.com", "name": "Alice Investor", "role": "INVESTOR"},
-    {"email": "bob@example.com", "name": "Bob Investor", "role": "INVESTOR"},
     {"email": "advisor@example.com", "name": "Demo Advisor", "role": "ADVISOR"},
 ]
 DEMO_ASSETS = [
@@ -44,6 +51,7 @@ def get_demo_user_by_id(db: Session, user_id: int) -> User:
 
 
 def seed_demo_users_accounts_and_assets(db: Session) -> None:
+    _remove_legacy_bob_demo_data(db)
     for user_fields in DEMO_USERS:
         user = db.scalar(select(User).where(User.email == user_fields["email"]))
         if user is None:
@@ -55,6 +63,40 @@ def seed_demo_users_accounts_and_assets(db: Session) -> None:
     for asset_fields in DEMO_ASSETS:
         if db.get(Asset, asset_fields["symbol"]) is None:
             db.add(Asset(**asset_fields))
+    db.flush()
+
+
+def _remove_legacy_bob_demo_data(db: Session) -> None:
+    """Remove the retired Bob persona and every row that references it."""
+    legacy_user = db.scalar(select(User).where(User.email == "bob@example.com"))
+    if legacy_user is None:
+        return
+
+    account_ids = list(
+        db.scalars(select(Account.id).where(Account.user_id == legacy_user.id))
+    )
+    if account_ids:
+        db.execute(delete(Holding).where(Holding.account_id.in_(account_ids)))
+        db.execute(delete(Trade).where(Trade.account_id.in_(account_ids)))
+        db.execute(delete(AdvisorReport).where(AdvisorReport.account_id.in_(account_ids)))
+    db.execute(
+        delete(AdvisorReport).where(
+            or_(
+                AdvisorReport.advisor_user_id == legacy_user.id,
+                AdvisorReport.client_user_id == legacy_user.id,
+            )
+        )
+    )
+    db.execute(
+        delete(AdvisorNoteDraft).where(
+            or_(
+                AdvisorNoteDraft.advisor_user_id == legacy_user.id,
+                AdvisorNoteDraft.client_user_id == legacy_user.id,
+            )
+        )
+    )
+    db.execute(delete(Account).where(Account.user_id == legacy_user.id))
+    db.delete(legacy_user)
     db.flush()
 
 

@@ -11,7 +11,10 @@ from api_client import ApiError
 def render_advisor_dashboard_screen(user: dict) -> None:
     advisor_user_id = user["id"]
     st.title(f"Advisor Workspace — {user['name']}")
-    st.caption("Read-only client view. Advisors never trade for clients.")
+    st.caption(
+        "Read-only view of Alice Investor. Advisors never trade for clients; "
+        "assistant notes require your approval."
+    )
 
     clients = api_client.fetch_advisor_clients(advisor_user_id)
     st.subheader("Clients")
@@ -108,7 +111,7 @@ def _render_client_performance_vs_peers(
 
 
 def _render_assistant_chat_panel(advisor_user_id: int, client_user_id: int) -> None:
-    """The M9 chat panel. Memory is the transcript in st.session_state:
+    """Advisor-assistant chat. Memory is the transcript in st.session_state:
     past (non-refused) questions travel with every request as
     conversation_history — the in-context memory pattern, visible."""
     st.subheader("Assistant")
@@ -149,13 +152,13 @@ def _render_assistant_chat_panel(advisor_user_id: int, client_user_id: int) -> N
             st.success(f"Draft #{answer['draft_id']} sent to the approval queue.")
         elif answer["route"] == "portfolio" and not answer["refused"]:
             st.caption(
-                "No draft queued — M9 lab step 1 (submit_note_for_approval) "
-                "is not implemented yet."
+                "No draft was queued. The runtime only queues eligible "
+                "portfolio answers."
             )
 
 
 def _render_approval_queue_panel(advisor_user_id: int) -> None:
-    """The M9 approval queue: rung 1 (review problems), rung 2 (judge),
+    """Approval queue: rung 1 (review problems), rung 2 (judge),
     and rung 3 (you) side by side for every pending draft."""
     st.subheader("Approval Queue")
     try:

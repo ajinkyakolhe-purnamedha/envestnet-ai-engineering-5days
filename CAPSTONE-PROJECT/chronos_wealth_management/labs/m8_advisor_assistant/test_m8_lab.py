@@ -22,14 +22,12 @@ from labs.m8_advisor_assistant.review_advisor_note import review_advisor_note
 from labs.m8_advisor_assistant.route_client_question import (
     route_client_question,
 )
-from chronos.advisor_workspace.analyze_client_portfolio import (
+from chronos.advisor_analysis_reports_and_client_lists import (
     analyze_client_portfolio,
 )
-from chronos.investor_accounts.get_investor_account import (
-    get_account_for_investor_user,
-)
-from chronos.portfolio_performance.calculate_current_portfolio_value import (
+from chronos.investor_accounts_portfolios_and_history import (
     build_current_portfolio_snapshot,
+    get_account_for_investor_user,
 )
 
 

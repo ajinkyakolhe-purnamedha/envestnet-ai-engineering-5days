@@ -23,7 +23,8 @@ uv run python -m pytest labs/m8_advisor_assistant -q
 Every stub raises `NotImplementedError` with a hint. Full instructions:
 `SLIDES-markdown/m8-lab-instructions.md`.
 
-**Your code is the feature.** The API endpoint
-`POST /advisor/clients/{id}/assistant` serves THIS package — it answers
-`501 — complete the M8 lab` until your stubs are implemented, and comes
-alive when your tests go green.
+**Your code is the exercise.** The live endpoint
+`POST /advisor/clients/{id}/assistant` uses Chronos's stable
+`advisor_assistant_runtime.py`, so the two-persona demo remains usable while
+you work. This lab imports the same lean top-level portfolio and advisor
+analysis seams, but is deliberately independent of the live runtime.

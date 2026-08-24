@@ -12,7 +12,7 @@ import pytest
 
 from tests.conftest import *  # noqa: F401,F403
 
-from chronos.shared_database.api_schemas import (
+from chronos.api_schemas_advisor import (
     AdvisorAssistantAnswerResponse,
 )
 

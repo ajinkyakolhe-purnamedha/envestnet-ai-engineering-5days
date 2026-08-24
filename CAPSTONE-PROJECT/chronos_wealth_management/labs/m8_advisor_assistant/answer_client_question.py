@@ -6,7 +6,7 @@ known, so Python orders them and the model only writes prose.
 
 from sqlalchemy.orm import Session
 
-from chronos.shared_database.api_schemas import (
+from chronos.api_schemas_advisor import (
     AdvisorAssistantAnswerResponse,
 )
 

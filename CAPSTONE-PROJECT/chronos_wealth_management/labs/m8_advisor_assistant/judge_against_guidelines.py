@@ -4,11 +4,11 @@ Python owns this decision. The model never sees it undecided — that is
 how the morning's workflow fixed the honest trace.
 """
 
-from chronos.advisor_workspace.analyze_client_portfolio import (
+from chronos.advisor_analysis_reports_and_client_lists import (
     CONCENTRATION_THRESHOLD,
     HIGH_CASH_THRESHOLD,
 )
-from chronos.shared_database.api_schemas import AdvisorMetricResponse
+from chronos.api_schemas_advisor import AdvisorMetricResponse
 
 
 def judge_against_guidelines(metrics: AdvisorMetricResponse) -> str:

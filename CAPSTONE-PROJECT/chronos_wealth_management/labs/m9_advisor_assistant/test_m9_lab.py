@@ -10,11 +10,11 @@ a compact reference assistant so these tests grade your M9 code only.
 
 import pytest
 
-from chronos.shared_database.api_schemas import (
+from chronos.api_schemas_advisor import (
     AdvisorAssistantAnswerResponse,
 )
-from chronos.shared_database.database_tables import AdvisorNoteDraft
-from chronos.shared_database.domain_errors import (
+from chronos.application_database import AdvisorNoteDraft
+from chronos.application_errors_and_permissions import (
     NoteDraftAlreadyDecidedError,
 )
 

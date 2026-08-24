@@ -8,19 +8,17 @@ All prices are point-in-time via the portfolio snapshot.
 
 from sqlalchemy.orm import Session
 
-from chronos.advisor_workspace.analyze_client_portfolio import (
+from chronos.advisor_analysis_reports_and_client_lists import (
     analyze_client_portfolio,
     build_advisor_recommendations,
 )
-from chronos.investor_accounts.get_investor_account import (
+from chronos.investor_accounts_portfolios_and_history import (
     get_account_for_investor_user,
 )
-from chronos.portfolio_performance.calculate_current_portfolio_value import (
+from chronos.api_schemas_advisor import AdvisorMetricResponse
+from chronos.api_schemas_investor import PortfolioResponse
+from chronos.investor_accounts_portfolios_and_history import (
     build_current_portfolio_snapshot,
-)
-from chronos.shared_database.api_schemas import (
-    AdvisorMetricResponse,
-    PortfolioResponse,
 )
 
 

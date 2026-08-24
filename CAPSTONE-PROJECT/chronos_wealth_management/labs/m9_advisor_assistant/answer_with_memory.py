@@ -6,7 +6,7 @@ from chronos.advisor_assistant_drafts_and_approval import (
     answer_client_question_for_m9,
     condense_conversation_history,
 )
-from chronos.shared_database.api_schemas import AdvisorAssistantAnswerResponse
+from chronos.api_schemas_advisor import AdvisorAssistantAnswerResponse
 
 
 def answer_with_memory(

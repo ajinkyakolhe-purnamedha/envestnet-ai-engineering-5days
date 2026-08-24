@@ -5,7 +5,7 @@ nothing here calculates. When no model is installed, a deterministic
 template note keeps the feature working — no key, no network, no model.
 """
 
-from chronos.shared_database.api_schemas import AdvisorMetricResponse
+from chronos.api_schemas_advisor import AdvisorMetricResponse
 
 from labs.m8_advisor_assistant.model_loading import (
     load_offline_language_model,

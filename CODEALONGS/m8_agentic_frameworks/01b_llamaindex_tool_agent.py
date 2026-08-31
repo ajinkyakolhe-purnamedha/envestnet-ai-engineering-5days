@@ -1,9 +1,4 @@
-"""One concept: LlamaIndex runs the tool-calling loop for an agent.
-
-LlamaIndex alternative to 01_smolagents_tool_agent.py — same scripted
-classroom planner idea, so the framework's loop runs offline and
-deterministically.
-"""
+"""One concept: LlamaIndex owns a real local-model tool-calling loop."""
 
 import asyncio
 import sys
@@ -11,63 +6,35 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from llama_index.core.agent.workflow import ReActAgent
-from llama_index.core.llms import CompletionResponse, CustomLLM, LLMMetadata
+from llama_index.core.agent.workflow import FunctionAgent, ToolCallResult
 from llama_index.core.tools import FunctionTool
 
-from workshop_framework_setup import check_guideline, get_current_price
-
-# #region planner
-PLANNER_SCRIPT = [
-    "Thought: I need the current price first.\n"
-    'Action: get_current_price\nAction Input: {"symbol": "AAPL"}',
-    "Thought: Now check the guideline.\n"
-    "Action: check_guideline\n"
-    'Action Input: {"symbol": "AAPL", "proposed_allocation_pct": 36.0}',
-    "Thought: I can answer now.\n"
-    "Answer: Not allowed: 36% is above the 35% limit.",
-]
+from local_hf_agent import LocalSmolFunctionLLM
+from workshop_framework_setup import get_current_price
 
 
-class ClassroomPlanner(CustomLLM):
-    """Tiny scripted planner so the snippet teaches LlamaIndex execution."""
-
-    calls: int = 0
-
-    @property
-    def metadata(self) -> LLMMetadata:
-        return LLMMetadata(model_name="classroom-scripted-planner")
-
-    def complete(self, prompt: str, formatted: bool = False, **kwargs) -> CompletionResponse:
-        text = PLANNER_SCRIPT[min(self.calls, len(PLANNER_SCRIPT) - 1)]
-        self.calls += 1
-        return CompletionResponse(text=text)
-
-    def stream_complete(self, prompt: str, formatted: bool = False, **kwargs):
-        yield self.complete(prompt, formatted=formatted, **kwargs)
-# #endregion planner
-
-# #region agent
 price_tool = FunctionTool.from_defaults(fn=get_current_price)
-guideline_tool = FunctionTool.from_defaults(fn=check_guideline)
-
-planner = ClassroomPlanner()
-agent = ReActAgent(tools=[price_tool, guideline_tool], llm=planner)
+llm = LocalSmolFunctionLLM()
+agent = FunctionAgent(tools=[price_tool], llm=llm, streaming=False)
 
 
-async def run_agent() -> str:
-    return str(await agent.run("Can Alice raise AAPL to 36% of the portfolio?"))
+async def run_agent() -> tuple[str, list[str]]:
+    handler = agent.run("What is the current price of AAPL?", max_iterations=3)
+    tool_trace = []
+    async for event in handler.stream_events():
+        if isinstance(event, ToolCallResult):
+            tool_trace.append(event.tool_name)
+    return str(await handler), tool_trace
 
 
-agent_result = asyncio.run(run_agent())
-# #endregion agent
-
+agent_result, tool_trace = asyncio.run(run_agent())
 agent_summary = {
     "framework": "LlamaIndex",
     "agent_class": agent.__class__.__name__,
-    "tools": ["get_current_price", "check_guideline"],
-    "loop_limit": "max_iterations",
-    "model_calls": planner.calls,
+    "tools": [price_tool.metadata.name],
+    "model": llm.metadata.model_name,
+    "model_calls": llm.generation_count,
+    "tool_trace": tool_trace,
 }
 
 print("LlamaIndex agent shape:", agent_summary)

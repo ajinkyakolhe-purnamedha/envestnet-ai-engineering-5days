@@ -104,9 +104,11 @@ def test_m4_numbered_snippets_run_and_expose_pipeline_objects() -> None:
     setup = run_path(M4 / "workshop_llamaindex_setup.py")
     assert setup["POLICY_DIR"].exists()
     setup_source = (M4 / "workshop_llamaindex_setup.py").read_text()
-    assert "AutoModelForCausalLM" in setup_source
-    assert "apply_chat_template" in setup_source
-    assert "model.generate" in setup_source
+    shared_source = (ROOT / "shared" / "offline_hf.py").read_text()
+    assert "from offline_hf import LocalHuggingFaceLLM" in setup_source
+    assert "AutoModelForCausalLM" in shared_source
+    assert "apply_chat_template" in shared_source
+    assert "model.generate" in shared_source
     assert "bge-small-en-v1.5-onnx" in setup_source
     assert "onnxruntime" in setup_source
     assert "local-policy-llm" not in setup_source

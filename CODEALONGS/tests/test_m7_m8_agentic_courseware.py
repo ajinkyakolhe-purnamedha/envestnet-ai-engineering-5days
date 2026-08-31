@@ -2,6 +2,7 @@
 
 from pathlib import Path
 from runpy import run_path
+import sys
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -10,6 +11,7 @@ M8 = ROOT / "m8_agentic_frameworks"
 SLIDES = ROOT.parent / "SLIDES-markdown"
 M7_DECK = SLIDES / "m7-agentic-applications.md"
 M8_DECK = SLIDES / "m8-agentic-frameworks.md"
+sys.path.insert(0, str(M8))
 
 M7_SNIPPETS = [
     "01_regular_vs_agentic_llm.py",
@@ -131,6 +133,133 @@ def test_m8_has_five_section_llamaindex_smolagents_story() -> None:
     assert "LangGraph" not in deck
 
 
+def test_m8_has_an_explicit_local_agent_model_download_helper() -> None:
+    source = (M8 / "download_local_models.py").read_text()
+
+    assert "HuggingFaceTB/SmolLM2-1.7B-Instruct" in source
+    assert "snapshot_download" in source
+
+
+def test_m4_and_m8_share_the_offline_hugging_face_runtime() -> None:
+    shared_runtime = ROOT / "shared" / "offline_hf.py"
+
+    assert shared_runtime.exists()
+    assert "LocalHuggingFaceLLM" in shared_runtime.read_text()
+    assert "from offline_hf import" in (ROOT / "m4_building_rags" / "workshop_llamaindex_setup.py").read_text()
+    assert "from offline_hf import" in (M8 / "local_hf_agent.py").read_text()
+
+
+def test_local_smol_adapter_parses_documented_tool_call_format() -> None:
+    from llama_index.core.base.llms.types import ChatMessage, ChatResponse, MessageRole
+    from local_hf_agent import LocalSmolFunctionLLM
+
+    response = ChatResponse(
+        message=ChatMessage(
+            role=MessageRole.ASSISTANT,
+            content=(
+                '<tool_call>[{"name": "get_current_price", '
+                '"arguments": {"symbol": "AAPL"}}]</tool_call>'
+            ),
+        )
+    )
+
+    calls = LocalSmolFunctionLLM().get_tool_calls_from_response(response)
+
+    assert calls[0].tool_name == "get_current_price"
+    assert calls[0].tool_kwargs == {"symbol": "AAPL"}
+
+
+def test_local_smol_adapter_passes_batch_encoding_to_generate(monkeypatch) -> None:
+    import torch
+    import local_hf_agent
+    import offline_hf
+
+    class BatchEncoding(dict):
+        def to(self, device):
+            return self
+
+    class Tokenizer:
+        eos_token_id = 0
+
+        def apply_chat_template(self, *args, **kwargs):
+            return BatchEncoding(input_ids=torch.tensor([[1, 2]]), attention_mask=torch.tensor([[1, 1]]))
+
+        def decode(self, tokens, skip_special_tokens=True):
+            return "generated"
+
+    class Model:
+        device = "cpu"
+
+        def generate(self, **inputs):
+            assert set(inputs) == {"input_ids", "attention_mask", "max_new_tokens", "do_sample", "pad_token_id"}
+            return torch.tensor([[1, 2, 3]])
+
+    monkeypatch.setattr(offline_hf, "load_text_model", lambda model_dir: (Tokenizer(), Model()))
+
+    assert local_hf_agent.LocalSmolFunctionLLM()._generate([{"role": "user", "content": "hi"}]) == "generated"
+
+
+def test_local_smol_adapter_unwraps_schema_shaped_arguments() -> None:
+    from llama_index.core.base.llms.types import ChatMessage, ChatResponse, MessageRole
+    from local_hf_agent import LocalSmolFunctionLLM
+
+    response = ChatResponse(
+        message=ChatMessage(
+            role=MessageRole.ASSISTANT,
+            content=(
+                '<tool_call>[{"name": "get_current_price", "arguments": '
+                '{"properties": {"symbol": "AAPL"}}}]</tool_call>'
+            ),
+        )
+    )
+
+    calls = LocalSmolFunctionLLM().get_tool_calls_from_response(response)
+
+    assert calls[0].tool_kwargs == {"symbol": "AAPL"}
+
+
+def test_local_smol_adapter_uses_one_tool_system_prompt(monkeypatch) -> None:
+    import local_hf_agent
+    from llama_index.core.base.llms.types import ChatMessage, MessageRole
+    from llama_index.core.tools import FunctionTool
+
+    captured = []
+    monkeypatch.setattr(local_hf_agent.LocalSmolFunctionLLM, "_generate", lambda self, messages: captured.extend(messages) or "<tool_call>[]</tool_call>")
+    tool = FunctionTool.from_defaults(fn=lambda symbol: symbol, name="lookup")
+    llm = local_hf_agent.LocalSmolFunctionLLM()
+
+    llm.chat_with_tools(
+        [tool],
+        chat_history=[
+            ChatMessage(role=MessageRole.SYSTEM, content="generic agent prompt"),
+            ChatMessage(role=MessageRole.USER, content="Look up AAPL"),
+        ],
+    )
+
+    assert [message["role"] for message in captured].count("system") == 1
+
+
+def test_local_smol_adapter_switches_to_a_final_answer_after_tool_result(monkeypatch) -> None:
+    import local_hf_agent
+    from llama_index.core.base.llms.types import ChatMessage, MessageRole
+    from llama_index.core.tools import FunctionTool
+
+    captured = []
+    monkeypatch.setattr(local_hf_agent.LocalSmolFunctionLLM, "_generate", lambda self, messages: captured.extend(messages) or "The price is 108.0.")
+    tool = FunctionTool.from_defaults(fn=lambda symbol: symbol, name="lookup")
+
+    local_hf_agent.LocalSmolFunctionLLM().chat_with_tools(
+        [tool],
+        chat_history=[
+            ChatMessage(role=MessageRole.USER, content="Look up AAPL"),
+            ChatMessage(role=MessageRole.TOOL, content="{'symbol': 'AAPL', 'price': 108.0}"),
+        ],
+    )
+
+    assert "final answer" in captured[0]["content"].lower()
+    assert "<tool_call>" not in captured[0]["content"]
+
+
 def test_m8_deck_references_ordered_runnable_snippets() -> None:
     deck = M8_DECK.read_text()
 
@@ -148,6 +277,9 @@ def test_m8_deck_references_ordered_runnable_snippets() -> None:
 
 def test_m8_numbered_snippets_run_and_expose_key_outputs() -> None:
     for snippet in M8_SNIPPETS:
+        if snippet == "03_llamaindex_function_agent.py":
+            # The real local 1.7B agent is run once below, where its trace is asserted.
+            continue
         module = run_path(M8 / snippet)
         assert module["__doc__"]
 
@@ -162,6 +294,9 @@ def test_m8_numbered_snippets_run_and_expose_key_outputs() -> None:
 
     llama_agent = run_path(M8 / "03_llamaindex_function_agent.py")
     assert "get_current_price" in llama_agent["tool_names"]
+    assert llama_agent["model_call_count"] == 2
+    assert llama_agent["tool_trace"] == ["get_current_price"]
+    assert "108.0" in llama_agent["agent_result"]
 
     rag_tool = run_path(M8 / "04_llamaindex_rag_tool.py")
     assert "35%" in rag_tool["rag_result"]

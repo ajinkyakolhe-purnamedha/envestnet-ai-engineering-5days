@@ -4,16 +4,14 @@ import sys
 from pathlib import Path
 
 CHECKPOINT = Path(__file__).resolve().parents[1]
-CODEALONGS = CHECKPOINT.parent
 sys.path.insert(0, str(CHECKPOINT))
-sys.path.insert(0, str(CODEALONGS / "m4_building_rags"))
 
 from llama_index.core import SimpleDirectoryReader, VectorStoreIndex
 from llama_index.core.tools import QueryEngineTool, ToolMetadata
 from smolagents import ToolCallingAgent, tool
 from classroom_model import ClassroomModel
 from offline_model import generate
-from workshop_llamaindex_setup import POLICY_DIR, use_local_models
+from rag_setup import POLICY_DIR, use_local_models
 
 ALICE = {"client": "Alice", "cash": 25_000, "holdings": ["SPY", "QQQ", "GLD"]}
 QUESTION = "What does the policy say about Alice's concentration risk?"

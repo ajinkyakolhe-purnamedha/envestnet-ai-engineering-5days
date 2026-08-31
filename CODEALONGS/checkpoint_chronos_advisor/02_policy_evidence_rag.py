@@ -1,11 +1,7 @@
 """One concept: LlamaIndex retrieves Chronos policy evidence before answering."""
 
-import sys
-from pathlib import Path
-
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "m4_building_rags"))
 from llama_index.core import SimpleDirectoryReader, VectorStoreIndex
-from workshop_llamaindex_setup import POLICY_DIR, use_local_models
+from rag_setup import POLICY_DIR, use_local_models
 
 use_local_models()
 question = "What is the single asset concentration limit?"

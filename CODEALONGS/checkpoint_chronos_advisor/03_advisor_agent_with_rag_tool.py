@@ -4,12 +4,11 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "m8_agentic_frameworks"))
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "m4_building_rags"))
 from llama_index.core import SimpleDirectoryReader, VectorStoreIndex
 from llama_index.core.tools import QueryEngineTool, ToolMetadata
 from smolagents import Model, ToolCallingAgent, tool
 from smolagents.models import ChatMessage, ChatMessageToolCall, ChatMessageToolCallFunction, MessageRole
-from workshop_llamaindex_setup import POLICY_DIR, use_local_models
+from rag_setup import POLICY_DIR, use_local_models
 
 class ClassroomModel(Model):
     """Mocked tool-call response: replace with a stronger local model later."""

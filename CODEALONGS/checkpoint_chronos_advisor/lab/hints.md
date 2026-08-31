@@ -8,7 +8,8 @@ list and slice it with `[-4:]` before the new user question.
 
 ## TODOs 2a–2b · Policy evidence
 
-Follow the order in `../02_policy_evidence_rag.py`:
+Follow the order in `../02_policy_evidence_rag.py` using the checkpoint's own
+`rag_setup.py` file:
 
 1. In `load_policy_documents`, call `use_local_models()` and load `POLICY_DIR`.
 2. In `build_policy_engine`, call `VectorStoreIndex.from_documents(...)`.

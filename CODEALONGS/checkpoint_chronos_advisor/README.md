@@ -22,6 +22,8 @@ or turn missing policy evidence into a fact.
 | Check and reflect | 5 minutes |
 
 MCP comes later. This checkpoint keeps its tools in the same Python process.
+Its policy document, local model setup, and RAG support all live inside this
+folder; it does not import M4 courseware.
 
 ## Run
 

@@ -33,3 +33,11 @@ def test_checkpoint_lab_keeps_the_student_path_small() -> None:
     assert (LAB / "lab" / "README.md").exists()
     assert (LAB / "lab" / "hints.md").exists()
     assert not (LAB / "lab" / "solution.py").exists()
+
+
+def test_checkpoint_owns_its_rag_setup_and_policy_data() -> None:
+    assert (LAB / "data" / "mini_policy.md").exists()
+    setup = (LAB / "rag_setup.py").read_text()
+    assert "POLICY_DIR" in setup and "use_local_models" in setup
+    for path in [LAB / "02_policy_evidence_rag.py", LAB / "03_advisor_agent_with_rag_tool.py", LAB / "lab" / "starter.py"]:
+        assert "m4_building_rags" not in path.read_text()

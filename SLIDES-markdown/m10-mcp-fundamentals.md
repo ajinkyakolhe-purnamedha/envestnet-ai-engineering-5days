@@ -8,26 +8,28 @@ paginate: true
 
 # M10 · MCP Fundamentals
 
-Your advisor agent already has tools.
+Your advisor agent already has useful tools.
 
-Today, publish those tools so another AI application can discover and use them.
+Today, make those tools available to another AI application.
 
-By the end of this module you can:
+**MCP means Model Context Protocol:** a shared way for applications to find and call tools.
+
+By the end, you can:
 
 - explain why MCP exists
-- build a read-only MCP server
-- discover and call tools from a separate client
-- reuse the same capabilities in two AI applications
+- build a small MCP server
+- discover and call its tools
+- reuse the same tools in two applications
 
-<!-- Start from the familiar checkpoint assistant. This is not a new agent framework or a replacement for RAG. It is the next integration boundary. Point out that participants have already written the two capabilities we will publish. -->
+<!-- MCP is the next step after the checkpoint lab. It does not replace the agent, RAG, or the local model. It helps another application use the same useful Python capabilities. Keep the question simple: how can two applications use the same trusted tool without sharing all of their code? -->
 
 ---
 
 <!-- _class: lead -->
 
-# M10.1 · Your Agent Works — In One Process
+# M10.1 · The Tool Is Stuck Inside One App
 
-The checkpoint advisor has direct Python tools:
+The checkpoint advisor calls Python functions directly:
 
 ```text
 advisor agent
@@ -35,47 +37,49 @@ advisor agent
   -> policy_rag("concentration limit")
 ```
 
-They are useful.
+They work — but only inside that application.
 
-They are also trapped inside this application.
-
-<!-- Ask what happens if the investor chat, a future advisor workspace, or another host wants the same portfolio capability. Today they would import Chronos code, learn its internal layout, and duplicate setup. The problem is coupling, not an LLM failure. -->
+<!-- The functions are useful, but the investor chat or a future advisor workspace cannot use them without importing Chronos code. That means each new application must learn private file paths and setup details. The problem is not that the agent is weak. The problem is that a useful tool is trapped inside one app. -->
 
 ---
 
-# M10.1.2 · The Coupling Problem
+# M10.1.2 · We Want to Share a Tool, Not an App
+
+Bad sharing:
 
 ```text
-one agent imports one function
-        ↓
-another application imports it differently
-        ↓
-shared capability becomes shared internals
+new app -> imports Chronos internals
 ```
 
-We want to share a capability — not an application codebase.
+Better sharing:
 
-<!-- Emphasise the difference between reusing an answer and reusing a capability. We want a stable business-shaped interface: give a client identifier, receive a portfolio summary. -->
+```text
+new app -> asks Chronos for a portfolio summary
+```
+
+The second option shares a clear job.
+
+<!-- A clear job is easier to reuse and safer to reason about. “Give me Alice's portfolio summary” is a narrow request. “Import our whole advisor application” is not. MCP helps an application offer clear jobs to other applications. -->
 
 ---
 
 # M10.1.3 · The Question MCP Answers
 
-> How can Chronos publish useful capabilities without publishing its whole agent application?
+> How can Chronos offer useful tools without sharing its whole codebase?
 
-Not:
+Not by giving the model:
 
-- give the model database credentials
-- copy the function into every agent
-- expose a generic Python or SQL console
+- database credentials
+- a Python console
+- a copy of every internal function
 
-<!-- Let learners predict the desirable answer: a narrow, discoverable, reusable interface. This sets up MCP as an integration protocol, not an AI feature. -->
+<!-- Let students answer before introducing MCP. We need a small, named interface: the caller can see what is available, send valid inputs, and receive a result. Chronos keeps control of the code and data behind that interface. -->
 
 ---
 
 <!-- _class: lead -->
 
-# M10.2 · MCP Publishes Capabilities
+# M10.2 · MCP Connects Apps to Tools
 
 Before MCP:
 
@@ -86,46 +90,46 @@ agent -> local Python function
 With MCP:
 
 ```text
-host/client -> MCP server -> existing Python function
+application -> MCP client -> MCP server -> Python function
 ```
 
-<!-- Say the important sentence slowly: MCP changes the boundary, not the business logic. The portfolio calculation and policy search remain ordinary deterministic Python behind the server. -->
+MCP changes how the function is reached.
+
+<!-- The portfolio calculation and policy search are still normal Python. MCP does not move intelligence into the server. It creates a clear door through which another application can ask to use those functions. -->
 
 ---
 
-# M10.2.2 · What MCP Standardises
+# M10.2.2 · What an MCP Client Can Do
 
-An MCP client can ask a server:
+An MCP client can ask:
 
-- what tools do you provide?
-- what arguments does each tool accept?
-- call this tool with these arguments
-- what result did it return?
+1. What tools do you offer?
+2. What inputs does each tool need?
+3. Call this tool with these inputs.
+4. What result did it return?
 
-The host no longer needs to import server code.
-
-<!-- Avoid protocol-message detail for now. Learners should recognise the behavior: discovery, schema, call, result. We will see each in the client output. -->
+<!-- This is the whole behaviour to remember today: discover, understand, call, and read the result. The client does not need to import the server's Python file. We will see each step in the Chronos client output. -->
 
 ---
 
-# M10.2.3 · What MCP Does *Not* Do
+# M10.2.3 · What MCP Does Not Do
 
-MCP does **not**:
+MCP does not:
 
 - make a model smarter
-- decide which tool the agent should use
-- authorise a request
-- make unsafe data access safe
+- choose tools for the model
+- decide who has permission
+- make data safe by itself
 
-It standardises connection and capability discovery.
+MCP is a connection and tool-sharing standard.
 
-<!-- This is a crucial boundary. The existing agent decides whether it needs portfolio or policy information. M11 and M12 will add data-product and governance controls. Do not let students infer that a tool description equals permission. -->
+<!-- A tool description is not permission. The application still decides which tools an agent may see, and the server must still check important rules. We use safe demo data today. Later modules cover what data an agent should receive and how to enforce access rules. -->
 
 ---
 
 <!-- _class: lead -->
 
-# M10.3 · Build the Smallest Chronos Server
+# M10.3 · Build a Small Chronos Server
 
 Publish two read-only tools:
 
@@ -134,15 +138,13 @@ portfolio_summary(client_id)
 search_policy(query)
 ```
 
-They are the same business capabilities the checkpoint agent already uses.
-
 Code: `checkpoint_chronos_advisor/mcp_extension/server.py`
 
-<!-- Before running code, say that each tool remains intentionally narrow. There is no trade execution, no generic query mechanism, and no LLM inside the server. -->
+<!-- These are deliberately small tools. One returns a demo portfolio. One searches the investment policy. There is no trading tool, database console, or LLM inside the server. Starting small makes the boundary easy to see. -->
 
 ---
 
-# M10.3.2 · A Tool Is a Contract
+# M10.3.2 · A Tool Tells Clients How to Use It
 
 ```python
 @mcp.tool()
@@ -150,25 +152,25 @@ def portfolio_summary(client_id: str) -> dict:
     """Return the simulated portfolio for one Chronos investor."""
 ```
 
-The name, docstring, argument, and result are published to clients.
+- name: `portfolio_summary`
+- input: `client_id`
+- result: a portfolio dictionary
 
-<!-- Point at every part: decorator exposes it; name is what the client discovers; type/docstring make the input understandable; returned dictionary is the result contract. This is why tool design is product design. -->
+<!-- The decorator makes this function visible to MCP clients. The name, input type, docstring, and returned result help a client understand the tool. Think of this as a small promise: if you send a client ID, Chronos will return this kind of result. -->
 
 ---
 
-# M10.3.3 · The Server Is a Separate Process
+# M10.3.3 · The Server Runs Separately
 
 ```text
 client.py  -- stdio -->  server.py
-                          -> portfolio Python
-                          -> policy Python
+                          -> portfolio code
+                          -> policy code
 ```
 
-The client calls a protocol boundary.
+The client does not import the server function.
 
-It does not import `portfolio_summary` from `server.py`.
-
-<!-- This is the physical proof of the abstraction. Stdio is the simplest local transport: the client starts the process and communicates over standard input/output. Remote transports change deployment, not the core client/server roles. -->
+<!-- In this lab, stdio means the client starts the server as a separate local program and talks through standard input and output. This proves that the client is using a real boundary, not a hidden Python import. A remote server changes where it runs, not these three roles. -->
 
 ---
 
@@ -176,61 +178,61 @@ It does not import `portfolio_summary` from `server.py`.
 
 # M10.4 · Connect, Discover, Call
 
-The client lifecycle:
+The client does this in order:
 
 ```text
-start server -> connect -> initialize -> list tools -> call tool
+start server -> connect -> list tools -> call a tool
 ```
 
 Run: `checkpoint_chronos_advisor/mcp_extension/client.py`
 
-<!-- Ask learners to run the client now. Tell them not to skip the list-tools output: discovery is the behavior that removes the direct-import coupling. -->
+<!-- Run the client now. Read the output in order. Listing tools is important: it shows that the client learned what the server offers instead of assuming a Python function exists in a particular file. -->
 
 ---
 
-# M10.4.2 · Name the Three Roles
+# M10.4.2 · Three Roles
 
-| Role | Chronos example | Owns |
+| Role | Chronos example | Main job |
 | --- | --- | --- |
-| host | investor or advisor application | user experience, agent workflow |
-| client | MCP connection in that application | protocol requests |
-| server | Chronos tool process | published capabilities, execution |
+| host | investor or advisor app | works with the user |
+| client | MCP code in that app | talks to the server |
+| server | Chronos tool program | runs the tools |
 
-The model is not the MCP client.
+The model can be inside the host. It is not the client.
 
-<!-- A host can contain an LLM agent, but it owns the client. This distinction prevents the vague claim that the model ‘uses MCP’. The application opens the connection and decides what it exposes to the model. -->
+<!-- Use these names carefully. The host is the application the user sees. It may contain an LLM agent. The client is ordinary application code that opens the MCP connection. The server owns the tools. This avoids the vague statement “the model uses MCP”; the application uses MCP and may give results to the model. -->
 
 ---
 
-# M10.4.3 · Discovery Is Visible Evidence
+# M10.4.3 · Discovery Is the Important New Step
 
 ```text
 Discovered tools:
 ['portfolio_summary', 'search_policy']
 ```
 
-Then the client calls each tool:
+Then the client can call:
 
 ```text
 portfolio_summary("alice")
 search_policy("concentration limit")
 ```
 
-<!-- Connect visible output to the earlier promise. Another application can now learn the tool names and contracts from the server rather than importing the agent package. -->
+<!-- Discovery means asking the server what it offers before calling a tool. The names and inputs come from the server, not from an import statement. A different application can perform the same discovery and use the same two tools. -->
 
 ---
 
-# M10.4.4 · Tools, Resources, Prompts
+# M10.4.4 · Tools, Resources, and Prompts
 
-| Primitive | Best for | Chronos example |
+| Type | Use it when | Chronos example |
 | --- | --- | --- |
-| tool | parameterised operation | `portfolio_summary(client_id)` |
-| resource | addressable read context | policy document URI |
-| prompt | reusable interaction template | advisor meeting brief |
+| tool | you need to do a job with inputs | portfolio summary for Alice |
+| resource | you need a named piece of context | investment policy document |
+| prompt | you need a reusable writing pattern | advisor meeting brief |
 
-Start with tools: this module answers parameterised questions.
+Today we build tools.
 
-<!-- Do not build all three today. Learners need the distinction so they do not call everything a tool. A policy document may become a resource later; a prompt never replaces system policy or authorisation. -->
+<!-- Do not call every shared item a tool. A tool does a job and usually takes inputs. A resource is something to read at a known location. A prompt is reusable wording. The policy search is a tool because the client sends a query; the full policy could also be offered as a resource later. -->
 
 ---
 
@@ -244,45 +246,43 @@ Start with tools: this module answers parameterised questions.
 Investor Education Agent          Advisor Preparation Agent
 ```
 
-The server publishes capabilities.
+Same tools. Different applications.
 
-Each application chooses its own workflow and output.
-
-<!-- This is the payoff. MCP is not about moving one agent somewhere else. It makes the business capabilities reusable by applications that have different users, prompts, and success criteria. -->
+<!-- This is the reason MCP is useful. We are not moving one agent to another place. We are letting two different applications ask the same trusted server for the same narrow facts. Each application can still have its own prompt, user, and output. -->
 
 ---
 
 # M10.5.2 · Investor Education Agent
 
-Uses live MCP results to answer:
+Question:
 
 > “Explain diversification and the concentration policy in plain language.”
 
-- portfolio facts from `portfolio_summary`
-- policy evidence from `search_policy`
-- local model produces an educational explanation
-- no trade or personalised recommendation
+- calls the portfolio tool
+- calls the policy tool
+- uses the local model to explain the results
+- does not trade or give a personal recommendation
 
 Code: `mcp_extension/investor_agent.py`
 
-<!-- Run this example. The tool calls are live MCP calls; the local model only turns returned facts into a readable explanation. This mirrors the course rule: Python retrieves and controls; AI explains. -->
+<!-- Trace the flow. The investor app calls the live MCP tools first. It then gives the returned facts and policy evidence to the local model for a readable explanation. Python gets the facts; the model explains them. The tool result is not an instruction to trade. -->
 
 ---
 
 # M10.5.3 · Advisor Preparation Agent
 
-Uses the same live MCP results to answer:
+Question:
 
 > “Prepare an internal portfolio-review meeting brief.”
 
-- same portfolio tool
-- same policy tool
-- different prompt and audience
-- draft requires advisor review
+- calls the same two tools
+- uses a different prompt
+- writes for an advisor, not an investor
+- produces a draft for review
 
 Code: `mcp_extension/advisor_agent.py`
 
-<!-- Contrast it explicitly with the investor agent. Do not focus on whether the 135M output is elegant; use its limitations as evidence that output quality is separate from reusable data/tool integration. -->
+<!-- This application receives the same trusted facts but has a different job. Its output is an internal draft, not a client explanation. The small local model may write a plain answer; that is okay. Good writing quality and reusable tool access are separate things to evaluate. -->
 
 ---
 
@@ -290,35 +290,35 @@ Code: `mcp_extension/advisor_agent.py`
 
 ```text
 same MCP tools
-≠ same agent
-≠ same prompt
-≠ same user experience
-≠ same authority
+does not mean same agent
+does not mean same prompt
+does not mean same user experience
+does not mean same permission
 ```
 
-MCP reuses capabilities, not one agent's behaviour.
+MCP shares tools, not an entire agent.
 
-<!-- Ask learners to name a second internal application that could use these two tools: reporting, support, compliance review, or a test harness. The server is reusable precisely because its capability contract is narrow. -->
+<!-- Ask for another possible user of these tools: support, reporting, compliance review, or a test program. It may use the same server but should still have its own purpose and permissions. Reuse is valuable because the shared part is small and clear. -->
 
 ---
 
 <!-- _class: lead -->
 
-# M10.6 · The Boundary Is Not Governance
+# M10.6 · A Tool Boundary Is Not Enough for Production
 
-M10 proved:
+M10 proves:
 
 ```text
 publish -> discover -> call -> reuse
 ```
 
-It has not yet proved:
+It does not yet answer:
 
 ```text
-who may call -> which data -> how much -> audit what happened
+who may call? which data? how much? what was recorded?
 ```
 
-<!-- This is the honest handoff. The server is deliberately read-only and uses demo data, but it is not an enterprise governance implementation. Do not let the local demo imply production readiness. -->
+<!-- This demo uses read-only classroom data, so it is safe for learning. A real enterprise server still needs to know who is calling, what that person may access, what input is valid, how often it may be called, and what happened. MCP gives us a useful place to add those checks; it does not add them automatically. -->
 
 ---
 
@@ -326,14 +326,14 @@ who may call -> which data -> how much -> audit what happened
 
 | Module | Next question |
 | --- | --- |
-| M11 | What narrow data product should an agent receive? |
-| M12 | How does the server enforce identity, scope, limits, and audit? |
+| M11 | What small, useful data should an agent receive? |
+| M12 | How do we check identity, access, limits, and logs? |
 
 Closing question:
 
-> Which Chronos capabilities should be shared — and which should remain inside the application?
+> Which Chronos tools should be shared, and which should stay inside one app?
 
-<!-- End by returning to architecture judgement. MCP earns its complexity when a capability genuinely needs reuse across hosts. If one helper belongs to one small application, direct Python may still be the correct answer. -->
+<!-- Do not conclude that MCP is needed for every helper function. Direct Python is still a good choice when a helper belongs to one small application. MCP is useful when a capability should be found and reused by more than one host. The next modules make that shared boundary narrower and safer. -->
 
 ---
 
@@ -341,11 +341,11 @@ Closing question:
 
 # Lab · Publish, Discover, Reuse
 
-1. Run the Chronos MCP client and inspect discovered tools.
-2. Add one read-only tool description or improve an existing result contract.
-3. Run both the investor and advisor agents against the same server.
-4. Explain why they reuse MCP capabilities but do not share behaviour or authority.
+1. Run the Chronos MCP client and read the discovered tools.
+2. Improve one tool description or result shape.
+3. Run the investor and advisor applications against the same server.
+4. Explain why they share tools but not behaviour or permission.
 
-Exit: you can trace one request from application → client → server → tool result → application output.
+Exit: trace one request from app → client → server → tool result → app output.
 
-<!-- Keep the lab focused on the M10 thesis. Do not add authentication, raw database access, or write actions; those would introduce M11/M12 machinery before the fundamental client/server boundary is understood. -->
+<!-- Keep the lab small. The learner should be able to point to where the request starts, where the tool runs, and where the result is used. Do not add login, database access, or write actions today. Those are later engineering problems; this lab is about understanding the basic connection and reuse pattern. -->

@@ -13,7 +13,7 @@ from transformers.utils import logging as transformers_logging
 warnings.filterwarnings("ignore", category=FutureWarning)
 transformers_logging.set_verbosity_error()
 
-REPO_ROOT = Path(__file__).resolve().parents[3]
+REPO_ROOT = Path(__file__).resolve().parents[2]
 MODEL_PATH = REPO_ROOT / "OFFLINE-AI-Models" / "smollm2-135m-instruct"
 
 print("model folder:", MODEL_PATH)

@@ -31,6 +31,12 @@ as the gentler day-one on-ramp. m2 onward is snippets-only by design.
 m0 is itself split into three sequential sections
 (`01_share_purchase/`, `02_packages_and_model_access/`, `03_wealth_demo/`).
 
+### Revision checkpoint
+
+`checkpoint_chronos_advisor/` is a 90-minute M1–M9 revision lab: offline chat
+→ policy evidence → one-turn read-only agent. MCP is deliberately introduced
+later, so this checkpoint keeps both tools in the same Python process.
+
 Shared folders: `data/` (synthetic prices, portfolio, policy files) and
 `tests/` (material tests, one file per module — see below).
 

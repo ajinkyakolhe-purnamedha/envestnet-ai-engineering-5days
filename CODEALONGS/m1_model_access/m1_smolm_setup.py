@@ -8,7 +8,7 @@ os.environ.setdefault("HF_HUB_OFFLINE", "1")
 
 from transformers import pipeline
 
-REPO_ROOT = Path(__file__).resolve().parents[3]
+REPO_ROOT = Path(__file__).resolve().parents[2]
 MODEL_PATH = REPO_ROOT / "OFFLINE-AI-Models" / "smollm2-135m-instruct"
 
 

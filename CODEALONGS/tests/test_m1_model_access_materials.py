@@ -71,6 +71,12 @@ def test_m1_smolm_helper_is_small() -> None:
     assert "def call_smolm" in source
 
 
+def test_m1_smolm_helper_resolves_the_model_inside_this_repository() -> None:
+    helper = run_path(MATERIALS / "m1_smolm_setup.py")
+
+    assert helper["MODEL_PATH"] == ROOT.parent / "OFFLINE-AI-Models" / "smollm2-135m-instruct"
+
+
 def test_m1_advisor_assistant_calls_local_smolm() -> None:
     module = run_path(MATERIALS / "05_advisor_assistant.py")
     assert module["reply"]

@@ -31,9 +31,10 @@ uv run python -m checkpoint_chronos_advisor.starter
 uv run --extra courseware python -m pytest tests/test_checkpoint_chronos_advisor.py -q
 ```
 
-Use the test output as the progress meter. The tests use a mocked model on
-purpose, so they prove the application boundaries without waiting for a local
-model generation.
+Run `01_direct_investor_chat.py`, then `02_policy_evidence_rag.py`, then
+`03_advisor_agent_with_rag_tool.py`. The first two use the real local 135M
+model. The framework agent uses M8's explicitly labelled `ClassroomModel` for
+tool-call shape because 135M does not reliably emit function-call JSON.
 
 ## Exit criteria
 

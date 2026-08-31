@@ -1,0 +1,4 @@
+# Rejoined monolith — built locally from shards/ by setup_ollama.sh; never commit.
+*.gguf
+*.gguf.tmp
+.cache/

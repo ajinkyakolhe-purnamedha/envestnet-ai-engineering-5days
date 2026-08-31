@@ -1,0 +1,22 @@
+{
+  "repo_id": "unsloth/Qwen3.5-2B-GGUF",
+  "source_file": "Qwen3.5-2B-Q4_K_M.gguf",
+  "ollama_model": "qwen35-2b-chronos",
+  "shard_size_bytes": 93323264,
+  "shards": [
+    "shards/Qwen3.5-2B-Q4_K_M.gguf.shard-000",
+    "shards/Qwen3.5-2B-Q4_K_M.gguf.shard-001",
+    "shards/Qwen3.5-2B-Q4_K_M.gguf.shard-002",
+    "shards/Qwen3.5-2B-Q4_K_M.gguf.shard-003",
+    "shards/Qwen3.5-2B-Q4_K_M.gguf.shard-004",
+    "shards/Qwen3.5-2B-Q4_K_M.gguf.shard-005",
+    "shards/Qwen3.5-2B-Q4_K_M.gguf.shard-006",
+    "shards/Qwen3.5-2B-Q4_K_M.gguf.shard-007",
+    "shards/Qwen3.5-2B-Q4_K_M.gguf.shard-008",
+    "shards/Qwen3.5-2B-Q4_K_M.gguf.shard-009",
+    "shards/Qwen3.5-2B-Q4_K_M.gguf.shard-010",
+    "shards/Qwen3.5-2B-Q4_K_M.gguf.shard-011",
+    "shards/Qwen3.5-2B-Q4_K_M.gguf.shard-012",
+    "shards/Qwen3.5-2B-Q4_K_M.gguf.shard-013"
+  ]
+}

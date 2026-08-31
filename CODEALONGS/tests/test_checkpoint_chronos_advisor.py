@@ -17,7 +17,7 @@ def test_checkpoint_uses_local_llm_rag_and_framework_tools() -> None:
     chat = (LAB / "01_direct_investor_chat.py").read_text()
     rag = (LAB / "02_policy_evidence_rag.py").read_text()
     agent = (LAB / "03_advisor_agent_with_rag_tool.py").read_text()
-    assert "chronos_offline import generate" in chat
+    assert "from offline_model import generate" in chat
     assert "VectorStoreIndex" in rag and "source_nodes" in rag
     assert "ToolCallingAgent" in agent and "QueryEngineTool" in agent
     assert "ClassroomModel" in agent and "max_steps=3" in agent
@@ -26,7 +26,10 @@ def test_checkpoint_uses_local_llm_rag_and_framework_tools() -> None:
 def test_checkpoint_lab_keeps_the_student_path_small() -> None:
     readme = (LAB / "README.md").read_text()
     starter = (LAB / "lab" / "starter.py").read_text()
-    assert "90 minutes" in readme
+    assert "one\nhour" in readme
     assert "MCP comes later" in readme
     assert "NotImplementedError" in starter
     assert len(starter.splitlines()) <= 90
+    assert (LAB / "lab" / "README.md").exists()
+    assert (LAB / "lab" / "hints.md").exists()
+    assert not (LAB / "lab" / "solution.py").exists()

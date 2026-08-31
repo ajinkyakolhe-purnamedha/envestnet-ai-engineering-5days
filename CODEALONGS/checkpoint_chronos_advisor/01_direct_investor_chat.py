@@ -1,10 +1,6 @@
 """One concept: a local LLM explains trusted Chronos portfolio facts."""
 
-import sys
-from pathlib import Path
-
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from m9_memory_verification_hitl.chronos_offline import generate
+from offline_model import generate
 
 portfolio = {"client": "Alice", "cash": 25_000, "holdings": ["SPY", "QQQ", "GLD"]}
 history = [{"role": "user", "content": "What do I own?"}]

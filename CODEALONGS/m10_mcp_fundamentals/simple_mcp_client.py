@@ -22,5 +22,8 @@ async def main() -> None:
             result = await session.call_tool("add", {"a": 2, "b": 3})
             print("2 + 3 =", result.content[0].text)
 
+            greeting = await session.read_resource("greeting://Ada")
+            print("Greeting:", greeting.contents[0].text)
+
 
 asyncio.run(main())

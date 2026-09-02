@@ -20,6 +20,8 @@ model call lives once your organisation owns it.
 | 05–06 | Put the model behind a small, logged application boundary |
 | 07–08 | *Later:* the same call through a governed cloud boundary |
 
+Local Qwen3.5 via Ollama: see `OFFLINE-AI-Models/qwen35-2b-gguf/README.md`.
+
 ## Keys, and what runs without them
 
 Nothing in pairs 03–06 needs a key or a network — the local SmolLM weights are

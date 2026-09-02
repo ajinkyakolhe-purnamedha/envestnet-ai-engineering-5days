@@ -1,6 +1,6 @@
 """One concept: MCP publishes existing Python capabilities as tools."""
 
-from mcp.server.mcpserver import MCPServer
+from mcp.server import MCPServer
 
 mcp = MCPServer("Chronos Wealth")
 

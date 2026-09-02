@@ -159,9 +159,9 @@ Server: {cash: 25000, holdings: [SPY, QQQ, GLD]}
 | resource | read something | policy document |
 | prompt | reuse wording | meeting brief |
 
-Today we focus on tools.
+Tools lead today's Chronos example; the first card makes a resource tangible too.
 
-<!-- A tool does a job and usually takes inputs. A resource is named context that can be read. A prompt is reusable wording. Today we focus on tools, because they make the connection pattern easiest to see. -->
+<!-- A tool does a job and usually takes inputs. A resource is named context that can be read. A prompt is reusable wording. Tools carry the main Chronos story, but the first card will call one tool and read one resource so the distinction is concrete. -->
 
 ---
 
@@ -178,6 +178,60 @@ application -> tools offered by another program
 MCP can supply tools that an agent later uses through function calling.
 
 <!-- Do not teach these as competitors. In earlier modules, the agent was given locally registered functions. With MCP, the host can discover external tools and decide whether to offer them to an agent. MCP makes the connection reusable; function calling is one way an agent can choose among available tools. -->
+
+---
+
+# M10.2.7 · First Code-Along: The Smallest Working Server
+
+```python
+from mcp.server import MCPServer
+
+mcp = MCPServer("Demo")
+
+@mcp.tool()
+def add(a: int, b: int) -> int: ...
+
+@mcp.resource("greeting://{name}")
+def greeting(name: str) -> str: ...
+```
+
+One tool performs a small job. One resource returns named read-only context.
+
+<!-- Run simple_mcp_client.py, which starts simple_mcp_server.py automatically. Do not explain every library detail. Students need only see that decorators publish normal Python functions: add is called with inputs; greeting is read using its URI. -->
+
+---
+
+# M10.2.8 · First Client: Call and Read
+
+```python
+await session.initialize()
+tools = await session.list_tools()
+sum_result = await session.call_tool("add", {"a": 2, "b": 3})
+greeting = await session.read_resource("greeting://Ada")
+```
+
+```text
+2 + 3 = 5
+Greeting: Hello, Ada! Welcome to MCP.
+```
+
+The server owns the functions; the client asks for results.
+
+<!-- This is the first proof of the loop. Let students observe both results. Emphasise the difference: call_tool runs a named operation; read_resource retrieves context addressed by a URI. -->
+
+---
+
+# M10.2.9 · Think Beyond Chronos
+
+> Think of a capability currently buried inside one application your team owns.
+>
+> Who else could use it, and what would need to remain owned by the MCP server
+> rather than exposed to the calling application?
+
+If useful, consider: tool, resource, or prompt; inputs and result; what must
+never be exposed; when MCP would be unnecessary.
+
+<!-- Timing: 3 minutes, pairs first then two voices. This is deliberately open-ended. The aim is not to collect MCP use cases indiscriminately; learners must identify the smallest reusable capability and the boundary that prevents the host from depending on internal implementation details. -->
 
 ---
 
@@ -250,6 +304,8 @@ Support App  ---/       -> portfolio_summary
 # M10.4 · Build the Chronos MCP Server
 
 ```python
+from mcp.server import MCPServer
+
 @mcp.tool()
 def portfolio_summary(client_id: str) -> dict:
     """Return a simulated investor portfolio."""
@@ -370,6 +426,24 @@ Same facts. Different audience and output.
 
 ---
 
+# M10.5.4 · Prove Reuse with Two Real Model Calls
+
+Source: `m10_mcp_fundamentals/05_real_reuse_with_models.py`
+
+```python
+portfolio, policy = await shared_facts()  # live MCP calls
+investor_reply = generate(investor_messages(portfolio, policy))
+
+portfolio, policy = await shared_facts()  # a separate host session
+advisor_draft = generate(advisor_messages(portfolio, policy))
+```
+
+Same live MCP facts. Different prompts, audiences, and output boundaries.
+
+<!-- Run this card. It launches the same server code for two independent MCP client sessions. Each session receives live tool results; the local model is called twice, first to create an education-only explanation and then an internal advisor draft. There is no printed placeholder standing in for model behavior. -->
+
+---
+
 <!-- _class: lead -->
 
 # M10.6 · MCP Is Not the Whole Safety Story
@@ -392,11 +466,14 @@ who may call? which data? how much? what was recorded?
 
 # Lab · Publish, Discover, Reuse
 
-1. Run the server and client cards.
-2. Inspect the tools the client discovers.
-3. Add or improve one small read-only tool.
-4. Run the investor and advisor apps against the same server.
+1. Run `simple_mcp_client.py`; identify its tool result and resource result.
+2. Run the Chronos discovery card and inspect the tools it discovers.
+3. Add or improve one small read-only Chronos tool.
+4. Run `05_real_reuse_with_models.py` and compare how the same facts become
+   different model outputs.
+
+Optional: read `04_reuse_across_agents.py` as a plain-text bridge before Card 05.
 
 Exit: explain how a local custom-agent tool became a reusable MCP tool.
 
-<!-- The lab proves the whole story: the earlier agent had local functions; the MCP server publishes those capabilities; another application discovers and calls them; two hosts reuse them differently. M11 and M12 will make this boundary more governed and secure. -->
+<!-- The lab proves the whole story in increasing complexity: a tiny tool/resource server, a Chronos capability boundary, discovery from another process, then two real model calls. Card 04 remains optional because Card 05 supplies stronger evidence of reuse. M11 and M12 will make this boundary more governed and secure. -->

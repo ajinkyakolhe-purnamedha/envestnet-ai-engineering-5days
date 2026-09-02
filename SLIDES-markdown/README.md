@@ -20,6 +20,7 @@ teaching.
 | `m8-agentic-frameworks.md` | M8 · Agentic frameworks & orchestration |
 | `m9-memory-verification-hitl.md` | M9 · Memory, verification & human-in-the-loop |
 | `m10-mcp-fundamentals.md` | M10 · MCP fundamentals |
+| `m11-enterprise-data-tools.md` | M11 · Connecting to enterprise data and tools |
 
 The code a deck quotes lives in `../CODEALONGS/` — one folder per module,
 each with its own README of ordered snippets. Code fences in the decks carry

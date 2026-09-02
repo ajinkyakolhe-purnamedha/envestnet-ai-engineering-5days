@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 
 from datasets import load_dataset
-from peft import LoraConfig, PeftModel, get_peft_model
+from peft import PeftModel
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from workshop_hf_setup import (  # noqa: E402
@@ -40,6 +40,7 @@ targets = [row["expected"] for row in dataset]
 
 
 def generate_output(model, row: dict) -> str:
+    model.eval()
     prompt = tokenizer.apply_chat_template(
         prompt_messages_for(row), tokenize=False, add_generation_prompt=True
     )
@@ -49,7 +50,6 @@ def generate_output(model, row: dict) -> str:
 
 
 base_model = tiny_causal_lm(tokenizer)
-lora_config = LoraConfig(r=4, lora_alpha=8, task_type="CAUSAL_LM", target_modules=["c_attn"])
 base_outputs = [generate_output(base_model, row) for row in dataset]
 adapter_dir = ADAPTER_DIR
 if not adapter_dir.exists():

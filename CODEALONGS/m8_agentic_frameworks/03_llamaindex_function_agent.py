@@ -32,15 +32,26 @@ agent = FunctionAgent(
 async def run_agent() -> tuple[str, list[str]]:
     handler = agent.run("What is the current price of AAPL?", max_iterations=3)
     tool_trace = []
-    async for event in handler.stream_events():
-        if isinstance(event, ToolCallResult):
-            tool_trace.append(event.tool_name)
-    return str(await handler), tool_trace
+    try:
+        async for event in handler.stream_events():
+            if isinstance(event, ToolCallResult):
+                tool_trace.append(event.tool_name)
+        return str(await handler), tool_trace
+    except Exception as error:
+        return f"{type(error).__name__}: {error}", tool_trace
 
 
 agent_result, tool_trace = asyncio.run(run_agent())
 model_call_count = llm.generation_count
+runtime = {
+    "backend": "local Hugging Face inference",
+    "model": llm.metadata.model_name,
+    "model_calls": model_call_count,
+    "latency_ms": llm.last_generation_latency_ms,
+}
 
+print("Runtime:", runtime)
+print("Raw model text:", llm.last_response)
 print("LlamaIndex tools:", tool_names)
 print("Agent class:", agent.__class__.__name__)
 print("Tool trace:", tool_trace)

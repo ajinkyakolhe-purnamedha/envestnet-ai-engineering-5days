@@ -98,8 +98,11 @@ def test_m4_numbered_snippets_run_and_expose_pipeline_objects() -> None:
         assert module["__doc__"]
 
     end_to_end = run_path(M4 / "10_end_to_end_llamaindex_rag.py")
-    assert end_to_end["answer"]["source"] == "Concentration limit"
-    assert "35%" in end_to_end["answer"]["text"]
+    assert end_to_end["runtime"]["backend"] == "local Hugging Face inference"
+    assert end_to_end["runtime"]["model"] == "smollm2-135m-instruct"
+    assert end_to_end["runtime"]["model_calls"] >= 1
+    assert end_to_end["answer"]["text"] == str(end_to_end["response"])
+    assert end_to_end["answer"]["source"] == end_to_end["source_nodes"][0].node.metadata["file_name"]
 
     setup = run_path(M4 / "workshop_llamaindex_setup.py")
     assert setup["POLICY_DIR"].exists()
@@ -113,6 +116,7 @@ def test_m4_numbered_snippets_run_and_expose_pipeline_objects() -> None:
     assert "onnxruntime" in setup_source
     assert "local-policy-llm" not in setup_source
     assert "LocalPolicyEmbedding" not in setup_source
+    assert "grounded_fallback" not in setup_source
 
 
 def test_m5_numbered_snippets_run_and_show_specific_improvements() -> None:

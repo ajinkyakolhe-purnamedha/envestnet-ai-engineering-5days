@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import tempfile
 from pathlib import Path
 
 from transformers import AutoModelForCausalLM, AutoTokenizer, GPT2Config
@@ -12,6 +13,7 @@ MODEL_DIR = ROOT / "OFFLINE-AI-Models" / "smollm2-135m-instruct"
 DATA_DIR = Path(__file__).resolve().parent / "data"
 TRAIN_JSONL = DATA_DIR / "support_tickets.jsonl"
 EVAL_JSONL = DATA_DIR / "support_eval.jsonl"
+ADAPTER_DIR = Path(tempfile.gettempdir()) / "m6-live-lora-adapter"
 
 SYSTEM_PROMPT = (
     "Classify support tickets. Return only JSON with category and priority."
@@ -41,6 +43,9 @@ def prompt_messages_for(row: dict) -> list[dict[str, str]]:
 
 
 def tiny_causal_lm(tokenizer):
+    import torch
+
+    torch.manual_seed(7)
     config = GPT2Config(
         vocab_size=len(tokenizer),
         n_positions=128,

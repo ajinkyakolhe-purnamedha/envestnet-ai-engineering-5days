@@ -10,7 +10,13 @@ from trl import SFTConfig, SFTTrainer
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from workshop_hf_setup import TRAIN_JSONL, load_tokenizer, messages_for, tiny_causal_lm  # noqa: E402
+from workshop_hf_setup import (  # noqa: E402
+    ADAPTER_DIR,
+    TRAIN_JSONL,
+    load_tokenizer,
+    messages_for,
+    tiny_causal_lm,
+)
 
 
 warnings.filterwarnings("ignore", category=UserWarning)
@@ -49,8 +55,23 @@ trainer = SFTTrainer(
 trainable = sum(p.numel() for p in trainer.model.parameters() if p.requires_grad)
 total = sum(p.numel() for p in trainer.model.parameters())
 trainable_percent = trainable / total * 100
+lora_before = {
+    name: parameter.detach().clone()
+    for name, parameter in trainer.model.named_parameters()
+    if "lora_" in name
+}
+train_result = trainer.train()
+lora_weight_change = sum(
+    (parameter.detach() - lora_before[name]).abs().sum().item()
+    for name, parameter in trainer.model.named_parameters()
+    if name in lora_before
+)
+trainer.save_model(str(ADAPTER_DIR))
 
 print(type(trainer).__name__)
 print("is PEFT model:", isinstance(trainer.model, PeftModel))
 print("trainable percent:", round(trainable_percent, 3))
-print("dry run: trainer.train() intentionally not called")
+print("optimizer steps:", train_result.global_step)
+print("training loss:", round(train_result.training_loss, 4))
+print("LoRA weight change:", round(lora_weight_change, 6))
+print("saved adapter:", ADAPTER_DIR)

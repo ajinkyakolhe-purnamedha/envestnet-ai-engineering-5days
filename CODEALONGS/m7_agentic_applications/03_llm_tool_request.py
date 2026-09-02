@@ -27,19 +27,20 @@ messages = [
     },
 ]
 
-fallback_text = '{"tool": "get_current_price", "args": {"symbol": "AAPL"}}'
-raw_model_text = call_smolm(messages, max_new_tokens=80) or fallback_text
+raw_model_text = call_smolm(messages, max_new_tokens=80)
 parse_error = None
+tool_request = None
 
-try:
-    tool_request = json.loads(raw_model_text)
-except json.JSONDecodeError as error:
-    parse_error = str(error)
-    tool_request = json.loads(fallback_text)
+if not raw_model_text:
+    parse_error = "The local model returned no text."
+else:
+    try:
+        tool_request = json.loads(raw_model_text)
+    except json.JSONDecodeError as error:
+        parse_error = str(error)
 
 print("Raw model text:", raw_model_text)
 print("Parsed request:", tool_request)
 if parse_error:
-    print("Model did not return clean JSON, so the snippet uses the classroom fallback.")
-    print("Parse fallback:", parse_error)
+    print("Tool request blocked:", parse_error)
 print("Important: a tool request is text until Python validates and executes it.")

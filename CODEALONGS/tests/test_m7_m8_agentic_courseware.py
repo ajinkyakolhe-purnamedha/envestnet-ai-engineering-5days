@@ -79,6 +79,14 @@ def test_m7_shared_setup_is_small_enough_for_cookbook_context() -> None:
     assert "def call_smolm" in source
 
 
+def test_m7_tool_request_card_never_replaces_live_model_output() -> None:
+    source = (M7 / "03_llm_tool_request.py").read_text()
+
+    assert "fallback_text" not in source
+    assert "classroom fallback" not in source
+    assert "tool_request = None" in source
+
+
 def test_m7_numbered_snippets_run_and_expose_key_outputs() -> None:
     for snippet in M7_SNIPPETS:
         module = run_path(M7 / snippet)
@@ -92,9 +100,12 @@ def test_m7_numbered_snippets_run_and_expose_key_outputs() -> None:
     assert tools["tool_result"]["symbol"] == "AAPL"
 
     request = run_path(M7 / "03_llm_tool_request.py")
-    assert request["tool_request"]["tool"] == "get_current_price"
     assert request["raw_model_text"]
     assert request["parse_error"] is None or isinstance(request["parse_error"], str)
+    if request["parse_error"] is None:
+        assert request["tool_request"]["tool"] == "get_current_price"
+    else:
+        assert request["tool_request"] is None
 
     dispatch = run_path(M7 / "04_python_dispatch.py")
     assert dispatch["observation"]["result"]["symbol"] == "AAPL"
@@ -133,11 +144,30 @@ def test_m8_has_five_section_llamaindex_smolagents_story() -> None:
     assert "LangGraph" not in deck
 
 
-def test_m8_has_an_explicit_local_agent_model_download_helper() -> None:
-    source = (M8 / "download_local_models.py").read_text()
+def test_m8_uses_the_committed_135m_model_without_a_download_step() -> None:
+    import local_hf_agent
 
-    assert "HuggingFaceTB/SmolLM2-1.7B-Instruct" in source
-    assert "snapshot_download" in source
+    assert local_hf_agent.MODEL_DIR == ROOT.parent / "OFFLINE-AI-Models" / "smollm2-135m-instruct"
+    assert local_hf_agent.LocalSmolFunctionLLM().metadata.model_name == "HuggingFaceTB/SmolLM2-135M-Instruct"
+    assert not (M8 / "download_local_models.py").exists()
+
+
+def test_m8_agent_cards_make_live_local_model_calls() -> None:
+    for snippet in (
+        "01_smolagents_tool_agent.py",
+        "01b_llamaindex_tool_agent.py",
+        "02_smolagents_trace_limits.py",
+        "02b_llamaindex_trace_limits.py",
+        "03_llamaindex_function_agent.py",
+        "04_llamaindex_rag_tool.py",
+        "05_agentic_workflow_patterns.py",
+        "06_end_to_end_agentic_app.py",
+    ):
+        source = (M8 / snippet).read_text()
+        assert "LocalSmolFunctionLLM" in source or "LiveSmolAgentsModel" in source
+        assert "Runtime:" in source
+
+    assert "ClassroomModel" not in (M8 / "01_smolagents_tool_agent.py").read_text()
 
 
 def test_m4_and_m8_share_the_offline_hugging_face_runtime() -> None:
@@ -276,34 +306,37 @@ def test_m8_deck_references_ordered_runnable_snippets() -> None:
 
 
 def test_m8_numbered_snippets_run_and_expose_key_outputs() -> None:
+    modules = {}
     for snippet in M8_SNIPPETS:
-        if snippet == "03_llamaindex_function_agent.py":
-            # The real local 1.7B agent is run once below, where its trace is asserted.
-            continue
-        module = run_path(M8 / snippet)
-        assert module["__doc__"]
+        modules[snippet] = run_path(M8 / snippet)
+        assert modules[snippet]["__doc__"]
+        runtime = modules[snippet]["runtime"]
+        assert runtime["backend"] == "local Hugging Face inference"
+        assert runtime["model"] == "HuggingFaceTB/SmolLM2-135M-Instruct"
+        assert runtime["model_calls"] >= 1
 
-    smol = run_path(M8 / "01_smolagents_tool_agent.py")
+    smol = modules["01_smolagents_tool_agent.py"]
     assert smol["agent_summary"]["framework"] == "smolagents"
     assert "check_guideline" in smol["agent_summary"]["tools"]
-    assert smol["agent_summary"]["model_calls"] == 3
-    assert "35%" in smol["agent_result"]
+    assert smol["agent_summary"]["model_calls"] >= 1
+    assert smol["model"].last_response
 
-    trace = run_path(M8 / "02_smolagents_trace_limits.py")
-    assert trace["blocked"]["reason"] == "max_steps"
+    trace = modules["02_smolagents_trace_limits.py"]
+    assert trace["blocked"]["reason"] in {"framework_stop", "completed"}
+    assert trace["trace"][0]["model_output"]
 
-    llama_agent = run_path(M8 / "03_llamaindex_function_agent.py")
+    llama_agent = modules["03_llamaindex_function_agent.py"]
     assert "get_current_price" in llama_agent["tool_names"]
-    assert llama_agent["model_call_count"] == 2
-    assert llama_agent["tool_trace"] == ["get_current_price"]
-    assert "108.0" in llama_agent["agent_result"]
+    assert llama_agent["model_call_count"] >= 1
+    assert llama_agent["llm"].last_response
 
-    rag_tool = run_path(M8 / "04_llamaindex_rag_tool.py")
-    assert "35%" in rag_tool["rag_result"]
+    rag_tool = modules["04_llamaindex_rag_tool.py"]
+    assert rag_tool["policy_tool"].metadata.name == "search_policy"
 
-    patterns = run_path(M8 / "05_agentic_workflow_patterns.py")
+    patterns = modules["05_agentic_workflow_patterns.py"]
     assert patterns["workflow_output"]["allowed"] is False
+    assert patterns["workflow_output"]["note"] == patterns["llm"].last_response
 
-    end_to_end = run_path(M8 / "06_end_to_end_agentic_app.py")
+    end_to_end = modules["06_end_to_end_agentic_app.py"]
     assert end_to_end["answer"]["allowed"] is False
-    assert "35%" in end_to_end["answer"]["note"]
+    assert end_to_end["answer"]["model_draft"] == end_to_end["llm"].last_response

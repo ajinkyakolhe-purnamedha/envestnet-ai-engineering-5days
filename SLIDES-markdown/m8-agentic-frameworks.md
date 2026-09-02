@@ -151,6 +151,10 @@ Mapping back to M7:
 - `max_steps` is `max_turns`
 - framework logs are the trace
 
+The code-along runs the committed local SmolLM2 135M model. It prints the raw
+model text, model-call count, and latency; a malformed tool request stays
+visible instead of being replaced by a prepared answer.
+
 ---
 
 # M8.2.3 · Trace Limits
@@ -355,6 +359,9 @@ one agent step =
 Frameworks make steps easier to build.
 
 They do not make steps free.
+
+In the code-along, the drafting step is a live local-model call. Python still
+owns the route, gathered facts, policy result, and final deterministic boundary.
 
 Count steps before you ship the loop.
 

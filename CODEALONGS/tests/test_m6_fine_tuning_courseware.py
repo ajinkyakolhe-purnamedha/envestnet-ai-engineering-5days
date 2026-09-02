@@ -64,10 +64,20 @@ def test_m6_deck_references_ordered_runnable_snippets() -> None:
 
 def test_m6_final_adapter_snippet_stays_cookbook_sized() -> None:
     source = (M6 / "06_evaluate_and_save_adapter.py").read_text()
-    assert len(source.splitlines()) <= 60
+    assert len(source.splitlines()) <= 80
     assert "score_one" in source
-    assert "save_pretrained" in source
+    assert "ADAPTER_DIR" in source
     assert "PeftModel.from_pretrained" in source
+    assert "adapter_outputs = targets" not in source
+
+
+def test_m6_lora_card_runs_a_real_training_step() -> None:
+    source = (M6 / "05_peft_lora_sft_trainer.py").read_text()
+
+    assert "trainer.train()" in source
+    assert "intentionally not called" not in source
+    assert "lora_weight_change" in source
+    assert "trainer.save_model" in source
 
 
 def test_m6_huggingface_llm_snippet_calls_model_directly() -> None:
@@ -98,7 +108,10 @@ def test_m6_numbered_snippets_run_and_expose_key_outputs() -> None:
     lora = run_path(M6 / "05_peft_lora_sft_trainer.py")
     assert lora["trainer"].model.peft_config is not None
     assert lora["trainable_percent"] < 5.0
+    assert lora["train_result"].global_step >= 1
+    assert lora["lora_weight_change"] > 0
 
     shipped = run_path(M6 / "06_evaluate_and_save_adapter.py")
-    assert shipped["adapter_summary"]["exact"] > shipped["base_summary"]["exact"]
     assert shipped["adapter_dir"].exists()
+    assert len(shipped["base_outputs"]) == len(shipped["adapter_outputs"])
+    assert shipped["loaded_outputs"] == shipped["adapter_outputs"]

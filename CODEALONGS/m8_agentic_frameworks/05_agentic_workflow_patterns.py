@@ -5,7 +5,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from workshop_framework_setup import check_guideline, draft_advisor_note, get_current_price, get_portfolio_allocation
+from workshop_framework_setup import check_guideline, get_current_price, get_portfolio_allocation
+from local_hf_agent import LocalSmolFunctionLLM
 
 
 def route(question: str) -> str:
@@ -26,7 +27,26 @@ def evaluate(note: dict) -> dict:
 route_name = route("Can Alice raise AAPL to 36%?")
 price_result, allocation_result = gather_parallel_inputs()
 guideline_result = check_guideline("AAPL", 36.0)
-workflow_output = evaluate(draft_advisor_note(price_result, allocation_result, guideline_result))
+llm = LocalSmolFunctionLLM()
+model_draft = llm.complete(
+    "Write one short internal advisor note using only these facts. "
+    f"Price: {price_result}. Allocation: {allocation_result}. Policy result: {guideline_result}."
+).text
+workflow_output = evaluate(
+    {
+        "allowed": guideline_result["allowed"],
+        "note": model_draft,
+        "evidence": [price_result, allocation_result, guideline_result],
+    }
+)
+runtime = {
+    "backend": "local Hugging Face inference",
+    "model": llm.metadata.model_name,
+    "model_calls": llm.generation_count,
+    "latency_ms": llm.last_generation_latency_ms,
+}
 
+print("Runtime:", runtime)
+print("Raw model text:", llm.last_response)
 print("Route:", route_name)
 print("Workflow output:", workflow_output)

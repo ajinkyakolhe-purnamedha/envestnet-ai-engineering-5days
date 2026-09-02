@@ -122,6 +122,10 @@ load documents
 
 Frameworks package these same steps. They do not remove them.
 
+The code-along uses local SmolLM2 135M inference and prints its raw response.
+Retrieved source nodes are evidence to inspect; they do not permit the code to
+rewrite a weak model's answer.
+
 <!--
 Name the steps before showing framework names. The learner should be able to
 point at each object in code before trusting an abstraction.

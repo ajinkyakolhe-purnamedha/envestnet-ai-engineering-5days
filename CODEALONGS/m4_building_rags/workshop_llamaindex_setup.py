@@ -10,6 +10,7 @@ from __future__ import annotations
 import os
 import sys
 import tempfile
+import time
 from functools import lru_cache
 from pathlib import Path
 
@@ -79,28 +80,23 @@ class BGEPolicyEmbedding(BaseEmbedding):
         return self._get_query_embedding(query)
 
 
-def grounded_fallback(prompt: str, text: str) -> str:
-    lower = prompt.lower()
-    if "42%" in lower and "35%" in lower and "35%" not in text:
-        return f"{text}\nGrounded fact: 42% is above the 35% single-asset limit.".strip()
-    if "35%" in lower and "35%" not in text:
-        return f"{text}\nGrounded fact: no single asset may exceed 35% of the portfolio.".strip()
-    return text or "The offline model returned no answer from the supplied context."
-
-
 class HFSmolPolicyLLM(LocalHuggingFaceLLM):
     """Offline Hugging Face SmolLM wrapped as a LlamaIndex LLM."""
 
     model_dir: str = str(MODEL_DIR)
     model_name: str = "smollm2-135m-instruct"
+    last_response: str = ""
+    last_generation_latency_ms: float = 0.0
 
     def complete(self, prompt: str, formatted: bool = False, **kwargs):
+        started = time.perf_counter()
         response = super().complete(prompt, formatted=formatted, **kwargs)
-        response.text = grounded_fallback(prompt, response.text)
+        self.last_generation_latency_ms = round((time.perf_counter() - started) * 1000, 1)
+        self.last_response = response.text
         return response
 
 
-def use_local_models() -> None:
+def use_local_models() -> HFSmolPolicyLLM:
     """Configure LlamaIndex to run locally for the workshop."""
 
     def resolve_local(embed_model, callback_manager=None):
@@ -111,4 +107,17 @@ def use_local_models() -> None:
     settings_base.resolve_embed_model = resolve_local
 
     Settings.embed_model = BGEPolicyEmbedding()
-    Settings.llm = HFSmolPolicyLLM()
+    llm = HFSmolPolicyLLM()
+    Settings.llm = llm
+    return llm
+
+
+def runtime_evidence(llm: HFSmolPolicyLLM) -> dict[str, object]:
+    """Report the unmodified local inference that produced a RAG response."""
+
+    return {
+        "backend": "local Hugging Face inference",
+        "model": llm.model_name,
+        "model_calls": llm.generation_count,
+        "latency_ms": llm.last_generation_latency_ms,
+    }

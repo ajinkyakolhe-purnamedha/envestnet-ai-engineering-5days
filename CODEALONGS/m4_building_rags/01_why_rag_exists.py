@@ -7,10 +7,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from llama_index.core import SimpleDirectoryReader, VectorStoreIndex
 
-from workshop_llamaindex_setup import POLICY_DIR, use_local_models
+from workshop_llamaindex_setup import POLICY_DIR, runtime_evidence, use_local_models
 
 
-use_local_models()
+llm = use_local_models()
 
 question = "What is the single asset concentration limit?"
 bare_model_answer = "A bare model has not read the Chronos policy."
@@ -24,3 +24,4 @@ print("question:", question)
 print("bare model:", bare_model_answer)
 print("rag response:", response)
 print("source nodes:", len(response.source_nodes))
+print("Runtime:", runtime_evidence(llm))

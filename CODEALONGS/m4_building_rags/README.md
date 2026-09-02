@@ -21,6 +21,10 @@ uv run python m4_building_rags/01_why_rag_exists.py
 | `09_query_engine_sources.py` | grounded answers use source nodes |
 | `10_end_to_end_llamaindex_rag.py` | complete baseline RAG in LlamaIndex |
 
-Each snippet follows normal LlamaIndex getting-started style. The only workshop
-setup is `use_local_models()`, which swaps in local deterministic models so the
-examples run without model downloads or credentials.
+Each snippet follows normal LlamaIndex getting-started style. The workshop
+setup, `use_local_models()`, uses committed local BGE embeddings and the local
+SmolLM2 135M model—no model download or credentials required. Cards that query
+the engine print `Runtime:` with the actual model, model-call count, and
+latency. Retrieval may find the right source while the small model still gives
+an incomplete or incorrect answer; inspect the source nodes rather than
+rewriting the model's output.

@@ -9,10 +9,15 @@ M6 uses six simple scripts:
 | `03_tokenize_and_mask_labels.py` | token IDs, labels, and `-100` prompt masking |
 | `04_sft_trainer_dataset.py` | send formatted examples to TRL `SFTTrainer` |
 | `05_peft_lora_sft_trainer.py` | train only LoRA adapter weights with PEFT + `SFTTrainer` |
-| `06_evaluate_and_save_adapter.py` | evaluate outputs and save/load the adapter artifact |
+| `06_evaluate_and_save_adapter.py` | evaluate real outputs and reload the trained adapter artifact |
 
 Run from `CODEALONGS`:
 
 ```bash
 uv run python m6_fine_tuning/01_huggingface_llm.py
 ```
+
+Run cards in order. Card 05 performs two CPU training steps on a deliberately
+tiny randomly initialized model and saves its adapter under the system temp
+directory. Card 06 loads that real adapter; it measures generated outputs but
+does not promise a quality improvement from two examples.

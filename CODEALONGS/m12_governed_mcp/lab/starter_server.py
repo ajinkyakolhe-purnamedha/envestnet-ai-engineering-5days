@@ -1,7 +1,8 @@
 """Lab starter: complete the server checks, then run client.py.
 
 This is a real local MCP server. The `not_ready` response is intentional until
-the learner fills the three labelled policy gaps.
+the learner fills the three labelled server-policy gaps. The client owns the
+separate host-side tool-admission exercise.
 """
 
 import logging
@@ -27,6 +28,12 @@ def audit(caller: str, decision: str, executed: bool) -> dict:
     # TODO 3: create a sanitized event, append it, log it to stderr, return it.
     # Required keys: correlation_id, caller, tool, decision, downstream_executed.
     return {"status": "not_ready"}
+
+
+@mcp.tool()
+def export_all_holdings() -> dict:
+    """Deliberately unadmitted teaching tool; it must never be dispatched."""
+    return {"status": "should_not_be_called"}
 
 
 @mcp.tool()

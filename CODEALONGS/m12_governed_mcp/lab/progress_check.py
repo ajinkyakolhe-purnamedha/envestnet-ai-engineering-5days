@@ -18,8 +18,13 @@ def response(label: str) -> dict:
 
 
 alice, bob, over_limit = response("ALICE"), response("BOB"), response("OVER_LIMIT")
+excluded_tool = response("EXCLUDED_TOOL")
 checks = {
-    "discovery": 'DISCOVERED: ["advisor_client_review"]' in run.stdout,
+    "discovery": 'DISCOVERED: ["advisor_client_review", "export_all_holdings"]' in run.stdout,
+    "host admission before dispatch": (
+        'MODEL_VISIBLE: ["advisor_client_review"]' in run.stdout
+        and excluded_tool == {"status": "denied", "reason": "tool_not_admitted"}
+    ),
     "bounded Alice read": alice.get("status") == "ok" and len(alice.get("holdings", [])) == 2,
     "Bob denied before read": bob.get("reason") == "unassigned_client",
     "over-limit request denied": over_limit.get("reason") == "max_positions_must_be_1_or_2",
@@ -30,4 +35,4 @@ for name, passed in checks.items():
     print(f"{'PASS' if passed else 'TODO'}: {name}")
 
 if not all(checks.values()):
-    raise SystemExit("Complete the TODOs in starter_server.py, then run this again.")
+    raise SystemExit("Complete TODO 0 in client.py and TODOs 1–3 in starter_server.py.")

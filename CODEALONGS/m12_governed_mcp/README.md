@@ -37,9 +37,28 @@ uv run python m12_governed_mcp/lab/client.py
 uv run python m12_governed_mcp/lab/progress_check.py
 ```
 
-The starter intentionally reports `not_ready` until learners complete its
-three small server-side policy gaps. The client/server exchange itself is real
-local `stdio` MCP; no network or secrets are required.
+The starter intentionally reports `not_ready` until learners complete four
+small controls: host-side admission of `advisor_client_review`, followed by
+server-side client-scope authorisation, `max_positions` validation, and audit
+evidence. The server also advertises `export_all_holdings` so learners can
+prove that discovery does not make a tool model-visible or callable. The
+client/server exchange itself is real local `stdio` MCP; no network or secrets
+are required.
+
+## Capstone extension
+
+After the standalone lab, apply the same controls to real synthetic Chronos
+portfolio facts from `CAPSTONE-PROJECT/chronos_wealth_management`:
+
+```bash
+uv sync --extra m12
+uv run --extra m12 python -m labs.m12_governed_mcp.client
+uv run --extra m12 python -m labs.m12_governed_mcp.progress_check
+```
+
+See `CAPSTONE-PROJECT/chronos_wealth_management/labs/m12_governed_mcp/README.md`
+for the four capstone TODOs. Its MCP server reads the simulated-date-safe
+portfolio only after host admission, caller scope, and bounds permit the call.
 
 Chronos uses synthetic data and virtual money only. The final snippet creates a
 pending approval request; it does not deliver a note or mutate a portfolio.

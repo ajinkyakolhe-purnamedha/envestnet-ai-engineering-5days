@@ -81,6 +81,7 @@ def test_m12_deck_and_lab_point_to_the_governed_mcp_learning_path():
     """Keeps the delivered slides, lab, and runnable M12 snippets aligned."""
     deck = (ROOT / "SLIDES-markdown" / "m12-mcp-security-governance.md").read_text()
     lab = (ROOT / "SLIDES-markdown" / "m12-lab-instructions.md").read_text()
+    readme = (M12 / "README.md").read_text()
 
     for source in [
         "00_governed_request.py",
@@ -98,6 +99,18 @@ def test_m12_deck_and_lab_point_to_the_governed_mcp_learning_path():
     assert "progress_check.py" in lab
     timings = [int(value) for value in re.findall(r"Timing: (\d+) minute", deck)]
     assert sum(timings) == 60
+    assert len(timings) == 21
+    assert "host-side admission" in readme
+    assert "export_all_holdings" in readme
+    assert "labs.m12_governed_mcp.progress_check" in readme
+    for incremental_slide in [
+        "Permission is not identity",
+        "One safe request, step by step",
+        "Stop before data access",
+        "A limit is a policy decision",
+        "Audit the decision, not the portfolio",
+    ]:
+        assert incremental_slide in deck
     assert (M12 / "lab" / "starter_server.py").exists()
     assert (M12 / "lab" / "client.py").exists()
     assert (M12 / "lab" / "progress_check.py").exists()
@@ -107,7 +120,29 @@ def test_lab_client_runs_a_real_mcp_exchange_with_parseable_scenarios():
     """The starter must be an observable MCP exchange, even before completion."""
     output = run_card("lab/client.py")
 
-    assert 'DISCOVERED: ["advisor_client_review"]' in output
+    assert 'DISCOVERED: ["advisor_client_review", "export_all_holdings"]' in output
+    assert "MODEL_VISIBLE: []" in output
+    excluded = next(
+        line for line in output.splitlines() if line.startswith("EXCLUDED_TOOL:")
+    )
+    assert json.loads(excluded.split(":", 1)[1]) == {
+        "status": "not_ready",
+        "reason": "host_admission_not_implemented",
+    }
     for label in ["ALICE", "BOB", "OVER_LIMIT"]:
         line = next(line for line in output.splitlines() if line.startswith(f"{label}:"))
-        assert json.loads(line.split(":", 1)[1])["status"] == "not_ready"
+        assert json.loads(line.split(":", 1)[1]) == {
+            "status": "not_ready",
+            "reason": "host_admission_not_implemented",
+        }
+
+
+def test_lab_progress_check_requires_host_admission_before_server_policy():
+    result = subprocess.run(
+        [sys.executable, str(M12 / "lab" / "progress_check.py")],
+        capture_output=True,
+        text=True,
+    )
+
+    assert result.returncode != 0
+    assert "TODO: host admission before dispatch" in result.stdout

@@ -112,65 +112,10 @@ def fetch_advisor_clients(advisor_user_id: int) -> list:
         )
     )
 
-
 def fetch_advisor_client_portfolio(advisor_user_id: int, client_user_id: int) -> dict:
     return _handle(
         requests.get(
             f"{API_BASE_URL}/advisor/clients/{client_user_id}/portfolio",
             params={"advisor_user_id": advisor_user_id},
         )
-    )
-
-
-def generate_advisor_client_report(advisor_user_id: int, client_user_id: int) -> dict:
-    return _handle(
-        requests.post(
-            f"{API_BASE_URL}/advisor/clients/{client_user_id}/report",
-            params={"advisor_user_id": advisor_user_id},
-        )
-    )
-
-
-def ask_advisor_assistant(
-    advisor_user_id: int,
-    client_user_id: int,
-    question: str,
-    conversation_history: list[str],
-) -> dict:
-    return _handle(
-        requests.post(
-            f"{API_BASE_URL}/advisor/clients/{client_user_id}/assistant",
-            params={"advisor_user_id": advisor_user_id},
-            json={
-                "question": question,
-                "conversation_history": conversation_history,
-            },
-        )
-    )
-
-
-def fetch_pending_note_drafts(advisor_user_id: int) -> list:
-    return _handle(
-        requests.get(
-            f"{API_BASE_URL}/advisor/drafts",
-            params={"advisor_user_id": advisor_user_id},
-        )
-    )
-
-
-def decide_note_draft(
-    advisor_user_id: int, draft_id: int, decision: str, reason: str
-) -> dict:
-    return _handle(
-        requests.post(
-            f"{API_BASE_URL}/advisor/drafts/{draft_id}/decision",
-            params={"advisor_user_id": advisor_user_id},
-            json={"decision": decision, "reason": reason},
-        )
-    )
-
-
-def fetch_advisor_messages(user_id: int) -> list:
-    return _handle(
-        requests.get(f"{API_BASE_URL}/messages", params={"user_id": user_id})
     )

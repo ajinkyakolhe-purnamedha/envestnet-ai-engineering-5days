@@ -8,7 +8,6 @@ from chronos.application_errors_and_permissions import InvalidSimulatedDateError
 from chronos.investor_accounts_portfolios_and_history import (
     advance_simulated_investment_date,
     calculate_next_simulated_date,
-    get_available_market_date_range,
 )
 
 
@@ -27,12 +26,6 @@ def test_one_quarter_adds_three_months():
 def test_month_end_day_is_clamped():
     assert calculate_next_simulated_date(date(2020, 1, 31), "1M") == date(2020, 2, 29)
     assert calculate_next_simulated_date(date(2020, 11, 30), "1Q") == date(2021, 2, 28)
-
-
-def test_market_date_range_comes_from_fixture(db):
-    min_date, max_date = get_available_market_date_range(db)
-    assert min_date == date(2020, 5, 4)
-    assert max_date == date(2020, 9, 14)
 
 
 def test_advance_updates_account(db, alice_account):

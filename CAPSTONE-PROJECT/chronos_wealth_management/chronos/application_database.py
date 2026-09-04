@@ -5,7 +5,7 @@ from datetime import date, datetime, timezone
 from pathlib import Path
 
 from sqlalchemy import (
-    Date, DateTime, Float, ForeignKey, Integer, String, Text, UniqueConstraint,
+    Date, DateTime, Float, ForeignKey, Integer, String, UniqueConstraint,
     create_engine,
 )
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, sessionmaker
@@ -85,35 +85,6 @@ class Trade(Base):
     simulated_date: Mapped[date] = mapped_column(Date, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=_utc_now)
 
-
-class AdvisorNoteDraft(Base):
-    __tablename__ = "advisor_note_drafts"
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    advisor_user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
-    client_user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
-    question: Mapped[str] = mapped_column(Text, nullable=False)
-    note: Mapped[str] = mapped_column(Text, nullable=False)
-    verdict: Mapped[str | None] = mapped_column(String, nullable=True)
-    note_source: Mapped[str] = mapped_column(String, nullable=False)
-    review_problems_json: Mapped[str] = mapped_column(Text, nullable=False)
-    judge_verdict: Mapped[str | None] = mapped_column(String, nullable=True)
-    status: Mapped[str] = mapped_column(String, nullable=False)
-    decision_reason: Mapped[str | None] = mapped_column(Text, nullable=True)
-    created_simulated_date: Mapped[date] = mapped_column(Date, nullable=False)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=_utc_now)
-
-
-class AdvisorReport(Base):
-    __tablename__ = "advisor_reports"
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    advisor_user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
-    client_user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
-    account_id: Mapped[int] = mapped_column(ForeignKey("accounts.id"), nullable=False)
-    simulated_date: Mapped[date] = mapped_column(Date, nullable=False)
-    summary: Mapped[str] = mapped_column(Text, nullable=False)
-    metrics_json: Mapped[str] = mapped_column(Text, nullable=False)
-    recommendations_json: Mapped[str] = mapped_column(Text, nullable=False)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=_utc_now)
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_DATABASE_PATH = PROJECT_ROOT / "data" / "chronos.db"

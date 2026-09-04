@@ -2,13 +2,11 @@
 
 from datetime import date
 
-from sqlalchemy import delete, or_, select
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from chronos.application_database import (
     Account,
-    AdvisorNoteDraft,
-    AdvisorReport,
     Asset,
     Holding,
     Trade,
@@ -51,7 +49,6 @@ def get_demo_user_by_id(db: Session, user_id: int) -> User:
 
 
 def seed_demo_users_accounts_and_assets(db: Session) -> None:
-    _remove_legacy_bob_demo_data(db)
     for user_fields in DEMO_USERS:
         user = db.scalar(select(User).where(User.email == user_fields["email"]))
         if user is None:
@@ -65,46 +62,9 @@ def seed_demo_users_accounts_and_assets(db: Session) -> None:
             db.add(Asset(**asset_fields))
     db.flush()
 
-
-def _remove_legacy_bob_demo_data(db: Session) -> None:
-    """Remove the retired Bob persona and every row that references it."""
-    legacy_user = db.scalar(select(User).where(User.email == "bob@example.com"))
-    if legacy_user is None:
-        return
-
-    account_ids = list(
-        db.scalars(select(Account.id).where(Account.user_id == legacy_user.id))
-    )
-    if account_ids:
-        db.execute(delete(Holding).where(Holding.account_id.in_(account_ids)))
-        db.execute(delete(Trade).where(Trade.account_id.in_(account_ids)))
-        db.execute(delete(AdvisorReport).where(AdvisorReport.account_id.in_(account_ids)))
-    db.execute(
-        delete(AdvisorReport).where(
-            or_(
-                AdvisorReport.advisor_user_id == legacy_user.id,
-                AdvisorReport.client_user_id == legacy_user.id,
-            )
-        )
-    )
-    db.execute(
-        delete(AdvisorNoteDraft).where(
-            or_(
-                AdvisorNoteDraft.advisor_user_id == legacy_user.id,
-                AdvisorNoteDraft.client_user_id == legacy_user.id,
-            )
-        )
-    )
-    db.execute(delete(Account).where(Account.user_id == legacy_user.id))
-    db.delete(legacy_user)
-    db.flush()
-
-
 def reset_demo_investor_accounts(db: Session) -> int:
     db.query(Holding).delete()
     db.query(Trade).delete()
-    db.query(AdvisorReport).delete()
-    db.query(AdvisorNoteDraft).delete()
     accounts = db.scalars(select(Account)).all()
     for account in accounts:
         account.cash_balance = STARTING_CASH

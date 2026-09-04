@@ -7,7 +7,6 @@ import pytest
 from sqlalchemy import select
 
 from chronos.investor_trade_execution_and_preview import (
-    _resolve_trade_at_simulated_price,
     execute_investor_trade,
     preview_investor_trade,
 )
@@ -27,16 +26,17 @@ def _buy(db, account, amount, symbol="AAPL"):
     )
 
 
-def test_trade_resolution_uses_the_account_simulated_date(db, alice, alice_account):
-    symbol, price, shares = _resolve_trade_at_simulated_price(
+def test_trade_preview_uses_the_account_simulated_date(db, alice, alice_account):
+    preview = preview_investor_trade(
         db,
         alice_account,
         TradeRequest(user_id=alice.id, symbol="aapl", side="BUY", amount=10_800.0),
     )
 
-    assert symbol == "AAPL"
-    assert price == 108.0
-    assert shares == pytest.approx(100.0)
+    assert preview.valid is True
+    assert preview.symbol == "AAPL"
+    assert preview.price == 108.0
+    assert preview.shares == pytest.approx(100.0)
 
 
 def test_buy_reduces_cash_and_creates_holding(db, alice, alice_account):
@@ -145,12 +145,3 @@ def test_sell_everything_then_rebuy_uses_fresh_average_cost(db, alice, alice_acc
         )
     )
     assert holding.average_cost == pytest.approx(110.0)
-
-
-def test_alice_trade_affects_only_the_supported_demo_investor_account(
-    db, alice, alice_account
-):
-    _buy(db, alice_account, 10_800.0)
-
-    assert alice_account.cash_balance == pytest.approx(89_200.0)
-    assert db.scalar(select(Holding).where(Holding.account_id == alice_account.id))

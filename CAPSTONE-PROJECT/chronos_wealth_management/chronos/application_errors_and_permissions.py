@@ -18,12 +18,10 @@ class PriceUnavailableError(DomainError): pass
 class InsufficientCashError(DomainError): pass
 class InsufficientSharesError(DomainError): pass
 class InvalidSimulatedDateError(DomainError): pass
-class NoteDraftAlreadyDecidedError(DomainError): pass
 class MarketDataSetupError(DomainError): pass
 
 PermissionDeniedError = WrongRoleError
 MarketDataNotLoadedError = MarketDataSetupError
-InvalidDraftDecisionError = NoteDraftAlreadyDecidedError
 
 
 def require_investor_user(user: User) -> User:
@@ -42,7 +40,6 @@ _ERROR_STATUS_CODES = [
     (RecordNotFoundError, 404), (WrongRoleError, 403),
     (PriceUnavailableError, 400), (InsufficientCashError, 400),
     (InsufficientSharesError, 400), (InvalidSimulatedDateError, 400),
-    (NoteDraftAlreadyDecidedError, 409),
 ]
 
 

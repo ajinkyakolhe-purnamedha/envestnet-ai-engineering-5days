@@ -91,7 +91,7 @@ def test_invalid_side_is_422(client, alice):
     assert response.status_code == 422
 
 
-def test_advisor_endpoints_flow(client, alice, advisor):
+def test_advisor_client_portfolio_flow(client, alice, advisor):
     clients = client.get(
         "/advisor/clients", params={"advisor_user_id": advisor.id}
     ).json()
@@ -103,22 +103,6 @@ def test_advisor_endpoints_flow(client, alice, advisor):
         params={"advisor_user_id": advisor.id},
     )
     assert portfolio.status_code == 200
-
-    report = client.post(
-        f"/advisor/clients/{alice.id}/report",
-        params={"advisor_user_id": advisor.id},
-    )
-    assert report.status_code == 200
-    report_body = report.json()
-    assert report_body["client_user_id"] == alice.id
-    assert report_body["recommendations"]
-
-    fetched = client.get(
-        f"/advisor/reports/{report_body['report_id']}",
-        params={"advisor_user_id": advisor.id},
-    )
-    assert fetched.status_code == 200
-    assert fetched.json()["summary"] == report_body["summary"]
 
 
 def test_demo_reset_restores_starting_state(client, alice):
@@ -133,32 +117,6 @@ def test_demo_reset_restores_starting_state(client, alice):
     portfolio = client.get("/portfolio", params={"user_id": alice.id}).json()
     assert portfolio["cash_balance"] == 100_000.0
     assert portfolio["holdings"] == []
-
-
-def test_demo_reset_removes_advisor_drafts(client, alice, advisor):
-    created = client.post(
-        f"/advisor/clients/{alice.id}/assistant",
-        params={"advisor_user_id": advisor.id},
-        json={"question": "How is this portfolio positioned?"},
-    )
-    assert created.status_code == 200
-    assert created.json()["draft_id"] is not None
-
-    assert client.get(
-        "/advisor/drafts", params={"advisor_user_id": advisor.id}
-    ).json()
-    assert client.post("/demo/reset").status_code == 200
-
-    assert client.get(
-        "/advisor/drafts", params={"advisor_user_id": advisor.id}
-    ).json() == []
-    assert client.get("/messages", params={"user_id": alice.id}).json() == []
-
-def test_unknown_advisor_report_is_404(client, advisor):
-    response = client.get(
-        "/advisor/reports/999", params={"advisor_user_id": advisor.id}
-    )
-    assert response.status_code == 404
 
 
 def test_history_endpoint_respects_trading_days(client, alice):

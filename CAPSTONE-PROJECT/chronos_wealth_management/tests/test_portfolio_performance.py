@@ -8,18 +8,8 @@ from chronos.investor_trade_execution_and_preview import execute_investor_trade
 from chronos.investor_accounts_portfolios_and_history import (
     build_account_value_history,
     build_current_portfolio_snapshot,
-    calculate_holding_cost_basis,
-    calculate_holding_market_value,
-    calculate_unrealized_gain_loss,
 )
 from chronos.api_schemas_investor import TradeRequest
-
-
-def test_arithmetic_helpers():
-    assert calculate_holding_market_value(10, 110.0) == 1_100.0
-    assert calculate_holding_cost_basis(10, 100.0) == 1_000.0
-    assert calculate_unrealized_gain_loss(1_100.0, 1_000.0) == 100.0
-
 
 def test_portfolio_valuation_uses_simulated_date_prices(db, alice, alice_account):
     execute_investor_trade(

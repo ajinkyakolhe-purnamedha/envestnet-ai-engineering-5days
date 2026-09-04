@@ -17,11 +17,14 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-# M8 lab: lets the advisor assistant draft notes with the committed
-# offline SmolLM2 weights. The app works fully without it (template notes).
+# M8 lab: enables real local-model experiments. A missing model must be shown
+# as an explicit environment error, never replaced with template output.
 agents = [
     "torch",
     "transformers",
+]
+m12 = [
+    "mcp[cli]>=2.0,<3",
 ]
 
 [dependency-groups]

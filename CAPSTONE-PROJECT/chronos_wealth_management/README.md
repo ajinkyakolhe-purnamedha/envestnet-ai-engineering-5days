@@ -7,9 +7,12 @@ key required.
 
 ```text
 Investor side = deterministic finance app
-Advisor side = AI engineering playground (Day 1-5 labs)
+Advisor side = deterministic, read-only client workspace
 Python calculates. AI explains, retrieves, reasons, and assists.
 ```
+
+Later course labs add those AI capabilities through Chronos's deterministic
+data and policy boundaries; the baseline application does not simulate them.
 
 ## Stack
 
@@ -21,6 +24,12 @@ yfinance · Streamlit · pytest
 ```bash
 uv sync
 uv run python -m scripts.load_market_data   # yfinance -> CSV -> SQLite (one-time, needs network)
+```
+
+For the optional M12 Governed MCP extension, install its local MCP dependency:
+
+```bash
+uv sync --extra m12
 ```
 
 The load script downloads AAPL, MSFT, SPY, GLD, JPM daily prices
@@ -44,8 +53,7 @@ Demo Advisor     advisor@example.com  ADVISOR
 ```
 
 Alice starts with $100,000 virtual cash at simulated date 2020-06-01. Demo
-Advisor can review Alice's portfolio and approve or reject assistant-drafted
-notes before Alice can see them.
+Advisor can review Alice's portfolio through a read-only workspace.
 Reset everything back to that state with:
 
 ```bash
@@ -70,11 +78,10 @@ chronos/    lean top-level application modules + FastAPI route modules
   market_data_loading_and_price_queries.py      historical prices
   investor_accounts_portfolios_and_history.py   portfolios and simulated time
   investor_trade_execution_and_preview.py       trade preview and execution
-  advisor_analysis_reports_and_client_lists.py  advisor analysis and reports
-  advisor_assistant_runtime.py                  assistant answer/draft/approval runtime
+  advisor_client_lists.py                        advisor client summaries
   api_routes_{system,investor,advisor}.py       HTTP boundary by audience
 ui/         Streamlit screens; ui/api_client.py is the only HTTP client
-labs/       standalone M8/M9 teaching exercises; not the live API runtime
+labs/       opt-in M1–M15 AI lab starters; M12 includes a local MCP starter
 scripts/    load_market_data (yfinance one-time), reset_demo_data
 tests/      pytest suite + offline price fixture
 data/       chronos.db + market/prices.csv (generated, not committed)
@@ -84,6 +91,4 @@ Key rule everywhere: every price lookup uses the latest price on or before
 the account's simulated date — no feature can see the future.
 
 The live demo intentionally has two personas only: Alice Investor and Demo
-Advisor. The advisor can view Alice's portfolio but cannot trade for her;
-assistant notes require the advisor's explicit approval before they appear in
-Alice's dashboard.
+Advisor. The advisor can view Alice's portfolio but cannot trade for her.
